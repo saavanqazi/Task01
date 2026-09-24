@@ -86,19 +86,46 @@ def cmd_answers(trial):
     walk(json.loads(tj.read_text(encoding="utf-8")))
 
 
+def _final_answer_from_trajectory(trial):
+    """The last results.json object the agent wrote, recovered from its trajectory."""
+    import re
+    tj = Path(trial) / "agent" / "trajectory.json"
+    if not tj.is_file():
+        return None
+    found = []
+    def walk(x):
+        if isinstance(x, dict):
+            for v in x.values(): walk(v)
+        elif isinstance(x, list):
+            for v in x: walk(v)
+        elif isinstance(x, str) and "overturned_cell_count" in x:
+            for m in re.finditer(r"\{[^{}]*overturned_cell_count[^{}]*\}", x):
+                try: found.append(json.loads(m.group(0)))
+                except Exception: pass
+    walk(json.loads(tj.read_text(encoding="utf-8")))
+    return found[-1] if found else None
+
+
 def normalize(trial):
+    """Give a copied trial the files and result.json fields the delivery spec requires."""
+    ver = trial / "verifier"
+    reward = float((ver / "reward.txt").read_text().strip())
+    if not (ver / "reward.json").is_file():
+        (ver / "reward.json").write_text(json.dumps({"reward": reward}, indent=2) + "\n")
+    if not (ver / "verifier_summary.json").is_file() and (ver / "score.json").is_file():
+        score = json.loads((ver / "score.json").read_text(encoding="utf-8"))
+        summary = {"reward": score.get("reward", reward), "passed": score.get("passed"),
+                   "total": score.get("total"), "core_failures": score.get("core_failures", []),
+                   "items": score.get("checks", [])}
+        (ver / "verifier_summary.json").write_text(json.dumps(summary, indent=2) + "\n")
     rj = trial / "result.json"
-    data = json.loads(rj.read_text())
-    reward = float(json.loads((trial / "verifier" / "reward.json").read_text())["reward"])
-    final = {}
-    for cand in (trial / "artifacts" / "results.json", trial / "results.json"):
-        if cand.is_file():
-            final = json.loads(cand.read_text()); break
+    data = json.loads(rj.read_text(encoding="utf-8"))
+    final = _final_answer_from_trajectory(trial)
     data.update({
         "model": "GLM-5.2",
         "reward": reward,
         "overall_pass": reward == 1.0,
-        "final_answer": final or {"reward": reward},
+        "final_answer": final if final is not None else {"reward": reward},
         "judge": {"type": "deterministic", "llm_judge": None,
                   "note": "all checks are deterministic file assertions; no LLM judge in this task"},
     })
