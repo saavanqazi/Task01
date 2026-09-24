@@ -1,0 +1,13 @@
+{
+  "job_name": "glm-mic-audit-r0",
+  "jobs_dir": "/tmp/harbor-jobs",
+  "n_attempts": 4,
+  "n_concurrent_trials": 2,
+  "tasks": [
+    { "path": "/mnt/c/Users/amitb/Task01/task" }
+  ],
+  "agents": [
+    { "name": "opencode", "model_name": "openai/glm-5.2" }
+  ],
+  "environment": { "type": "docker", "delete": true }
+}
