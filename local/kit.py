@@ -153,6 +153,12 @@ def cmd_zip(name):
     missing = [m for m in must if not (TASK / m).is_file()]
     if missing:
         print("!! missing:", missing); sys.exit(1)
+    mf = json.loads((TASK / "tests" / "manifest.json").read_text(encoding="utf-8"))
+    if not (isinstance(mf, list) and mf and all("assertion" in v for v in mf)):
+        print("!! tests/manifest.json must be a nonempty JSON list of verifiers"); sys.exit(1)
+    vf = json.loads((TASK / "tests" / "verifier.json").read_text(encoding="utf-8"))
+    if vf.get("verifiers") != mf:
+        print("!! tests/verifier.json verifiers differ from tests/manifest.json"); sys.exit(1)
     if not (TASK / "qc_report.html").is_file():
         print("note: qc_report.html not present (fine for the first upload; required in the version you submit)")
     ev = sorted(p.name for p in (TASK / "evaluations").iterdir())

@@ -29,13 +29,27 @@ from rl_world_verifiers.models import VerifierSpec, effective_weights
 from rl_world_verifiers.sources.registry import SourceRegistry
 from rl_world_verifiers.verifiers import verify_definition
 
+
+def _load_spec(tests_dir):
+    """Load the verifier spec. tests/manifest.json is the delivery format (a JSON list of
+    verifiers); tests/verifier.json is the same spec in the engine's object shape. Accept both."""
+    for name in ("manifest.json", "verifier.json"):
+        path = tests_dir / name
+        if not path.is_file():
+            continue
+        data = json.loads(path.read_text(encoding="utf-8"))
+        if isinstance(data, list):
+            data = {"task_id": tests_dir.parent.name, "verifiers": data}
+        return VerifierSpec.model_validate(data)
+    raise FileNotFoundError("tests/manifest.json or tests/verifier.json")
+
 WORKSPACE = Path(os.environ.get("HARBOR_TASK_WORKSPACE", "/app"))
 # Harbor mounts the agent trajectory under /logs/agent. Passing it through makes
 # `response.*` sources (grade the agent's final chat message) resolvable; when the
 # directory is absent those sources fail with the engine's own precondition error
 # instead of an unknown-registry crash, and every other source is unaffected.
 AGENT_LOGS = Path(os.environ.get("HARBOR_AGENT_LOGS_DIR", "/logs/agent"))
-SPEC = VerifierSpec.model_validate_json((TESTS_DIR / "manifest.json").read_text(encoding="utf-8"))
+SPEC = _load_spec(TESTS_DIR)
 WEIGHTS = effective_weights(SPEC.verifiers)
 REGISTRY = SourceRegistry(WORKSPACE, agent_logs_dir=AGENT_LOGS if AGENT_LOGS.is_dir() else None)
 
