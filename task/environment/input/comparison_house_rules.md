@@ -28,12 +28,17 @@ checked, and it never decides a cell.
 Inside one vendor document, an entry in its release history outranks the document's undated
 control or feature lists, and a later release's entry outranks an earlier one's. The Racklane
 reference's module sections describe Racklane 4.0, and its release history runs on from
-there.
+there. A release history is read only as far as the release the studio runs (rule 1): an
+entry for a later release describes software the studio does not have, and it says nothing
+about any cell. A control lives on the stage that carries it, so an entry that retires a
+stage retires the controls that stage carried, and the document speaks to each of them.
 
 ## Rule 4 — silence
 
 A document speaks to a feature only where it names that feature and says the product has it
-or lacks it. A list that leaves a feature out says nothing about it either way. Where a
+or lacks it. A list that leaves a feature out says nothing about it either way. A vendor
+document's preview of a release not yet on sale — a "coming in" list or a roadmap — says
+nothing about the release that is on sale. Where a
 product's vendor document says nothing about a feature, the review decides that cell if it
 says whether that product has the feature. What the review says the earlier Racklane software had counts as the rack chain having it at its current release, unless the Racklane release history
 records the feature's removal.

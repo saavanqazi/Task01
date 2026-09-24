@@ -1,28 +1,28 @@
 {
  "task": "task_tech_mg_it_b10_a5_mic_modelling_feature_matrix_audit",
  "generated_by": "to_harbor_cli.build_requirements_json",
- "verifier_total": 15,
+ "verifier_total": 17,
  "census": {
   "feature_matrix_audit.csv": {
-   "records": 11,
+   "records": 12,
    "columns": [
     "micaform_decided_by",
     "micaform_verdict",
     "racklane_decided_by",
     "racklane_verdict"
    ],
-   "cell_pins": 44,
-   "row_set": 11
+   "cell_pins": 48,
+   "row_set": 12
   }
  },
  "scoring": {
   "policy": "two-tier: any core failure zeroes the reward; incidental failures cost their weight share (tests/score.py)",
-  "core": 13,
+  "core": 15,
   "incidental": [
    "note_in_common_exactly_one",
    "note_micaform_only_exactly_one"
   ],
-  "sidecar_note": "derived figures are paid once, in results.json; artifact cell pins grade PRIMARY data carried into the deliverable, and cardinality closures pay the count — neither re-pays a derived figure"
+  "sidecar_note": "derived figures are paid once, in results.json; artifact cell pins grade PRIMARY data carried into the deliverable, and cardinality closures pay the count \u2014 neither re-pays a derived figure"
  },
  "duplicate_payments": [
   {
@@ -77,15 +77,17 @@
   {
    "requirement_id": "R2",
    "ask": "Give every cell of the draft a verdict and a deciding document under the house rules' ranking of the documents.",
-   "prompt_span": "One row per feature row in `draft_comparison.md` and no other rows, in any order, with `feature_id` exactly as the draft writes it. Each row carries two cells for each product. `racklane_verdict` and `micaform_verdict` each take exactly one of `STANDS`, `OVERTURNED` or `UNVERIFIABLE`: whether Theo's entry for that product on that row survives the documents. `racklane_decided_by` and `micaform_decided_by` name the one document that decides that cell, by its short name in the house rules — `racklane_manual`, `micaform_page` or `review` — or `none` where the verdict is `UNVERIFIABLE`. Which document decides a cell is not a judgement call: the house rules rank the documents, say what counts as a document speaking to a feature, and name the deciding document even where another one agrees with it, so every cell has one answer.",
+   "prompt_span": "One row per feature row in `draft_comparison.md` and no other rows, in any order, with `feature_id` exactly as the draft writes it. Each row carries two cells for each product. `racklane_verdict` and `micaform_verdict` each take exactly one of `STANDS`, `OVERTURNED` or `UNVERIFIABLE`: whether Theo's entry for that product on that row survives the documents. `racklane_decided_by` and `micaform_decided_by` name the one document that decides that cell, by its short name in the house rules \u2014 `racklane_manual`, `micaform_page` or `review` \u2014 or `none` where the verdict is `UNVERIFIABLE`. Which document decides a cell is not a judgement call: the house rules rank the documents, say what counts as a document speaking to a feature, and name the deciding document even where another one agrees with it, so every cell has one answer.",
    "surface": "feature_matrix_audit.csv",
    "criticality": "critical",
    "graded_by": [
     "matrix_table",
     "matrix_table_trap_ft2",
-    "matrix_table_trap_ft3"
+    "matrix_table_trap_ft3",
+    "matrix_table_trap_ft10",
+    "matrix_table_trap_ft12"
    ],
-   "graded_by_count": 3,
+   "graded_by_count": 5,
    "tolerance": {
     "value": "pinned",
     "numeric_rendering": "tolerant (numeric abs<=0.001 inside table_equals, grouping-normalised; leading-zero ids exact)",
@@ -119,8 +121,8 @@
   },
   {
    "requirement_id": "R4",
-   "ask": "Write the note to Maren — as written prose of at least three whole sentences — stating the in-common and Micaform-only counts beside their labels and naming the tape stage row with the release that settles it. Both counts are required, and a figure written as a denial in its own clause does not count.",
-   "prompt_span": "A note to Maren of at least 60 words. It has to read as a written note rather than as a list of findings: at least three whole sentences, each of six or more words of two letters or more and each closed with a full stop, a question mark or an exclamation mark. Lay them out however you like — wrapped, one sentence to a line, or bulleted — and no word of them is graded. The note states how many features the two setups have `in common` and how many are `Micaform only`, each once, as a figure beside its label, in figures or spelled out in words, counted the way the house rules count them; `share` reads as the same label as `in common`, and `only in Micaform` as the same label as `Micaform only`. Beside means in the same sentence and close: the check allows about 48 characters between a count and its label, with no other number between them when the count comes first. Both counts are required on the note: a note that leaves either out, swaps them or states either wrongly fails. The note also names the tape stage row by its feature id — that id is required, exactly as the draft writes it — together with the number of the Racklane release that settles whether the rack chain still has a tape stage, in figures as the release history writes it; the two sit in the same paragraph, within about nine hundred characters of each other, and the check reads them as named together rather than as one attributed to the other. Every one of those figures is STATED, and a figure written as a denial does not count: a `no` or `not` directly in front of a figure refuses it; so does a `no` or `not` earlier in the figure's own clause whenever the figure comes before its label or id; and so does a `no` or `not` standing between the release number and the id inside one clause. A clause ends at a full stop, a question or exclamation mark, a comma, semicolon, colon or dash, or at the word `and`, `but`, `yet` or `so`. Denying a WRONG figure in a clause of its own is free. Nothing else about the note is graded — not its tone, its recommendation, what it says about the sidechain, or the order it takes. At least 60 words of prose. Each of the two counts stands beside its label once, stated as the finding — not offered as one of two candidates. That last rule is checked beside `in common` and `Micaform only` only, so a hedge beside `share` or `only in Micaform` costs nothing. The release number is not guarded that way: it is graded as the figure it stands beside, and a note that hedges it loses nothing.",
+   "ask": "Write the note to Maren \u2014 as written prose of at least three whole sentences \u2014 stating the in-common and Micaform-only counts beside their labels and naming the tape stage row with the release that settles it. Both counts are required, and a figure written as a denial in its own clause does not count.",
+   "prompt_span": "A note to Maren of at least 60 words. It has to read as a written note rather than as a list of findings: at least three whole sentences, each of six or more words of two letters or more and each closed with a full stop, a question mark or an exclamation mark. Lay them out however you like \u2014 wrapped, one sentence to a line, or bulleted \u2014 and no word of them is graded. The note states how many features the two setups have `in common` and how many are `Micaform only`, each once, as a figure beside its label, in figures or spelled out in words, counted the way the house rules count them; `share` reads as the same label as `in common`, and `only in Micaform` as the same label as `Micaform only`. Beside means in the same sentence and close: the check allows about 48 characters between a count and its label, with no other number between them when the count comes first. Both counts are required on the note: a note that leaves either out, swaps them or states either wrongly fails. The note also names the tape stage row by its feature id \u2014 that id is required, exactly as the draft writes it \u2014 together with the number of the Racklane release that settles whether the rack chain still has a tape stage, in figures as the release history writes it; the two sit in the same paragraph, within about nine hundred characters of each other, and the check reads them as named together rather than as one attributed to the other. Every one of those figures is STATED, and a figure written as a denial does not count: a `no` or `not` directly in front of a figure refuses it; so does a `no` or `not` earlier in the figure's own clause whenever the figure comes before its label or id; and so does a `no` or `not` standing between the release number and the id inside one clause. A clause ends at a full stop, a question or exclamation mark, a comma, semicolon, colon or dash, or at the word `and`, `but`, `yet` or `so`. Denying a WRONG figure in a clause of its own is free. Nothing else about the note is graded \u2014 not its tone, its recommendation, what it says about the sidechain, or the order it takes. At least 60 words of prose. Each of the two counts stands beside its label once, stated as the finding \u2014 not offered as one of two candidates. That last rule is checked beside `in common` and `Micaform only` only, so a hedge beside `share` or `only in Micaform` costs nothing. The release number is not guarded that way: it is graded as the figure it stands beside, and a note that hedges it loses nothing.",
    "surface": "micaform_switch_note.md",
    "criticality": "critical",
    "graded_by": [
@@ -163,7 +165,7 @@
     "extra_columns": "allowed",
     "extra_keys": "forbidden (key set closed, instruction-backed)"
    },
-   "discrimination": "Gold: 7 overturned, 3 unverifiable, 5 in common, 2 Micaform only. Refusing the review where the rack reference is silent gives 5 overturned, 5 unverifiable and 3 in common; reading an omission as absence gives 6, 0, 3 and 5; letting the review outrank the vendor gives 9 overturned; ignoring the release history gives 5 overturned, 4 unverifiable and 1 Micaform only; letting the earliest release entry win gives 6 in common and 1 Micaform only; counting an unverifiable cell as having the feature gives 8 in common; accepting the draft gives 0 overturned, 3 in common and 5 Micaform only."
+   "discrimination": "Gold: 8 overturned, 3 unverifiable, 5 in common, 2 Micaform only. Refusing the review where the rack reference is silent gives 6 overturned, 5 unverifiable and 3 in common; reading an omission as absence gives 7, 0, 3 and 5; letting the review outrank the vendor gives 10 overturned; ignoring the release history gives 6 overturned, 4 unverifiable and 1 Micaform only; reading the Racklane 4.4 entry as current (beyond the studio's 4.3) gives 7 overturned, 3 unverifiable, 4 in common and 1 Micaform only; reading the Micaform 'Coming in 1.2' preview as the release on sale gives 6 overturned and 2 unverifiable; keeping the wow control after the Tape stage is retired gives 7 overturned; accepting the draft gives 0 overturned, 3 in common and 5 Micaform only."
   }
  ],
  "derivation": {
@@ -195,5 +197,6 @@
    ]
   },
   "input_sha256": "8cf5732b8f85d6357444d0439a2469a9c6e2a605f31716142d6d12b246bc7309"
- }
+ },
+ "hardening_note": "Hardened 2026-09-24 (round 1): FT-12 added; Racklane 4.4 entry beyond the studio's release; Micaform 'Coming in 1.2' preview; review speaks to the Micaform wow control. Other files in consistency/ (mutations, attacks, envelope, readers, preflight) describe the mined baseline and were not regenerated."
 }
