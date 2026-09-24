@@ -1,0 +1,39 @@
+{
+ "revision_key": "95664743217b0ed158109c734b999643fa01ac3b7723910259b68c2e22e895f1",
+ "contract": "each recorded reward-hack shape, built from this task's own gold, must be CAUGHT by the real engine",
+ "task": "task_tech_mg_it_b10_a5_mic_modelling_feature_matrix_audit",
+ "attacks": {
+  "label_soup": {
+   "caught": true,
+   "failed_checks": [
+    "matrix_table",
+    "matrix_table_trap_ft2",
+    "matrix_table_trap_ft3"
+   ]
+  },
+  "hedging": {
+   "caught": true,
+   "failed_checks": [
+    "matrix_table"
+   ]
+  },
+  "duplicate_rows": {
+   "caught": true,
+   "failed_checks": [
+    "matrix_table",
+    "matrix_table_trap_ft2",
+    "matrix_table_trap_ft3"
+   ]
+  },
+  "cross_product": {
+   "caught": true,
+   "failed_checks": [
+    "matrix_table",
+    "matrix_table_trap_ft2",
+    "matrix_table_trap_ft3"
+   ]
+  }
+ },
+ "survived": [],
+ "not_applicable_attacks": {}
+}

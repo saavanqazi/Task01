@@ -1,0 +1,159 @@
+{
+  "task": "task_tech_mg_it_b10_a5_mic_modelling_feature_matrix_audit",
+  "revision_key": "95664743217b0ed158109c734b999643fa01ac3b7723910259b68c2e22e895f1",
+  "backend": "glm",
+  "min_divergence": 0.3,
+  "documents": [
+    {
+      "file": "micaform_switch_note.md",
+      "gold_chars": 1082,
+      "protected_tokens": 6,
+      "instructed_anchors": [
+        {
+          "words": [
+            "Micaform only",
+            "only in Micaform",
+            "in common",
+            "share"
+          ],
+          "figure": "5"
+        },
+        {
+          "words": [
+            "in common",
+            "share",
+            "Micaform only",
+            "only in Micaform"
+          ],
+          "figure": "2"
+        }
+      ],
+      "attempts": 1,
+      "api_error": null,
+      "divergence": 0.623,
+      "missing_facts": [],
+      "missing_fact_count": 0,
+      "missing_anchors": [],
+      "status": "ok"
+    }
+  ],
+  "scoring": {
+    "reward": 1.0,
+    "core_failures": [],
+    "checks": [
+      {
+        "name": "matrix_exists",
+        "tag": "core",
+        "passed": true,
+        "weight": 0.0666666667,
+        "detail": ""
+      },
+      {
+        "name": "matrix_header",
+        "tag": "core",
+        "passed": true,
+        "weight": 0.0666666667,
+        "detail": ""
+      },
+      {
+        "name": "matrix_table_trap_ft2",
+        "tag": "core",
+        "passed": true,
+        "weight": 0.0666666667,
+        "detail": ""
+      },
+      {
+        "name": "matrix_table_trap_ft3",
+        "tag": "core",
+        "passed": true,
+        "weight": 0.0666666667,
+        "detail": ""
+      },
+      {
+        "name": "matrix_table",
+        "tag": "core",
+        "passed": true,
+        "weight": 0.0666666667,
+        "detail": ""
+      },
+      {
+        "name": "note_exists",
+        "tag": "core",
+        "passed": true,
+        "weight": 0.0666666667,
+        "detail": ""
+      },
+      {
+        "name": "note_prose_floor",
+        "tag": "core",
+        "passed": true,
+        "weight": 0.0666666667,
+        "detail": ""
+      },
+      {
+        "name": "note_tape_release",
+        "tag": "core",
+        "passed": true,
+        "weight": 0.0666666667,
+        "detail": ""
+      },
+      {
+        "name": "note_in_common",
+        "tag": "core",
+        "passed": true,
+        "weight": 0.0666666667,
+        "detail": ""
+      },
+      {
+        "name": "note_in_common_exactly_one",
+        "tag": "incidental",
+        "passed": true,
+        "weight": 0.0666666667,
+        "detail": ""
+      },
+      {
+        "name": "note_micaform_only",
+        "tag": "core",
+        "passed": true,
+        "weight": 0.0666666667,
+        "detail": ""
+      },
+      {
+        "name": "note_micaform_only_exactly_one",
+        "tag": "incidental",
+        "passed": true,
+        "weight": 0.0666666667,
+        "detail": ""
+      },
+      {
+        "name": "note_sentence_floor",
+        "tag": "core",
+        "passed": true,
+        "weight": 0.0666666667,
+        "detail": ""
+      },
+      {
+        "name": "results_figures",
+        "tag": "core",
+        "passed": true,
+        "weight": 0.0666666667,
+        "detail": ""
+      },
+      {
+        "name": "results_exists",
+        "tag": "core",
+        "passed": true,
+        "weight": 0.0666666662,
+        "detail": ""
+      }
+    ],
+    "passed": 15,
+    "total": 15
+  },
+  "failed_checks": [],
+  "verdict": "pass",
+  "model": "glm-5.2",
+  "family": "glm",
+  "author_family": "claude",
+  "stamped_at": "2026-09-22T15:16:03+05:30"
+}

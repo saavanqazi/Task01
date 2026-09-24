@@ -1,0 +1,72 @@
+[
+  {
+    "name": "bash",
+    "server": "local",
+    "arguments": {
+      "command": "cat input/comparison_house_rules.md"
+    }
+  },
+  {
+    "name": "bash",
+    "server": "local",
+    "arguments": {
+      "command": "cat input/draft_comparison.md"
+    }
+  },
+  {
+    "name": "bash",
+    "server": "local",
+    "arguments": {
+      "command": "cat input/micaform_page.html"
+    }
+  },
+  {
+    "name": "bash",
+    "server": "local",
+    "arguments": {
+      "command": "cat input/mixbench_review.pdf"
+    }
+  },
+  {
+    "name": "bash",
+    "server": "local",
+    "arguments": {
+      "command": "cat input/racklane_manual.html"
+    }
+  },
+  {
+    "name": "bash",
+    "server": "local",
+    "arguments": {
+      "command": "cat input/submission_format.md"
+    }
+  },
+  {
+    "name": "bash",
+    "server": "local",
+    "arguments": {
+      "command": "cat > feature_matrix_audit.csv << 'FEATUREMATRIXAUDITEOF'\nfeature_id,racklane_verdict,racklane_decided_by,micaform_verdict,micaform_decided_by\nFT-1,STANDS,racklane_manual,STANDS,micaform_page\nFT-2,OVERTURNED,review,STANDS,micaform_page\nFT-3,OVERTURNED,review,STANDS,micaform_page\nFT-4,STANDS,racklane_manual,OVERTURNED,micaform_page\nFT-5,STANDS,racklane_manual,UNVERIFIABLE,none\nFT-6,OVERTURNED,racklane_manual,OVERTURNED,micaform_page\nFT-7,STANDS,racklane_manual,STANDS,micaform_page\nFT-8,OVERTURNED,racklane_manual,STANDS,micaform_page\nFT-9,UNVERIFIABLE,none,STANDS,micaform_page\nFT-10,STANDS,racklane_manual,OVERTURNED,micaform_page\nFT-11,STANDS,racklane_manual,UNVERIFIABLE,none\nFEATUREMATRIXAUDITEOF"
+    }
+  },
+  {
+    "name": "bash",
+    "server": "local",
+    "arguments": {
+      "command": "cat > micaform_switch_note.md << 'MICAFORMSWITCHNOTEEOF'\nMaren,\n\nBefore we spend anything on Micaform I had Theo's comparison checked cell by cell against\nTarnwell's own pages, the Mixbench review and our house rules, and the picture is not quite\nthe one his table paints.\n\nProximity and Intensity are not new with Micaform. The review says the old Racklane Capsule\nmodule already had both, and the Racklane reference simply never mentions them, so Theo's\nnoes for FT-2 and FT-3 on the rack side do not hold. The tape stage (FT-6) runs the\nother way: Tarnwell retired it from the Capsule module in Racklane 4.2, so the rack\nchain no longer has one and Theo's Yes on that side has to go.\n\nOnce the matrix is corrected, the rack chain and Micaform have 5 features in\ncommon, and 2 are Micaform only: the tape stage and the dual capsule blend.\nWhat the move costs us is the sidechain key input on the Valve Stage, which Micaform does\nnot offer.\n\nMy view is that the blend is worth having, but I would like one session without the\nsidechain before we retire the rack. The cell by cell audit is in the matrix file if you\nwant the detail.\n\nRafa\nMICAFORMSWITCHNOTEEOF"
+    }
+  },
+  {
+    "name": "bash",
+    "server": "local",
+    "arguments": {
+      "command": "cat > results.json << 'RESULTSEOF'\n{\n  \"overturned_cell_count\": 7,\n  \"unverifiable_cell_count\": 3,\n  \"in_common_feature_count\": 5,\n  \"micaform_only_feature_count\": 2\n}\nRESULTSEOF"
+    }
+  },
+  {
+    "name": "bash",
+    "server": "local",
+    "arguments": {
+      "command": "ls -la feature_matrix_audit.csv micaform_switch_note.md results.json"
+    }
+  }
+]
