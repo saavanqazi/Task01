@@ -6,6 +6,8 @@ Goal of this roadmap: take the mined bundle to a submittable ZIP that clears bot
 
 ---
 
+> **Running it:** all harbor/docker commands below are shown in bash form from the guidelines. The Windows cmd equivalents, using `--env-file glm.env` and the `jobs\` output folder, are in `local/README.md`, with `local/kit.py` doing the clean-up, reward readout, fairness probes and evaluations packaging.
+
 ## 0. What the task actually asks (problem statement, decoded)
 
 Rafa (studio owner) wants Theo's 11-row draft comparison checked **cell by cell** (11 features × 2 products = 22 cells) against three source documents, ranked by a house-rules file, and then wants four counts and a note to Maren.
