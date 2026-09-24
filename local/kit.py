@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Cross-platform helper for the harbor loop (runs from Windows cmd with plain python).
+r"""Cross-platform helper for the harbor loop (runs from Windows cmd with plain python).
 
   python local\kit.py clean                    remove mined evaluations\nop and evaluations\oracle
   python local\kit.py rewards jobs\<job>       reward + failed checks per trial (crash / missing trajectory flagged)
