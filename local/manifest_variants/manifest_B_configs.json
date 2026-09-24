@@ -1,0 +1,644 @@
+{
+  "task_id": "tech-mg_it_b10_a5-mic-modelling-feature-matrix-audit",
+  "verifier_configs": [
+    {
+      "name": "matrix_exists",
+      "category": "core",
+      "tag": "core",
+      "source": {
+        "type": "file",
+        "file": {
+          "type": "filesystem",
+          "command": "check_path_exists",
+          "arguments": {
+            "path": "feature_matrix_audit.csv"
+          }
+        }
+      },
+      "assertion": {
+        "type": "deterministic",
+        "expected": true,
+        "deterministic": {
+          "path": "$.is_file",
+          "comparison": "equals"
+        }
+      },
+      "metadata": {
+        "how_justification": "Checks feature_matrix_audit.csv is present as a file in the workspace.",
+        "why_justification": "The feature matrix audit is delivered.",
+        "tag": "core"
+      }
+    },
+    {
+      "name": "matrix_header",
+      "category": "core",
+      "tag": "core",
+      "source": {
+        "type": "file",
+        "file": {
+          "type": "csv",
+          "command": "extract_text",
+          "arguments": {
+            "path": "feature_matrix_audit.csv"
+          }
+        }
+      },
+      "assertion": {
+        "type": "deterministic",
+        "expected": "(?i)\\A\\x22?feature_id\\x22?[ \\t]*,[ \\t]*\\x22?racklane_verdict\\x22?[ \\t]*,[ \\t]*\\x22?racklane_decided_by\\x22?[ \\t]*,[ \\t]*\\x22?micaform_verdict\\x22?[ \\t]*,[ \\t]*\\x22?micaform_decided_by\\x22?[ \\t]*\\r?\\n",
+        "deterministic": {
+          "path": "$.text",
+          "comparison": "regex_match"
+        }
+      },
+      "metadata": {
+        "how_justification": "Opens feature_matrix_audit.csv with csv.extract_text and applies regex_match.",
+        "why_justification": "The contract document pins the header verbatim. Entailed by: \"Header, exactly: `feature_id,racklane_verdict,racklane_decided_by,micaform_verdict,micaform_decided_by`\"",
+        "tag": "core"
+      }
+    },
+    {
+      "name": "matrix_table_trap_ft2",
+      "category": "core",
+      "tag": "core",
+      "source": {
+        "type": "file",
+        "file": {
+          "type": "csv",
+          "command": "read_rows",
+          "arguments": {
+            "path": "feature_matrix_audit.csv"
+          }
+        }
+      },
+      "assertion": {
+        "type": "deterministic",
+        "expected": {
+          "id_column": "feature_id",
+          "rows": {
+            "FT-2": {
+              "racklane_verdict": "OVERTURNED",
+              "racklane_decided_by": "review",
+              "micaform_verdict": "STANDS",
+              "micaform_decided_by": "micaform_page"
+            }
+          },
+          "cell_types": {
+            "racklane_verdict": "text",
+            "racklane_decided_by": "text",
+            "micaform_verdict": "text",
+            "micaform_decided_by": "text"
+          }
+        },
+        "deterministic": {
+          "path": "$",
+          "comparison": "table_equals"
+        }
+      },
+      "metadata": {
+        "how_justification": "Parses feature_matrix_audit.csv with csv.read_rows and applies table_equals to every graded cell of the FT-2 row (matched by 'feature_id'); a failure names the exact cell.",
+        "why_justification": "Every cell's verdict and deciding document is graded, so a review refused on a silent reference, a review allowed over the vendor, a release history skipped and an omission read as absence each show on the rows they move. Entailed by: \"One row per feature row in `draft_comparison.md` and no other rows, in any order, with `feature_id` exactly as the draft writes it. Each row carries two cells for each product. `racklane_verdict` and `micaform_verdict` each take exactly one of `STANDS`, `OVERTURNED` or `UNVERIFIABLE`: whether Theo's entry for that product on that row survives the documents. `racklane_decided_by` and `micaform_decided_by` name the one document that decides that cell, by its short name in the house rules \u2014 `racklane_manual`, `micaform_page` or `review` \u2014 or `none` where the verdict is `UNVERIFIABLE`. Which document decides a cell is not a judgement call: the house rules rank the documents, say what counts as a document speaking to a feature, and name the deciding document even where another one agrees with it, so every cell has one answer.\"",
+        "tag": "core"
+      }
+    },
+    {
+      "name": "matrix_table_trap_ft3",
+      "category": "core",
+      "tag": "core",
+      "source": {
+        "type": "file",
+        "file": {
+          "type": "csv",
+          "command": "read_rows",
+          "arguments": {
+            "path": "feature_matrix_audit.csv"
+          }
+        }
+      },
+      "assertion": {
+        "type": "deterministic",
+        "expected": {
+          "id_column": "feature_id",
+          "rows": {
+            "FT-3": {
+              "racklane_verdict": "OVERTURNED",
+              "racklane_decided_by": "review",
+              "micaform_verdict": "STANDS",
+              "micaform_decided_by": "micaform_page"
+            }
+          },
+          "cell_types": {
+            "racklane_verdict": "text",
+            "racklane_decided_by": "text",
+            "micaform_verdict": "text",
+            "micaform_decided_by": "text"
+          }
+        },
+        "deterministic": {
+          "path": "$",
+          "comparison": "table_equals"
+        }
+      },
+      "metadata": {
+        "how_justification": "Parses feature_matrix_audit.csv with csv.read_rows and applies table_equals to every graded cell of the FT-3 row (matched by 'feature_id'); a failure names the exact cell.",
+        "why_justification": "Every cell's verdict and deciding document is graded, so a review refused on a silent reference, a review allowed over the vendor, a release history skipped and an omission read as absence each show on the rows they move. Entailed by: \"One row per feature row in `draft_comparison.md` and no other rows, in any order, with `feature_id` exactly as the draft writes it. Each row carries two cells for each product. `racklane_verdict` and `micaform_verdict` each take exactly one of `STANDS`, `OVERTURNED` or `UNVERIFIABLE`: whether Theo's entry for that product on that row survives the documents. `racklane_decided_by` and `micaform_decided_by` name the one document that decides that cell, by its short name in the house rules \u2014 `racklane_manual`, `micaform_page` or `review` \u2014 or `none` where the verdict is `UNVERIFIABLE`. Which document decides a cell is not a judgement call: the house rules rank the documents, say what counts as a document speaking to a feature, and name the deciding document even where another one agrees with it, so every cell has one answer.\"",
+        "tag": "core"
+      }
+    },
+    {
+      "name": "matrix_table_trap_ft10",
+      "category": "core",
+      "tag": "core",
+      "source": {
+        "type": "file",
+        "file": {
+          "type": "csv",
+          "command": "read_rows",
+          "arguments": {
+            "path": "feature_matrix_audit.csv"
+          }
+        }
+      },
+      "assertion": {
+        "type": "deterministic",
+        "expected": {
+          "id_column": "feature_id",
+          "rows": {
+            "FT-10": {
+              "racklane_verdict": "STANDS",
+              "racklane_decided_by": "racklane_manual",
+              "micaform_verdict": "OVERTURNED",
+              "micaform_decided_by": "micaform_page"
+            }
+          },
+          "cell_types": {
+            "racklane_verdict": "text",
+            "racklane_decided_by": "text",
+            "micaform_verdict": "text",
+            "micaform_decided_by": "text"
+          }
+        },
+        "deterministic": {
+          "path": "$",
+          "comparison": "table_equals"
+        }
+      },
+      "metadata": {
+        "how_justification": "Parses feature_matrix_audit.csv with csv.read_rows and applies table_equals to every graded cell of the FT-3 row (matched by 'feature_id'); a failure names the exact cell.",
+        "why_justification": "The sidechain row moves on both sides when a release outside the one under audit is read as current: the rack cell flips if the Racklane 4.4 entry (beyond the studio's 4.3, rule 3) is applied, and the Micaform cell flips if the page's \"Coming in 1.2\" preview is read as Micaform 1.1 (rule 4). Entailed by the house rules' release scoping and the cell contract.",
+        "tag": "core"
+      }
+    },
+    {
+      "name": "matrix_table_trap_ft12",
+      "category": "core",
+      "tag": "core",
+      "source": {
+        "type": "file",
+        "file": {
+          "type": "csv",
+          "command": "read_rows",
+          "arguments": {
+            "path": "feature_matrix_audit.csv"
+          }
+        }
+      },
+      "assertion": {
+        "type": "deterministic",
+        "expected": {
+          "id_column": "feature_id",
+          "rows": {
+            "FT-12": {
+              "racklane_verdict": "OVERTURNED",
+              "racklane_decided_by": "racklane_manual",
+              "micaform_verdict": "STANDS",
+              "micaform_decided_by": "review"
+            }
+          },
+          "cell_types": {
+            "racklane_verdict": "text",
+            "racklane_decided_by": "text",
+            "micaform_verdict": "text",
+            "micaform_decided_by": "text"
+          }
+        },
+        "deterministic": {
+          "path": "$",
+          "comparison": "table_equals"
+        }
+      },
+      "metadata": {
+        "how_justification": "Parses feature_matrix_audit.csv with csv.read_rows and applies table_equals to every graded cell of the FT-3 row (matched by 'feature_id'); a failure names the exact cell.",
+        "why_justification": "The tape wow control is added by the 4.1 entry and removed with the Tape stage by the 4.2 entry (rule 3: a control lives on the stage that carries it), so the rack cell is OVERTURNED on the manual even though the review also mentions the control; the Micaform page is silent and the review says the tape stage has no wow control, so the review decides that cell (rule 4). Entailed by the cell contract.",
+        "tag": "core"
+      }
+    },
+    {
+      "name": "matrix_table",
+      "category": "core",
+      "tag": "core",
+      "source": {
+        "type": "file",
+        "file": {
+          "type": "csv",
+          "command": "read_rows",
+          "arguments": {
+            "path": "feature_matrix_audit.csv"
+          }
+        }
+      },
+      "assertion": {
+        "type": "deterministic",
+        "expected": {
+          "id_column": "feature_id",
+          "rows": {
+            "FT-1": {
+              "racklane_verdict": "STANDS",
+              "racklane_decided_by": "racklane_manual",
+              "micaform_verdict": "STANDS",
+              "micaform_decided_by": "micaform_page"
+            },
+            "FT-4": {
+              "racklane_verdict": "STANDS",
+              "racklane_decided_by": "racklane_manual",
+              "micaform_verdict": "OVERTURNED",
+              "micaform_decided_by": "micaform_page"
+            },
+            "FT-5": {
+              "racklane_verdict": "STANDS",
+              "racklane_decided_by": "racklane_manual",
+              "micaform_verdict": "UNVERIFIABLE",
+              "micaform_decided_by": "none"
+            },
+            "FT-6": {
+              "racklane_verdict": "OVERTURNED",
+              "racklane_decided_by": "racklane_manual",
+              "micaform_verdict": "OVERTURNED",
+              "micaform_decided_by": "micaform_page"
+            },
+            "FT-7": {
+              "racklane_verdict": "STANDS",
+              "racklane_decided_by": "racklane_manual",
+              "micaform_verdict": "STANDS",
+              "micaform_decided_by": "micaform_page"
+            },
+            "FT-8": {
+              "racklane_verdict": "OVERTURNED",
+              "racklane_decided_by": "racklane_manual",
+              "micaform_verdict": "STANDS",
+              "micaform_decided_by": "micaform_page"
+            },
+            "FT-9": {
+              "racklane_verdict": "UNVERIFIABLE",
+              "racklane_decided_by": "none",
+              "micaform_verdict": "STANDS",
+              "micaform_decided_by": "micaform_page"
+            },
+            "FT-11": {
+              "racklane_verdict": "STANDS",
+              "racklane_decided_by": "racklane_manual",
+              "micaform_verdict": "UNVERIFIABLE",
+              "micaform_decided_by": "none"
+            }
+          },
+          "row_set": [
+            "FT-1",
+            "FT-2",
+            "FT-3",
+            "FT-4",
+            "FT-5",
+            "FT-6",
+            "FT-7",
+            "FT-8",
+            "FT-9",
+            "FT-10",
+            "FT-11",
+            "FT-12"
+          ],
+          "columns": [
+            "feature_id",
+            "racklane_verdict",
+            "racklane_decided_by",
+            "micaform_verdict",
+            "micaform_decided_by"
+          ],
+          "cell_types": {
+            "racklane_verdict": "text",
+            "racklane_decided_by": "text",
+            "micaform_verdict": "text",
+            "micaform_decided_by": "text"
+          }
+        },
+        "deterministic": {
+          "path": "$",
+          "comparison": "table_equals"
+        }
+      },
+      "metadata": {
+        "how_justification": "Parses feature_matrix_audit.csv with csv.read_rows and applies table_equals: every graded cell of 9 rows plus the full 11-row population as a row_set lock (duplicate-row and cross-product dumps fail the lock; a duplicated graded id is rejected outright), and the delivered column set closed to the stated header, with declared cell types {'racklane_verdict': 'text', 'racklane_decided_by': 'text', 'micaform_verdict': 'text', 'micaform_decided_by': 'text'} normalised on both sides. A failure names the exact row and column.",
+        "why_justification": "Every cell's verdict and deciding document is graded, so a review refused on a silent reference, a review allowed over the vendor, a release history skipped and an omission read as absence each show on the rows they move. FT-6 also moves when the 4.4 entry beyond the studio's release is read as current, and FT-5 when the Micaform 1.2 preview is read as the release on sale. Entailed by: \"One row per feature row in `draft_comparison.md` and no other rows, in any order, with `feature_id` exactly as the draft writes it.\"",
+        "tag": "core"
+      }
+    },
+    {
+      "name": "note_exists",
+      "category": "core",
+      "tag": "core",
+      "source": {
+        "type": "file",
+        "file": {
+          "type": "filesystem",
+          "command": "check_path_exists",
+          "arguments": {
+            "path": "micaform_switch_note.md"
+          }
+        }
+      },
+      "assertion": {
+        "type": "deterministic",
+        "expected": true,
+        "deterministic": {
+          "path": "$.is_file",
+          "comparison": "equals"
+        }
+      },
+      "metadata": {
+        "how_justification": "Checks micaform_switch_note.md is present as a file in the workspace.",
+        "why_justification": "The note to Maren is delivered.",
+        "tag": "core"
+      }
+    },
+    {
+      "name": "note_prose_floor",
+      "category": "core",
+      "tag": "core",
+      "source": {
+        "type": "file",
+        "file": {
+          "type": "md",
+          "command": "extract_text",
+          "arguments": {
+            "path": "micaform_switch_note.md"
+          }
+        }
+      },
+      "assertion": {
+        "type": "deterministic",
+        "expected": "(?s)(?:[A-Za-z]+[^A-Za-z]+){60,}",
+        "deterministic": {
+          "path": "$.text",
+          "comparison": "regex_match"
+        }
+      },
+      "metadata": {
+        "how_justification": "Opens micaform_switch_note.md with md.extract_text and applies regex_match.",
+        "why_justification": "The note is the message Maren is owed about the purchase; a count and a release number are not a message to a business partner.",
+        "tag": "core"
+      }
+    },
+    {
+      "name": "note_tape_release",
+      "category": "core",
+      "tag": "core",
+      "source": {
+        "type": "file",
+        "file": {
+          "type": "md",
+          "command": "extract_text",
+          "arguments": {
+            "path": "micaform_switch_note.md"
+          }
+        }
+      },
+      "assertion": {
+        "type": "deterministic",
+        "expected": "(?is)(?:\\bFT-6\\w*\\b(?:(?:(?!(?:\\n[ \\t]*\\n|\\[Slide \\d)).){0,900}?(?:[.!?,;:\u2013\u2014]|\\bbut\\b|\\band\\b|\\byet\\b|\\bso\\b))?(?:(?!(?:[.!?,;:\u2013\u2014]|\\bbut\\b|\\band\\b|\\byet\\b|\\bso\\b))(?!\\bno\\b|\\bnot\\b)(?!(?:\\n[ \\t]*\\n|\\[Slide \\d)).){0,200}?\\b(?<!\\bno )(?<!\\bnot )(?<![\\d.])(?:4\\.2|4\\.20)(?!\\d)(?!\\.\\d)|(?:^|(?<=[.!?,;:\u2013\u2014\\n])|\\bbut\\b|\\band\\b|\\byet\\b|\\bso\\b)(?:(?!(?:[.!?,;:\u2013\u2014]|\\bbut\\b|\\band\\b|\\byet\\b|\\bso\\b))(?!\\bno\\b|\\bnot\\b)(?!\\n[ \\t]*\\n).){0,200}?\\b(?<!\\bno )(?<!\\bnot )(?<![\\d.])(?:4\\.2|4\\.20)(?!\\d)(?!\\.\\d)\\w*\\b(?:(?:(?!(?:\\n[ \\t]*\\n|\\[Slide \\d)).){0,900}?(?:[.!?,;:\u2013\u2014]|\\bbut\\b|\\band\\b|\\byet\\b|\\bso\\b))?(?:(?!(?:[.!?,;:\u2013\u2014]|\\bbut\\b|\\band\\b|\\byet\\b|\\bso\\b))(?!\\bno\\b|\\bnot\\b)(?!(?:\\n[ \\t]*\\n|\\[Slide \\d)).){0,200}?\\bFT-6)",
+        "deterministic": {
+          "path": "$.text",
+          "comparison": "regex_match"
+        }
+      },
+      "metadata": {
+        "how_justification": "Opens micaform_switch_note.md with md.extract_text and applies regex_match.",
+        "why_justification": "Names the tape stage row, FT-6, and the Racklane release that settles whether the rack chain still has a tape stage, in one paragraph within about nine hundred characters of each other. That release is what the house rules' ranking of a later release entry over an earlier one and over the 4.0 control list produces, so the 4.0 list, the earlier 4.1 entry and the current 4.3 release are each a different figure and none satisfies it, and neither does the release written as a denial (a `no` or `not` in front of it, or between it and the id, inside one clause). The release number is graded here and nowhere else \u2014 what the matrix pins is the verdict and deciding document of the FT-6 rack cell it settles. Both names stand in the same paragraph: this is CO-NAMING, not attribution. Which record carries which value is pinned cell by cell in the register and in results.json, both core.",
+        "tag": "core"
+      }
+    },
+    {
+      "name": "note_in_common",
+      "category": "core",
+      "tag": "core",
+      "source": {
+        "type": "file",
+        "file": {
+          "type": "md",
+          "command": "extract_text",
+          "arguments": {
+            "path": "micaform_switch_note.md"
+          }
+        }
+      },
+      "assertion": {
+        "type": "deterministic",
+        "expected": "(?is)(?:(?:^|(?<=[.!?,;:\u2013\u2014\\n])|\\bbut\\b|\\band\\b|\\byet\\b|\\bso\\b)(?:(?!(?:[.!?,;:\u2013\u2014]|\\bbut\\b|\\band\\b|\\byet\\b|\\bso\\b))(?!\\bno\\b|\\bnot\\b)(?!\\n[ \\t]*\\n).){0,200}?(?<!\\bno )(?<!\\bnot )(?<!\\bno )(?<!\\bnot )(?<![-\\d.])(?:5|5\\.0|5\\.00|\\bfive\\b)(?!\\d)(?!\\.\\d)[^\\w\\n,;.|/]{0,2}(?:(?![.!?](?:\\s|$))(?!(?:\\bM[-_ ]?i[-_ ]?c[-_ ]?a[-_ ]?f[-_ ]?o[-_ ]?r[-_ ]?m[-_\\s]*o[-_ ]?n[-_ ]?l[-_ ]?y\\w*\\b|\\bo[-_ ]?n[-_ ]?l[-_ ]?y[-_\\s]*i[-_ ]?n[-_\\s]*M[-_ ]?i[-_ ]?c[-_ ]?a[-_ ]?f[-_ ]?o[-_ ]?r[-_ ]?m\\w*\\b))(?!(?:\\d|\\b(?:zero|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen|twenty)\\b)).){0,48}(?<!\\bno )(?<!\\bnot )(?:\\bi[-_ ]?n[-_\\s]*c[-_ ]?o[-_ ]?m[-_ ]?m[-_ ]?o[-_ ]?n\\w*\\b|\\bs[-_ ]?h[-_ ]?a[-_ ]?r[-_ ]?e\\w*\\b)|(?<!\\d )(?<!\\d  )(?!(?:\\d|\\b(?:zero|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen|twenty)\\b))(?<!\\bno )(?<!\\bnot )(?:\\bi[-_ ]?n[-_\\s]*c[-_ ]?o[-_ ]?m[-_ ]?m[-_ ]?o[-_ ]?n\\w*\\b|\\bs[-_ ]?h[-_ ]?a[-_ ]?r[-_ ]?e\\w*\\b)(?:(?![.!?](?:\\s|$))(?!(?:\\bM[-_ ]?i[-_ ]?c[-_ ]?a[-_ ]?f[-_ ]?o[-_ ]?r[-_ ]?m[-_\\s]*o[-_ ]?n[-_ ]?l[-_ ]?y\\w*\\b|\\bo[-_ ]?n[-_ ]?l[-_ ]?y[-_\\s]*i[-_ ]?n[-_\\s]*M[-_ ]?i[-_ ]?c[-_ ]?a[-_ ]?f[-_ ]?o[-_ ]?r[-_ ]?m\\w*\\b)).){0,48}(?<!\\bno )(?<!\\bnot )(?<![-\\d.])(?:5|5\\.0|5\\.00|\\bfive\\b)(?!\\d)(?!\\.\\d)(?![^\\w\\n,;.|/]{0,2}(?:(?:\\bM[-_ ]?i[-_ ]?c[-_ ]?a[-_ ]?f[-_ ]?o[-_ ]?r[-_ ]?m[-_\\s]*o[-_ ]?n[-_ ]?l[-_ ]?y\\w*\\b|\\bo[-_ ]?n[-_ ]?l[-_ ]?y[-_\\s]*i[-_ ]?n[-_\\s]*M[-_ ]?i[-_ ]?c[-_ ]?a[-_ ]?f[-_ ]?o[-_ ]?r[-_ ]?m\\w*\\b))))",
+        "deterministic": {
+          "path": "$.text",
+          "comparison": "regex_match"
+        }
+      },
+      "metadata": {
+        "how_justification": "Opens micaform_switch_note.md with md.extract_text and applies regex_match.",
+        "why_justification": "The note states the in common count once: the features both products are decided to have, counted as the house rules count them. It moves with the trap \u2014 refusing the review on the two rack cells the reference is silent on drops it. The same count is core in results.json; here it is graded as the figure beside its own label. The digit inside a feature id such as FT-5 does not satisfy it.",
+        "tag": "core"
+      }
+    },
+    {
+      "name": "note_in_common_exactly_one",
+      "category": "core",
+      "tag": "incidental",
+      "source": {
+        "type": "file",
+        "file": {
+          "type": "md",
+          "command": "extract_text",
+          "arguments": {
+            "path": "micaform_switch_note.md"
+          }
+        }
+      },
+      "assertion": {
+        "type": "deterministic",
+        "expected": "(?is)(?:\\bi[-_ ]?n[-_\\s]*c[-_ ]?o[-_ ]?m[-_ ]?m[-_ ]?o[-_ ]?n\\w*\\b(?:(?![.!?](?:\\s|$)|\\n).){0,160}?(?:(?<![\\d.])\\d[\\d,]*(?:\\.\\d+)?(?!\\d)(?!\\.\\d)|\\b(?:zero|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen|twenty)\\b)(?:[^\\w\\n;.|/]*(?:\\b(?:or|alternatively|possibly|either|maybe|perhaps)\\b|\\s/\\s)[^\\w\\n;.|/]*|[^\\w\\n;.|/]*(?:\\bou\\b|\\bsoit\\b|\\bvoire\\b)[^\\w\\n;.|/]*)(?:(?<![\\d.])\\d[\\d,]*(?:\\.\\d+)?(?!\\d)(?!\\.\\d)|\\b(?:zero|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen|twenty)\\b)(?!\\s*(?:in|of|out|per|percent)\\b|\\s*%)|(?:(?<![\\d.])\\d[\\d,]*(?:\\.\\d+)?(?!\\d)(?!\\.\\d)|\\b(?:zero|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen|twenty)\\b)(?:[^\\w\\n;.|/]*(?:\\b(?:or|alternatively|possibly|either|maybe|perhaps)\\b|\\s/\\s)[^\\w\\n;.|/]*|[^\\w\\n;.|/]*(?:\\bou\\b|\\bsoit\\b|\\bvoire\\b)[^\\w\\n;.|/]*)(?:(?<![\\d.])\\d[\\d,]*(?:\\.\\d+)?(?!\\d)(?!\\.\\d)|\\b(?:zero|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen|twenty)\\b)(?!\\s*(?:in|of|out|per|percent)\\b|\\s*%)(?:(?![.!?](?:\\s|$)|\\n).){0,160}?\\bi[-_ ]?n[-_\\s]*c[-_ ]?o[-_ ]?m[-_ ]?m[-_ ]?o[-_ ]?n\\w*\\b|\\bi[-_ ]?n[-_\\s]*c[-_ ]?o[-_ ]?m[-_ ]?m[-_ ]?o[-_ ]?n\\w*\\b(?:(?![.!?](?:\\s|$)|\\n).){0,160}?(?:(?<![\\d.])\\d[\\d,]*(?:\\.\\d+)?(?!\\d)(?!\\.\\d)|\\b(?:zero|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen|twenty)\\b)(?:(?![.!?](?:\\s|$)|\\n).){0,160}?(?:[^\\w\\n;.|/]*(?:\\b(?:or|alternatively|possibly|either|maybe|perhaps)\\b|\\s/\\s)[^\\w\\n;.|/]*|[^\\w\\n;.|/]*(?:\\bou\\b|\\bsoit\\b|\\bvoire\\b)[^\\w\\n;.|/]*)(?:(?<![\\d.])\\d[\\d,]*(?:\\.\\d+)?(?!\\d)(?!\\.\\d)|\\b(?:zero|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen|twenty)\\b)(?!\\s*(?:in|of|out|per|percent)\\b|\\s*%)|(?:(?<![\\d.])\\d[\\d,]*(?:\\.\\d+)?(?!\\d)(?!\\.\\d)|\\b(?:zero|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen|twenty)\\b)(?:(?![.!?](?:\\s|$)|\\n).){0,160}?\\bi[-_ ]?n[-_\\s]*c[-_ ]?o[-_ ]?m[-_ ]?m[-_ ]?o[-_ ]?n\\w*\\b(?:(?![.!?](?:\\s|$)|\\n).){0,160}?(?:[^\\w\\n;.|/]*(?:\\b(?:or|alternatively|possibly|either|maybe|perhaps)\\b|\\s/\\s)[^\\w\\n;.|/]*|[^\\w\\n;.|/]*(?:\\bou\\b|\\bsoit\\b|\\bvoire\\b)[^\\w\\n;.|/]*)(?:(?<![\\d.])\\d[\\d,]*(?:\\.\\d+)?(?!\\d)(?!\\.\\d)|\\b(?:zero|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen|twenty)\\b)(?!\\s*(?:in|of|out|per|percent)\\b|\\s*%)|(?:(?<![\\d.])\\d[\\d,]*(?:\\.\\d+)?(?!\\d)(?!\\.\\d)|\\b(?:zero|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen|twenty)\\b)(?:(?![.!?](?:\\s|$)|\\n).){0,160}?(?:[^\\w\\n;.|/]*(?:\\b(?:or|alternatively|possibly|either|maybe|perhaps)\\b|\\s/\\s)[^\\w\\n;.|/]*|[^\\w\\n;.|/]*(?:\\bou\\b|\\bsoit\\b|\\bvoire\\b)[^\\w\\n;.|/]*)(?:(?<![\\d.])\\d[\\d,]*(?:\\.\\d+)?(?!\\d)(?!\\.\\d)|\\b(?:zero|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen|twenty)\\b)(?!\\s*(?:in|of|out|per|percent)\\b|\\s*%)(?:(?![.!?](?:\\s|$)|\\n).){0,160}?\\bi[-_ ]?n[-_\\s]*c[-_ ]?o[-_ ]?m[-_ ]?m[-_ ]?o[-_ ]?n\\w*\\b)",
+        "deterministic": {
+          "path": "$.text",
+          "comparison": "not_regex_match"
+        }
+      },
+      "metadata": {
+        "how_justification": "Opens micaform_switch_note.md with md.extract_text and applies not_regex_match.",
+        "why_justification": "A hedge is not an answer: the in common figure may not be offered as one of several candidates in its own sentence. The note states the in common count once: the features both products are decided to have, counted as the house rules count them. It moves with the trap \u2014 refusing the review on the two rack cells the reference is silent on drops it. The same count is core in results.json; here it is graded as the figure beside its own label. The digit inside a feature id such as FT-5 does not satisfy it.",
+        "tag": "incidental"
+      }
+    },
+    {
+      "name": "note_micaform_only",
+      "category": "core",
+      "tag": "core",
+      "source": {
+        "type": "file",
+        "file": {
+          "type": "md",
+          "command": "extract_text",
+          "arguments": {
+            "path": "micaform_switch_note.md"
+          }
+        }
+      },
+      "assertion": {
+        "type": "deterministic",
+        "expected": "(?is)(?:(?:^|(?<=[.!?,;:\u2013\u2014\\n])|\\bbut\\b|\\band\\b|\\byet\\b|\\bso\\b)(?:(?!(?:[.!?,;:\u2013\u2014]|\\bbut\\b|\\band\\b|\\byet\\b|\\bso\\b))(?!\\bno\\b|\\bnot\\b)(?!\\n[ \\t]*\\n).){0,200}?(?<!\\bno )(?<!\\bnot )(?<!\\bno )(?<!\\bnot )(?<![-\\d.])(?:2|2\\.0|2\\.00|\\btwo\\b)(?!\\d)(?!\\.\\d)[^\\w\\n,;.|/]{0,2}(?:(?![.!?](?:\\s|$))(?!(?:\\bi[-_ ]?n[-_\\s]*c[-_ ]?o[-_ ]?m[-_ ]?m[-_ ]?o[-_ ]?n\\w*\\b|\\bs[-_ ]?h[-_ ]?a[-_ ]?r[-_ ]?e\\w*\\b))(?!(?:\\d|\\b(?:zero|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen|twenty)\\b)).){0,48}(?<!\\bno )(?<!\\bnot )(?:\\bM[-_ ]?i[-_ ]?c[-_ ]?a[-_ ]?f[-_ ]?o[-_ ]?r[-_ ]?m[-_\\s]*o[-_ ]?n[-_ ]?l[-_ ]?y\\w*\\b|\\bo[-_ ]?n[-_ ]?l[-_ ]?y[-_\\s]*i[-_ ]?n[-_\\s]*M[-_ ]?i[-_ ]?c[-_ ]?a[-_ ]?f[-_ ]?o[-_ ]?r[-_ ]?m\\w*\\b)|(?<!\\d )(?<!\\d  )(?!(?:\\d|\\b(?:zero|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen|twenty)\\b))(?<!\\bno )(?<!\\bnot )(?:\\bM[-_ ]?i[-_ ]?c[-_ ]?a[-_ ]?f[-_ ]?o[-_ ]?r[-_ ]?m[-_\\s]*o[-_ ]?n[-_ ]?l[-_ ]?y\\w*\\b|\\bo[-_ ]?n[-_ ]?l[-_ ]?y[-_\\s]*i[-_ ]?n[-_\\s]*M[-_ ]?i[-_ ]?c[-_ ]?a[-_ ]?f[-_ ]?o[-_ ]?r[-_ ]?m\\w*\\b)(?:(?![.!?](?:\\s|$))(?!(?:\\bi[-_ ]?n[-_\\s]*c[-_ ]?o[-_ ]?m[-_ ]?m[-_ ]?o[-_ ]?n\\w*\\b|\\bs[-_ ]?h[-_ ]?a[-_ ]?r[-_ ]?e\\w*\\b)).){0,48}(?<!\\bno )(?<!\\bnot )(?<![-\\d.])(?:2|2\\.0|2\\.00|\\btwo\\b)(?!\\d)(?!\\.\\d)(?![^\\w\\n,;.|/]{0,2}(?:(?:\\bi[-_ ]?n[-_\\s]*c[-_ ]?o[-_ ]?m[-_ ]?m[-_ ]?o[-_ ]?n\\w*\\b|\\bs[-_ ]?h[-_ ]?a[-_ ]?r[-_ ]?e\\w*\\b))))",
+        "deterministic": {
+          "path": "$.text",
+          "comparison": "regex_match"
+        }
+      },
+      "metadata": {
+        "how_justification": "Opens micaform_switch_note.md with md.extract_text and applies regex_match.",
+        "why_justification": "The note states the Micaform only count once: what the move buys that the rack chain is decided to lack, counted as the house rules count it. The same count is core in results.json; here it is graded as the figure beside its own label. The digit inside a feature id such as FT-2 does not satisfy it.",
+        "tag": "core"
+      }
+    },
+    {
+      "name": "note_micaform_only_exactly_one",
+      "category": "core",
+      "tag": "incidental",
+      "source": {
+        "type": "file",
+        "file": {
+          "type": "md",
+          "command": "extract_text",
+          "arguments": {
+            "path": "micaform_switch_note.md"
+          }
+        }
+      },
+      "assertion": {
+        "type": "deterministic",
+        "expected": "(?is)(?:\\bM[-_ ]?i[-_ ]?c[-_ ]?a[-_ ]?f[-_ ]?o[-_ ]?r[-_ ]?m[-_\\s]*o[-_ ]?n[-_ ]?l[-_ ]?y\\w*\\b(?:(?![.!?](?:\\s|$)|\\n).){0,160}?(?:(?<![\\d.])\\d[\\d,]*(?:\\.\\d+)?(?!\\d)(?!\\.\\d)|\\b(?:zero|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen|twenty)\\b)(?:[^\\w\\n;.|/]*(?:\\b(?:or|alternatively|possibly|either|maybe|perhaps)\\b|\\s/\\s)[^\\w\\n;.|/]*|[^\\w\\n;.|/]*(?:\\bou\\b|\\bsoit\\b|\\bvoire\\b)[^\\w\\n;.|/]*)(?:(?<![\\d.])\\d[\\d,]*(?:\\.\\d+)?(?!\\d)(?!\\.\\d)|\\b(?:zero|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen|twenty)\\b)(?!\\s*(?:in|of|out|per|percent)\\b|\\s*%)|(?:(?<![\\d.])\\d[\\d,]*(?:\\.\\d+)?(?!\\d)(?!\\.\\d)|\\b(?:zero|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen|twenty)\\b)(?:[^\\w\\n;.|/]*(?:\\b(?:or|alternatively|possibly|either|maybe|perhaps)\\b|\\s/\\s)[^\\w\\n;.|/]*|[^\\w\\n;.|/]*(?:\\bou\\b|\\bsoit\\b|\\bvoire\\b)[^\\w\\n;.|/]*)(?:(?<![\\d.])\\d[\\d,]*(?:\\.\\d+)?(?!\\d)(?!\\.\\d)|\\b(?:zero|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen|twenty)\\b)(?!\\s*(?:in|of|out|per|percent)\\b|\\s*%)(?:(?![.!?](?:\\s|$)|\\n).){0,160}?\\bM[-_ ]?i[-_ ]?c[-_ ]?a[-_ ]?f[-_ ]?o[-_ ]?r[-_ ]?m[-_\\s]*o[-_ ]?n[-_ ]?l[-_ ]?y\\w*\\b|\\bM[-_ ]?i[-_ ]?c[-_ ]?a[-_ ]?f[-_ ]?o[-_ ]?r[-_ ]?m[-_\\s]*o[-_ ]?n[-_ ]?l[-_ ]?y\\w*\\b(?:(?![.!?](?:\\s|$)|\\n).){0,160}?(?:(?<![\\d.])\\d[\\d,]*(?:\\.\\d+)?(?!\\d)(?!\\.\\d)|\\b(?:zero|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen|twenty)\\b)(?:(?![.!?](?:\\s|$)|\\n).){0,160}?(?:[^\\w\\n;.|/]*(?:\\b(?:or|alternatively|possibly|either|maybe|perhaps)\\b|\\s/\\s)[^\\w\\n;.|/]*|[^\\w\\n;.|/]*(?:\\bou\\b|\\bsoit\\b|\\bvoire\\b)[^\\w\\n;.|/]*)(?:(?<![\\d.])\\d[\\d,]*(?:\\.\\d+)?(?!\\d)(?!\\.\\d)|\\b(?:zero|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen|twenty)\\b)(?!\\s*(?:in|of|out|per|percent)\\b|\\s*%)|(?:(?<![\\d.])\\d[\\d,]*(?:\\.\\d+)?(?!\\d)(?!\\.\\d)|\\b(?:zero|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen|twenty)\\b)(?:(?![.!?](?:\\s|$)|\\n).){0,160}?\\bM[-_ ]?i[-_ ]?c[-_ ]?a[-_ ]?f[-_ ]?o[-_ ]?r[-_ ]?m[-_\\s]*o[-_ ]?n[-_ ]?l[-_ ]?y\\w*\\b(?:(?![.!?](?:\\s|$)|\\n).){0,160}?(?:[^\\w\\n;.|/]*(?:\\b(?:or|alternatively|possibly|either|maybe|perhaps)\\b|\\s/\\s)[^\\w\\n;.|/]*|[^\\w\\n;.|/]*(?:\\bou\\b|\\bsoit\\b|\\bvoire\\b)[^\\w\\n;.|/]*)(?:(?<![\\d.])\\d[\\d,]*(?:\\.\\d+)?(?!\\d)(?!\\.\\d)|\\b(?:zero|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen|twenty)\\b)(?!\\s*(?:in|of|out|per|percent)\\b|\\s*%)|(?:(?<![\\d.])\\d[\\d,]*(?:\\.\\d+)?(?!\\d)(?!\\.\\d)|\\b(?:zero|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen|twenty)\\b)(?:(?![.!?](?:\\s|$)|\\n).){0,160}?(?:[^\\w\\n;.|/]*(?:\\b(?:or|alternatively|possibly|either|maybe|perhaps)\\b|\\s/\\s)[^\\w\\n;.|/]*|[^\\w\\n;.|/]*(?:\\bou\\b|\\bsoit\\b|\\bvoire\\b)[^\\w\\n;.|/]*)(?:(?<![\\d.])\\d[\\d,]*(?:\\.\\d+)?(?!\\d)(?!\\.\\d)|\\b(?:zero|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen|twenty)\\b)(?!\\s*(?:in|of|out|per|percent)\\b|\\s*%)(?:(?![.!?](?:\\s|$)|\\n).){0,160}?\\bM[-_ ]?i[-_ ]?c[-_ ]?a[-_ ]?f[-_ ]?o[-_ ]?r[-_ ]?m[-_\\s]*o[-_ ]?n[-_ ]?l[-_ ]?y\\w*\\b)",
+        "deterministic": {
+          "path": "$.text",
+          "comparison": "not_regex_match"
+        }
+      },
+      "metadata": {
+        "how_justification": "Opens micaform_switch_note.md with md.extract_text and applies not_regex_match.",
+        "why_justification": "A hedge is not an answer: the Micaform only figure may not be offered as one of several candidates in its own sentence. The note states the Micaform only count once: what the move buys that the rack chain is decided to lack, counted as the house rules count it. The same count is core in results.json; here it is graded as the figure beside its own label. The digit inside a feature id such as FT-2 does not satisfy it.",
+        "tag": "incidental"
+      }
+    },
+    {
+      "name": "note_sentence_floor",
+      "category": "core",
+      "tag": "core",
+      "source": {
+        "type": "file",
+        "file": {
+          "type": "md",
+          "command": "extract_text",
+          "arguments": {
+            "path": "micaform_switch_note.md"
+          }
+        }
+      },
+      "assertion": {
+        "type": "deterministic",
+        "expected": "(?s)(?:\\b[A-Za-z]{2,}\\b(?:[^A-Za-z.!?]|\\b[A-Za-z]\\b){0,40}){6}[^.!?]{0,400}[.!?](?:.*?(?:\\b[A-Za-z]{2,}\\b(?:[^A-Za-z.!?]|\\b[A-Za-z]\\b){0,40}){6}[^.!?]{0,400}[.!?])(?:.*?(?:\\b[A-Za-z]{2,}\\b(?:[^A-Za-z.!?]|\\b[A-Za-z]\\b){0,40}){6}[^.!?]{0,400}[.!?])",
+        "deterministic": {
+          "path": "$.text",
+          "comparison": "regex_match"
+        }
+      },
+      "metadata": {
+        "how_justification": "Opens micaform_switch_note.md with md.extract_text and applies regex_match.",
+        "why_justification": "A note to a business partner is prose. The other checks on `micaform_switch_note.md` grade a count beside its label, a second count beside its label, and a row id in the same paragraph as a release number, and the shared 60-word floor counts runs of letters, so a file of one-letter padding carrying those tokens would satisfy all of them. This grades what the contract asks in the same terms: at least 3 whole sentences, each of 6 or more words of two letters or more, each closed with a full stop, a question mark or an exclamation mark. It pins no word and no layout, so what it refuses is a file that is not written prose at all.",
+        "tag": "core"
+      }
+    },
+    {
+      "name": "results_figures",
+      "category": "core",
+      "tag": "core",
+      "source": {
+        "type": "file",
+        "file": {
+          "type": "json",
+          "command": "read_file",
+          "arguments": {
+            "path": "results.json"
+          }
+        }
+      },
+      "assertion": {
+        "type": "deterministic",
+        "expected": {
+          "keys": {
+            "overturned_cell_count": {
+              "value": 8,
+              "tolerance": null
+            },
+            "unverifiable_cell_count": {
+              "value": 3,
+              "tolerance": null
+            },
+            "in_common_feature_count": {
+              "value": 5,
+              "tolerance": null
+            },
+            "micaform_only_feature_count": {
+              "value": 2,
+              "tolerance": null
+            }
+          },
+          "closed": true
+        },
+        "deterministic": {
+          "path": "$",
+          "comparison": "object_equals"
+        }
+      },
+      "metadata": {
+        "how_justification": "Reads results.json with json.read_file and applies object_equals over the 4 graded keys with the key set closed; numeric keys compare within an absolute tolerance and a failure names the exact key.",
+        "why_justification": "The overturned count moves with the review-on-silence rule, the vendor-over-review rule and the release history, the unverifiable count with the review-on-silence rule and the release history; the two feature counts move with how the release history is read and with reading an omission as absence, and the in-common count also with the review-on-silence rule. The contract closes the key set.",
+        "tag": "core"
+      }
+    },
+    {
+      "name": "results_exists",
+      "category": "core",
+      "tag": "core",
+      "source": {
+        "type": "file",
+        "file": {
+          "type": "filesystem",
+          "command": "check_path_exists",
+          "arguments": {
+            "path": "results.json"
+          }
+        }
+      },
+      "assertion": {
+        "type": "deterministic",
+        "expected": true,
+        "deterministic": {
+          "path": "$.is_file",
+          "comparison": "equals"
+        }
+      },
+      "metadata": {
+        "how_justification": "Checks results.json is present as a file in the workspace.",
+        "why_justification": "Derived figures delivered.",
+        "tag": "core"
+      }
+    }
+  ]
+}

@@ -154,11 +154,12 @@ def cmd_zip(name):
     if missing:
         print("!! missing:", missing); sys.exit(1)
     mf = json.loads((TASK / "tests" / "manifest.json").read_text(encoding="utf-8"))
-    if not (isinstance(mf, list) and mf and all("assertion" in v for v in mf)):
-        print("!! tests/manifest.json must be a nonempty JSON list of verifiers"); sys.exit(1)
+    if not isinstance(mf, dict) or not isinstance(mf.get("verifier_configs", []), list):
+        print("!! tests/manifest.json must be a JSON object with optional verifier_configs[]"); sys.exit(1)
     vf = json.loads((TASK / "tests" / "verifier.json").read_text(encoding="utf-8"))
-    if vf.get("verifiers") != mf:
-        print("!! tests/verifier.json verifiers differ from tests/manifest.json"); sys.exit(1)
+    if not (isinstance(vf, dict) and vf.get("verifiers") and all("assertion" in v for v in vf["verifiers"])):
+        print("!! tests/verifier.json must carry a nonempty verifiers[] list of assertions"); sys.exit(1)
+    print(f"manifest.json: object, {len(mf.get('verifier_configs', []))} verifier_configs; verifier.json: {len(vf['verifiers'])} verifiers")
     if not (TASK / "qc_report.html").is_file():
         print("note: qc_report.html not present (fine for the first upload; required in the version you submit)")
     ev = sorted(p.name for p in (TASK / "evaluations").iterdir())

@@ -32,10 +32,10 @@ Verification of the round: engine replay of `tests/score.py` on the new gold →
 1.0 on two fresh runs; the nine note probes replayed in the task image (six correct wordings 1.0,
 three wrong notes 0.0); fresh 4-run GLM-5.2 battery → 3/4 (see Results log).
 
-Packaging: `tests/manifest.json` is the delivery format, a JSON list of the 17 verifiers (the
-platform's upload validation rejects the engine's object shape); `tests/verifier.json` carries the
-same verifiers in the engine's `{task_id, verifiers}` shape. `tests/score.py` and
-`tests/test_outputs.py` load the manifest and accept either shape; oracle re-run after the change. The base image is pinned to the immutable digest its tag resolved to
+Packaging: `tests/verifier.json` carries the 17 verifiers in the engine's `{task_id, verifiers[]}`
+shape and is what `tests/score.py` and `tests/test_outputs.py` load. `tests/manifest.json` is the
+delivery-format object the platform's upload validation asks for (`verifier_configs[]` optional);
+assertions are not duplicated into it. Oracle re-run after the change. The base image is pinned to the immutable digest its tag resolved to
 (`python@sha256:392307d2…`), and `.gitattributes` keeps every script LF, both Delivery Gate
 findings (QC1-2, QC1-3) seen on an earlier bundle. The mining pipeline's `consistency/` folder was
 dropped because it describes the pre-hardening gold.

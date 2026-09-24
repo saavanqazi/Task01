@@ -15,7 +15,7 @@ positive-only):
 
 The negative lanes mutate COPIES; the workspace itself is never modified. One
 pytest per assertion/case, so Harbor's per-test grid (and the CTRF report) names
-exactly what failed. The spec in `manifest.json` (a list; `verifier.json` is the same spec in engine shape) and the engine in
+exactly what failed. The spec in `verifier.json` (tests/manifest.json is the delivery-format object) and the engine in
 `rl_world_verifiers/` are copies of what the task harness runs, so a result here
 means the same thing it means there.
 """
@@ -38,17 +38,19 @@ from rl_world_verifiers.verifiers import verify_definition  # noqa: E402
 
 
 def _load_spec(tests_dir):
-    """Load the verifier spec. tests/manifest.json is the delivery format (a JSON list of
-    verifiers); tests/verifier.json is the same spec in the engine's object shape. Accept both."""
-    for name in ("manifest.json", "verifier.json"):
+    """Load the verifier spec. tests/verifier.json holds the engine's {task_id, verifiers[]} spec;
+    tests/manifest.json is the delivery-format object (optional verifier_configs[]), read only
+    when it carries a verifiers[] list itself."""
+    for name in ("verifier.json", "manifest.json"):
         path = tests_dir / name
         if not path.is_file():
             continue
         data = json.loads(path.read_text(encoding="utf-8"))
         if isinstance(data, list):
             data = {"task_id": tests_dir.parent.name, "verifiers": data}
-        return VerifierSpec.model_validate(data)
-    raise FileNotFoundError("tests/manifest.json or tests/verifier.json")
+        if isinstance(data, dict) and data.get("verifiers"):
+            return VerifierSpec.model_validate(data)
+    raise FileNotFoundError("no verifiers[] in tests/verifier.json or tests/manifest.json")
 
 WORKSPACE = Path(os.environ.get("HARBOR_TASK_WORKSPACE", "/app"))
 SPEC = _load_spec(TESTS_DIR)

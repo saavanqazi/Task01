@@ -31,17 +31,19 @@ from rl_world_verifiers.verifiers import verify_definition
 
 
 def _load_spec(tests_dir):
-    """Load the verifier spec. tests/manifest.json is the delivery format (a JSON list of
-    verifiers); tests/verifier.json is the same spec in the engine's object shape. Accept both."""
-    for name in ("manifest.json", "verifier.json"):
+    """Load the verifier spec. tests/verifier.json holds the engine's {task_id, verifiers[]} spec;
+    tests/manifest.json is the delivery-format object (optional verifier_configs[]), read only
+    when it carries a verifiers[] list itself."""
+    for name in ("verifier.json", "manifest.json"):
         path = tests_dir / name
         if not path.is_file():
             continue
         data = json.loads(path.read_text(encoding="utf-8"))
         if isinstance(data, list):
             data = {"task_id": tests_dir.parent.name, "verifiers": data}
-        return VerifierSpec.model_validate(data)
-    raise FileNotFoundError("tests/manifest.json or tests/verifier.json")
+        if isinstance(data, dict) and data.get("verifiers"):
+            return VerifierSpec.model_validate(data)
+    raise FileNotFoundError("no verifiers[] in tests/verifier.json or tests/manifest.json")
 
 WORKSPACE = Path(os.environ.get("HARBOR_TASK_WORKSPACE", "/app"))
 # Harbor mounts the agent trajectory under /logs/agent. Passing it through makes
