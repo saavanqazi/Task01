@@ -5,6 +5,7 @@ r"""Cross-platform helper for the harbor loop (runs from Windows cmd with plain 
   python local\kit.py rewards jobs\<job>       reward + failed checks per trial (crash / missing trajectory flagged)
   python local\kit.py probes                   replay tests\score.py in the task image against local\probes\*
   python local\kit.py package jobs\<job>       build task\evaluations\difficulty\r1..r4 + solvability\r1
+  python local\kit.py answers jobs\<job>\<trial>  print the deliverables the agent wrote, recovered from its trajectory
 """
 import json, os, shutil, subprocess, sys
 from pathlib import Path
@@ -37,11 +38,14 @@ def cmd_rewards(jobdir):
         if not (t / "agent" / "trajectory.json").is_file(): flags.append("NO-TRAJECTORY")
         try:
             s = json.loads((t / "verifier" / "score.json").read_text())
-            failed = ", ".join(c["name"] + ("(inc)" if c["tag"] == "incidental" else "")
-                               for c in s["checks"] if not c["passed"]) or "-"
+            bad = [c for c in s["checks"] if not c["passed"]]
+            failed = ", ".join(c["name"] + ("(inc)" if c["tag"] == "incidental" else "") for c in bad) or "-"
         except Exception:
-            failed = "score.json unreadable"
+            bad, failed = [], "score.json unreadable"
         print(f"{t.name}  reward={r}  {' '.join(flags)}  failed: {failed}")
+        for c in bad:
+            if c.get("detail"):
+                print(f"      {c['name']}: {c['detail']}")
 
 
 def cmd_probes():
@@ -61,6 +65,25 @@ def cmd_probes():
             got = "ENGINE ERROR: " + (out.stderr.strip().splitlines() or ["?"])[-1]
         mark = "OK " if got.startswith(expect) else "!! "
         print(f"{mark}{p.name:28s} expect={expect:5s} got={got}")
+
+
+def cmd_answers(trial):
+    """Recover what the agent wrote: scan trajectory.json for the deliverables' contents."""
+    import re
+    tj = Path(trial) / "agent" / "trajectory.json"
+    if not tj.is_file():
+        print("no agent/trajectory.json"); return
+    seen = set()
+    def walk(x):
+        if isinstance(x, dict):
+            for v in x.values(): walk(v)
+        elif isinstance(x, list):
+            for v in x: walk(v)
+        elif isinstance(x, str):
+            for key in ("overturned_cell_count", "feature_id,racklane_verdict", "in common", "Micaform only", "FT-6"):
+                if key in x and x not in seen and len(x) < 6000:
+                    seen.add(x); print("-" * 70); print(x.strip()[:3000]); break
+    walk(json.loads(tj.read_text(encoding="utf-8")))
 
 
 def normalize(trial):
@@ -106,7 +129,8 @@ def cmd_package(jobdir):
 
 if __name__ == "__main__":
     a = sys.argv[1:]
-    if not a or a[0] not in ("clean", "rewards", "probes", "package"):
+    if not a or a[0] not in ("clean", "rewards", "probes", "package", "answers"):
         print(__doc__); sys.exit(1)
     {"clean": lambda: cmd_clean(), "rewards": lambda: cmd_rewards(a[1]),
-     "probes": lambda: cmd_probes(), "package": lambda: cmd_package(a[1])}[a[0]]()
+     "probes": lambda: cmd_probes(), "package": lambda: cmd_package(a[1]),
+     "answers": lambda: cmd_answers(a[1])}[a[0]]()

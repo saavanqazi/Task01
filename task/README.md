@@ -28,9 +28,12 @@ Gold after round 1: 12 rows; overturned 8, unverifiable 3, in common 5, Micaform
 `matrix_table` row set is now FT-1..FT-12; new per-row traps `matrix_table_trap_ft10` and
 `matrix_table_trap_ft12`; `results_figures` expects 8 overturned. 17 verifiers (15 core, 2 incidental).
 
-Verification of the round: engine replay of `tests/score.py` on the new gold → 1.0, 17/17; note
-regexes re-probed on the six paraphrases (all pass) and three wrong notes (all fail). Oracle and the
-fresh GLM battery are recorded below once run.
+Verification of the round: engine replay of `tests/score.py` on the new gold → 1.0, 17/17; oracle
+1.0 on two fresh runs; the nine note probes replayed in the task image (six correct wordings 1.0,
+three wrong notes 0.0); fresh 4-run GLM-5.2 battery → 3/4 (see Results log).
+
+Packaging: `tests/verifier.json` was renamed to `tests/manifest.json` (non-connector packaging rule)
+and `tests/score.py` / `tests/test_outputs.py` repointed; oracle re-run after the rename.
 
 `consistency/requirements.json` census updated for 12 rows / 17 checks. The other files under
 `consistency/` (mutations, attacks, envelope, readers, preflight) are the mining pipeline's record of
@@ -51,7 +54,7 @@ core miss zeroes the run.
 | Round | Oracle | GLM-5.2 (terminus-2) rewards | Verdict |
 |---|---|---|---|
 | Baseline | 1.0, 1.0 | 1.0, 1.0, 1.0, 1.0 (job `glm-mic-audit-r0-t2`) | 4/4, too easy |
-| Round 1 | _pending_ | _pending_ | |
+| Round 1 | 1.0, 1.0 (jobs `oracle-r1`, `oracle-r1b`) | 1.0, 0.0, 1.0, 1.0 (job `glm-mic-audit-r1-t2`; the 0.0 run had every matrix cell right and failed `note_in_common` + `results_figures`, a miscount of the in-common features) | 3/4, in band |
 
 ## QC flags left unfixed
 
