@@ -1,0 +1,127 @@
+{
+  "reward": 1.0,
+  "core_failures": [],
+  "passed": 17,
+  "total": 17,
+  "checks": [
+    {
+      "name": "matrix_exists",
+      "tag": "core",
+      "passed": true,
+      "weight": 0.0588235294,
+      "detail": ""
+    },
+    {
+      "name": "matrix_header",
+      "tag": "core",
+      "passed": true,
+      "weight": 0.0588235294,
+      "detail": ""
+    },
+    {
+      "name": "matrix_table_trap_ft2",
+      "tag": "core",
+      "passed": true,
+      "weight": 0.0588235294,
+      "detail": ""
+    },
+    {
+      "name": "matrix_table_trap_ft3",
+      "tag": "core",
+      "passed": true,
+      "weight": 0.0588235294,
+      "detail": ""
+    },
+    {
+      "name": "matrix_table_trap_ft10",
+      "tag": "core",
+      "passed": true,
+      "weight": 0.0588235294,
+      "detail": ""
+    },
+    {
+      "name": "matrix_table_trap_ft12",
+      "tag": "core",
+      "passed": true,
+      "weight": 0.0588235294,
+      "detail": ""
+    },
+    {
+      "name": "matrix_table",
+      "tag": "core",
+      "passed": true,
+      "weight": 0.0588235294,
+      "detail": ""
+    },
+    {
+      "name": "note_exists",
+      "tag": "core",
+      "passed": true,
+      "weight": 0.0588235294,
+      "detail": ""
+    },
+    {
+      "name": "note_prose_floor",
+      "tag": "core",
+      "passed": true,
+      "weight": 0.0588235294,
+      "detail": ""
+    },
+    {
+      "name": "note_tape_release",
+      "tag": "core",
+      "passed": true,
+      "weight": 0.0588235294,
+      "detail": ""
+    },
+    {
+      "name": "note_in_common",
+      "tag": "core",
+      "passed": true,
+      "weight": 0.0588235294,
+      "detail": ""
+    },
+    {
+      "name": "note_in_common_exactly_one",
+      "tag": "incidental",
+      "passed": true,
+      "weight": 0.0588235294,
+      "detail": ""
+    },
+    {
+      "name": "note_micaform_only",
+      "tag": "core",
+      "passed": true,
+      "weight": 0.0588235294,
+      "detail": ""
+    },
+    {
+      "name": "note_micaform_only_exactly_one",
+      "tag": "incidental",
+      "passed": true,
+      "weight": 0.0588235294,
+      "detail": ""
+    },
+    {
+      "name": "note_sentence_floor",
+      "tag": "core",
+      "passed": true,
+      "weight": 0.0588235294,
+      "detail": ""
+    },
+    {
+      "name": "results_figures",
+      "tag": "core",
+      "passed": true,
+      "weight": 0.0588235294,
+      "detail": ""
+    },
+    {
+      "name": "results_exists",
+      "tag": "core",
+      "passed": true,
+      "weight": 0.0588235296,
+      "detail": ""
+    }
+  ]
+}

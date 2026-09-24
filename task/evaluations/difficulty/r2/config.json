@@ -1,0 +1,12 @@
+{
+    "task": {
+        "path": "task"
+    },
+    "trial_name": "task__iRPbaaP",
+    "trials_dir": "jobs\\glm-mic-audit-r1-t2",
+    "agent": {
+        "name": "terminus-2",
+        "model_name": "openai/glm-5.2"
+    },
+    "job_id": "75a46abe-b91a-493c-9e28-37bb701f55c7"
+}
