@@ -1,6 +1,5 @@
 glm.env
 *.env
-task/evaluations/
 jobs/
 __pycache__/
 *.zip

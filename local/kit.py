@@ -6,6 +6,7 @@ r"""Cross-platform helper for the harbor loop (runs from Windows cmd with plain 
   python local\kit.py probes                   replay tests\score.py in the task image against local\probes\*
   python local\kit.py package jobs\<job>       build task\evaluations\difficulty\r1..r4 + solvability\r1
   python local\kit.py answers jobs\<job>\<trial>  print the deliverables the agent wrote, recovered from its trajectory
+  python local\kit.py zip mic-audit-v1.zip     normalise CRLF, check digest pin + bundle shape, zip task/ (top folder task/)
 """
 import json, os, shutil, subprocess, sys
 from pathlib import Path
@@ -114,7 +115,8 @@ def normalize(trial):
         (ver / "reward.json").write_text(json.dumps({"reward": reward}, indent=2) + "\n")
     if not (ver / "verifier_summary.json").is_file() and (ver / "score.json").is_file():
         score = json.loads((ver / "score.json").read_text(encoding="utf-8"))
-        summary = {"reward": score.get("reward", reward), "passed": score.get("passed"),
+        summary = {"source": "derived from verifier/score.json (tests/score.py output)",
+                   "reward": score.get("reward", reward), "passed": score.get("passed"),
                    "total": score.get("total"), "core_failures": score.get("core_failures", []),
                    "items": score.get("checks", [])}
         (ver / "verifier_summary.json").write_text(json.dumps(summary, indent=2) + "\n")
@@ -126,10 +128,43 @@ def normalize(trial):
         "reward": reward,
         "overall_pass": reward == 1.0,
         "final_answer": final if final is not None else {"reward": reward},
-        "judge": {"type": "deterministic", "llm_judge": None,
-                  "note": "all checks are deterministic file assertions; no LLM judge in this task"},
+        "judge": {"type": "deterministic file_check", "judge_model": None},
     })
     rj.write_text(json.dumps(data, indent=2) + "\n")
+
+
+def cmd_zip(name):
+    """Normalise line endings, check the digest pin and the bundle shape, then zip task/ as <name>."""
+    import re, zipfile
+    text_ext = {".py", ".sh", ".md", ".json", ".toml", ".csv", ".html", ".txt", ".yaml", ".yml"}
+    fixed = 0
+    for p in TASK.rglob("*"):
+        if p.is_file() and (p.suffix in text_ext or p.name == "Dockerfile"):
+            b = p.read_bytes()
+            if b"\r\n" in b:
+                p.write_bytes(b.replace(b"\r\n", b"\n")); fixed += 1
+    print(f"CRLF normalised in {fixed} file(s)")
+    df = (TASK / "environment" / "Dockerfile").read_text()
+    if not re.search(r"^FROM \S+@sha256:[0-9a-f]{64}", df, re.M):
+        print("!! Dockerfile FROM is not digest-pinned"); sys.exit(1)
+    must = ["task.toml", "instruction.md", "README.md", "review.csv", "tests/manifest.json",
+            "solution/golden_trajectory.json", "evaluations/solvability/r1/verifier/reward.json"]
+    must += [f"evaluations/difficulty/r{i}/verifier/reward.json" for i in range(1, 5)]
+    missing = [m for m in must if not (TASK / m).is_file()]
+    if missing:
+        print("!! missing:", missing); sys.exit(1)
+    if not (TASK / "qc_report.html").is_file():
+        print("note: qc_report.html not present (fine for the first upload; required in the version you submit)")
+    ev = sorted(p.name for p in (TASK / "evaluations").iterdir())
+    if any(n not in ("difficulty", "solvability", "stability") for n in ev):
+        print("!! unexpected folder under evaluations/:", ev); sys.exit(1)
+    out = ROOT / name
+    with zipfile.ZipFile(out, "w", zipfile.ZIP_DEFLATED) as z:
+        for p in sorted(TASK.rglob("*")):
+            if p.is_file() and "__pycache__" not in p.parts:
+                z.write(p, "task/" + p.relative_to(TASK).as_posix())
+    n = len(zipfile.ZipFile(out).namelist())
+    print(f"wrote {out} ({n} files); top-level folder: task/")
 
 
 def cmd_package(jobdir):
@@ -156,8 +191,9 @@ def cmd_package(jobdir):
 
 if __name__ == "__main__":
     a = sys.argv[1:]
-    if not a or a[0] not in ("clean", "rewards", "probes", "package", "answers"):
+    if not a or a[0] not in ("clean", "rewards", "probes", "package", "answers", "zip"):
         print(__doc__); sys.exit(1)
     {"clean": lambda: cmd_clean(), "rewards": lambda: cmd_rewards(a[1]),
      "probes": lambda: cmd_probes(), "package": lambda: cmd_package(a[1]),
-     "answers": lambda: cmd_answers(a[1])}[a[0]]()
+     "answers": lambda: cmd_answers(a[1]),
+     "zip": lambda: cmd_zip(a[1] if len(a) > 1 else "mic-audit.zip")}[a[0]]()

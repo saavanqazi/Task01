@@ -15,7 +15,7 @@ positive-only):
 
 The negative lanes mutate COPIES; the workspace itself is never modified. One
 pytest per assertion/case, so Harbor's per-test grid (and the CTRF report) names
-exactly what failed. The spec in `manifest.json` and the engine in
+exactly what failed. The spec in `manifest.json` (mirrored as `verifier.json`) and the engine in
 `rl_world_verifiers/` are copies of what the task harness runs, so a result here
 means the same thing it means there.
 """

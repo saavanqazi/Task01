@@ -32,12 +32,12 @@ Verification of the round: engine replay of `tests/score.py` on the new gold →
 1.0 on two fresh runs; the nine note probes replayed in the task image (six correct wordings 1.0,
 three wrong notes 0.0); fresh 4-run GLM-5.2 battery → 3/4 (see Results log).
 
-Packaging: `tests/verifier.json` was renamed to `tests/manifest.json` (non-connector packaging rule)
-and `tests/score.py` / `tests/test_outputs.py` repointed; oracle re-run after the rename.
-
-`consistency/requirements.json` census updated for 12 rows / 17 checks. The other files under
-`consistency/` (mutations, attacks, envelope, readers, preflight) are the mining pipeline's record of
-the baseline and were not regenerated.
+Packaging: the graders now load `tests/manifest.json` (non-connector packaging rule) and
+`tests/verifier.json` ships as an identical mirror, as the accepted bundles do; oracle re-run after
+the change. The base image is pinned to the immutable digest its tag resolved to
+(`python@sha256:392307d2…`), and `.gitattributes` keeps every script LF, both Delivery Gate
+findings (QC1-2, QC1-3) seen on an earlier bundle. The mining pipeline's `consistency/` folder was
+dropped because it describes the pre-hardening gold.
 
 ## Why the task is hard
 
@@ -63,6 +63,28 @@ overturns that on the Micaform page, so Micaform has it and the row is in common
 in translating a verdict back into has/lacks before counting — the coupled step the task is built
 around — and rule 7 admits no other reading. Classified MODEL; `note_in_common` and `results_figures`
 failed together, exactly the checks that carry that figure.
+
+## Rollouts shipped
+
+| rollout | harbor trial | reward | outcome |
+|---|---|---|---|
+| difficulty/r1 | task__CwyDXsG | 1.0 | all 24 cells and all four counts correct |
+| difficulty/r2 | task__iRPbaaP | 0.0 | MODEL: all 24 cells correct; in-common revised from 5 to 4 on a self-check, dropping FT-4 |
+| difficulty/r3 | task__Kp4Xjwu | 1.0 | correct |
+| difficulty/r4 | task__sdgoqtb | 1.0 | correct |
+
+`evaluations/solvability/r1` is a copy of difficulty/r1, trial task__CwyDXsG (a GLM-5.2 run on the
+terminus-2 harness, not the oracle). Zero exceptions; every run wrote all three deliverables.
+
+**Evidence format note.** This harbor build writes `verifier/reward.txt` and `verifier/score.json`;
+the bundle's `verifier/reward.json` and `verifier/verifier_summary.json` were derived from those two
+files by the packaging script (a format conversion, no new facts), which also added `model`,
+`overall_pass`, `final_answer`, `reward` and `judge` to each `result.json`.
+
+## Scoring shape
+
+Fifteen core checks gate the reward and two incidental hedging guards cost 1/17 each, so a run
+scores 1.0, 0.933, 0.867 or 0.0. The difficulty signal is the count of runs at exactly 1.0.
 
 ## QC flags left unfixed
 

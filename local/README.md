@@ -62,8 +62,14 @@ Copies the four trials unflattened into `task\evaluations\difficulty\r1..r4`, no
 `result.json` (`"model": "GLM-5.2"`, `overall_pass`, `final_answer`, `reward`, judge provenance) and
 copies the first 1.0 run into `solvability\r1`. Never an oracle run.
 
-Then zip **only** the task folder (right-click `task` → Send to → Compressed folder, or
-`tar -a -cf mic-audit-v1.zip task`).
+Then build the zip with the kit, which normalises line endings, checks the digest pin and the
+bundle shape, and puts everything under a top-level `task/` folder:
+
+```bat
+uv run python local\kit.py zip mic-audit-v1.zip
+```
+
+`task\evaluations` is committed to the repo, so `git add task\evaluations` and push after packaging.
 
 `glm-harbor-config.json` — compare its field names with the team's template before the first battery;
 only `tasks[0].path` and `job_name` are meant to change per task.
