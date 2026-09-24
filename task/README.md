@@ -54,7 +54,15 @@ core miss zeroes the run.
 | Round | Oracle | GLM-5.2 (terminus-2) rewards | Verdict |
 |---|---|---|---|
 | Baseline | 1.0, 1.0 | 1.0, 1.0, 1.0, 1.0 (job `glm-mic-audit-r0-t2`) | 4/4, too easy |
-| Round 1 | 1.0, 1.0 (jobs `oracle-r1`, `oracle-r1b`) | 1.0, 0.0, 1.0, 1.0 (job `glm-mic-audit-r1-t2`; the 0.0 run had every matrix cell right and failed `note_in_common` + `results_figures`, a miscount of the in-common features) | 3/4, in band |
+| Round 1 | 1.0, 1.0 (jobs `oracle-r1`, `oracle-r1b`); 1.0 again after the manifest rename (`oracle-r1-manifest`) | 1.0, 0.0, 1.0, 1.0 (job `glm-mic-audit-r1-t2`, trials CwyDXsG, iRPbaaP, Kp4Xjwu, sdgoqtb) | 3/4, in band |
+
+Failing run (trial iRPbaaP, `evaluations/difficulty/r2`): every one of the 24 matrix cells correct. The agent
+first wrote 5 in common, then on a self-check revised it to 4, listing FT-1, FT-2, FT-3 and FT-8 as the
+only shared rows and dropping FT-4. Theo's draft has Micaform lacking the valve drive; the audit
+overturns that on the Micaform page, so Micaform has it and the row is in common (rule 7). The slip is
+in translating a verdict back into has/lacks before counting — the coupled step the task is built
+around — and rule 7 admits no other reading. Classified MODEL; `note_in_common` and `results_figures`
+failed together, exactly the checks that carry that figure.
 
 ## QC flags left unfixed
 
