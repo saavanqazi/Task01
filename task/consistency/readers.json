@@ -1,0 +1,528 @@
+{
+ "task": "task_tech_mg_it_b10_a5_mic_modelling_feature_matrix_audit",
+ "n": 4,
+ "api_failures": 0,
+ "parsed_families": [
+  "glm"
+ ],
+ "input_surface": [
+  "prompt",
+  "input/comparison_house_rules.md",
+  "input/draft_comparison.md",
+  "input/submission_format.md"
+ ],
+ "readers": [
+  {
+   "goal": {
+    "deliverables": [
+     {
+      "file": "feature_matrix_audit.csv",
+      "figures": [
+       {
+        "name": "feature_id",
+        "meaning": "The identifier of a feature row from Theo's draft comparison."
+       },
+       {
+        "name": "racklane_verdict",
+        "meaning": "The verdict on Theo's Racklane chain entry for that feature row."
+       },
+       {
+        "name": "racklane_decided_by",
+        "meaning": "The document that settles the Racklane chain cell for that feature row."
+       },
+       {
+        "name": "micaform_verdict",
+        "meaning": "The verdict on Theo's Micaform entry for that feature row."
+       },
+       {
+        "name": "micaform_decided_by",
+        "meaning": "The document that settles the Micaform cell for that feature row."
+       }
+      ]
+     },
+     {
+      "file": "micaform_switch_note.md",
+      "figures": [
+       {
+        "name": "in common count",
+        "meaning": "The number of feature rows shared by both the Racklane chain and Micaform."
+       },
+       {
+        "name": "Micaform only count",
+        "meaning": "The number of feature rows exclusive to Micaform."
+       },
+       {
+        "name": "tape stage feature id",
+        "meaning": "The feature identifier of the tape stage row as written in the draft."
+       },
+       {
+        "name": "Racklane release number",
+        "meaning": "The release number from the Racklane history that settles the tape stage question."
+       }
+      ]
+     },
+     {
+      "file": "results.json",
+      "figures": [
+       {
+        "name": "overturned_cell_count",
+        "meaning": "The total number of audit cells across both products with an OVERTURNED verdict."
+       },
+       {
+        "name": "unverifiable_cell_count",
+        "meaning": "The total number of audit cells across both products with an UNVERIFIABLE verdict."
+       },
+       {
+        "name": "in_common_feature_count",
+        "meaning": "The number of feature rows where both products are decided to have the feature."
+       },
+       {
+        "name": "micaform_only_feature_count",
+        "meaning": "The number of feature rows where only Micaform is decided to have the feature."
+       }
+      ]
+     }
+    ]
+   },
+   "method": "## How I Would Compute Each Figure\n\n**Per-cell verdicts (the foundation for everything else).** For each of the 11 feature rows and each of the two products, I would first read what Theo's draft says (Yes or No). I would then scan the three source documents for any explicit mention of that feature for that product. The hierarchy is fixed by the house rules: for a Racklane cell, `racklane_manual` outranks `review`, and `micaform_page` is irrelevant; for a Micaform cell, `micaform_page` outranks `review`, and `racklane_manual` is irrelevant. Inside the Racklane manual specifically, a dated release-history entry beats the undated 4.0 module sections, and a later dated entry beats an earlier one, so the chain's state at 4.3 is whatever the 4.0 baseline plus the successive release-history entries produce. A cell is `STANDS` when the highest-ranked speaking document's answer matches the draft's, `OVERTURNED` when it contradicts the draft, and `UNVERIFIABLE` when no document speaks to it at all (decided_by = `none`).\n\n**overturned_cell_count.** I would count every cell—22 in total (11 rows × 2 products)—whose verdict is `OVERTURNED`.\n\n**unverifiable_cell_count.** Same count, but for cells whose verdict is `UNVERIFIABLE`.\n\n**in_common_feature_count.** A row counts as in common when *both* products are decided to *have* the feature—meaning each cell is non-UNVERIFIABLE and its deciding document's answer is \"has.\" Because the verdict encodes whether the draft agreed with the document, I can derive the document's answer from the draft entry plus the verdict: draft \"Yes\" + STANDS → has; draft \"Yes\" + OVERTURNED → lacks; draft \"No\" + STANDS → lacks; draft \"No\" + OVERTURNED → has. I would count rows where both sides resolve to \"has.\"\n\n**micaform_only_feature_count.** I would count rows where Micaform's deciding document says \"has\" and the Racklane chain's deciding document says \"lacks,\" with both cells non-UNVERIFIABLE. Any row with an UNVERIFIABLE cell on either side counts toward neither figure.\n\n## Rules I Would Have to Decide for Myself\n\n1. **Feature naming.** Rule 4 says a document \"names that feature,\" but the documents may use wording that differs from the draft's labels. I would treat a document as speaking to a feature when it refers to it by a recognisable name—exact string match is too strict, but I would not infer a feature from vague proximity. This is the biggest judgment call; if a document uses a synonym I consider clearly equivalent, I count it as speaking.\n\n2. **What \"records the feature's removal\" means (Rule 4's last sentence).** The rule says a feature the review attributes to older Racklane software still counts as present at 4.3 unless the release history \"records the feature's removal.\" Rule 4's silence principle says a list that omits a feature says nothing either way, so I would read \"records removal\" as requiring an explicit statement that the feature was dropped—not merely its absence from a later release's feature list.\n\n3. **Deriving \"has/lacks\" from an OVERTURNED cell.** The verdicts compare the draft to the document, but the counts need the document's own answer. For an OVERTURNED cell I simply invert the draft's entry to recover what the document said. This is mechanical, not a judgment call, but it is a step the rules leave implicit.\n\n4. **Whether the review alone can settle a Racklane cell the manual never mentions.** Rule 4's last sentence lets the review's statements about older Racklane software count as the chain having the feature, unless the release history shows removal. So a review mention *can* be the deciding document for a Racklane cell when the manual is silent. I would apply this, but only where the review explicitly says the rack product has or lacks that specific feature.",
+   "model": "glm-5.2",
+   "family": "glm",
+   "backend": "glm",
+   "author_family": "claude",
+   "revision_key": "d162cb1623369a56763ac5e616712608d5d635787e15ff00cae260f4ac66bde4",
+   "stamped_at": "2026-09-22T14:01:34+05:30"
+  },
+  {
+   "goal": {
+    "deliverables": [
+     {
+      "file": "feature_matrix_audit.csv",
+      "figures": [
+       {
+        "name": "feature_id",
+        "meaning": "The identifier of the feature row from Theo's draft comparison."
+       },
+       {
+        "name": "racklane_verdict",
+        "meaning": "Whether the draft's entry for the Racklane chain on that row survives the deciding documents."
+       },
+       {
+        "name": "racklane_decided_by",
+        "meaning": "The single document that settles the Racklane chain cell."
+       },
+       {
+        "name": "micaform_verdict",
+        "meaning": "Whether the draft's entry for Micaform on that row survives the deciding documents."
+       },
+       {
+        "name": "micaform_decided_by",
+        "meaning": "The single document that settles the Micaform cell."
+       }
+      ]
+     },
+     {
+      "file": "micaform_switch_note.md",
+      "figures": [
+       {
+        "name": "in common",
+        "meaning": "The number of features both setups are decided to have."
+       },
+       {
+        "name": "Micaform only",
+        "meaning": "The number of features decided to be in Micaform alone."
+       },
+       {
+        "name": "tape stage feature id",
+        "meaning": "The feature id of the tape stage row in the draft."
+       },
+       {
+        "name": "Racklane release number",
+        "meaning": "The number of the Racklane release that settles whether the rack chain still has a tape stage."
+       }
+      ]
+     },
+     {
+      "file": "results.json",
+      "figures": [
+       {
+        "name": "overturned_cell_count",
+        "meaning": "The count of overturned verdicts across both products' cells."
+       },
+       {
+        "name": "unverifiable_cell_count",
+        "meaning": "The count of unverifiable verdicts across both products' cells."
+       },
+       {
+        "name": "in_common_feature_count",
+        "meaning": "The count of feature rows both products are decided to have."
+       },
+       {
+        "name": "micaform_only_feature_count",
+        "meaning": "The count of feature rows decided to be Micaform only."
+       }
+      ]
+     }
+    ]
+   },
+   "method": "I'd work the audit in five passes.\n\n**Cell verdicts.** For each of Theo's eleven rows I treat the two product cells independently. For a Racklane cell I open `racklane_manual.html` first and ask whether it *names that feature* (by the draft's wording or an obvious paraphrase) and states the product has or lacks it. Per Rule 3, a dated release-history entry beats the manual's undated module sections, and a later release beats an earlier one. If the manual is silent, I fall back to `mixbench_review.pdf`, and under Rule 4 anything the review says the *earlier* Racklane software had counts as the 4.3 chain still having it, *unless* the manual's release history records that feature's removal. If neither document speaks, the cell is `UNVERIFIABLE` with deciding document `none`. For a Micaform cell the same ladder applies but with `micaform_page.html` as the vendor document. The deciding document is the highest-ranked one that speaks, named even when a lower-ranked doc agrees. I then compare the draft's Yes/No to the deciding document's answer: agree → `STANDS`, contradict → `OVERTURNED`. Theo's draft never decides anything.\n\n**Overturned and unverifiable counts.** Simple tallies over all 22 cells (11 rows × 2 products), counting verdicts of `OVERTURNED` and `UNVERIFIABLE` respectively.\n\n**In-common and Micaform-only counts.** These hinge on what each product is *decided* to have, not on whether Theo's draft stood — so a row where the draft said \"No\" but the deciding doc says the product has it still counts as having it. A row is *in common* when both products are decided to have the feature; *Micaform only* when Micaform is decided to have it and the rack chain is decided to lack it. Any row carrying an `UNVERIFIABLE` cell contributes to neither count, exactly as Rule 7 says.\n\n**Note to Maren.** I'd write ≥60 words of prose, three-plus sentences, embedding the `in common` count beside its label and the `Micaform only` count beside its label, and in the same paragraph naming the tape-stage row by its feature id together with the Racklane release number that settles whether the rack chain still has a tape stage — stated, not denied.\n\n**Judgment calls I'd have to make myself.** The main one is what counts as a document \"naming\" a feature: I'd allow tight paraphrases (e.g. \"bias\" vs \"valve bias control\") but require the document to take a position (has/lacks), so a bare appearance in a feature photograph or a screenshot caption wouldn't qualify. Second, I'd treat \"the release history records the feature's removal\" strictly: it must be an explicit dated removal, not mere silence in a later release's feature list (Rule 4 already says omission says nothing). Third, where the review describes an earlier Racklane release, I'd attribute its findings to the 4.3 chain only when the manual is silent on that feature and only until a removal is recorded. Fourth, I'd identify which sections of each vendor document are \"undated control/feature lists\" versus dated release-history entries by the document's own section structure rather than by inference. I'd flag any cell where a paraphrase match is arguable so the decision is transparent.\n\nNote: the task lists `racklane_manual.html`, `micaform_page.html`, and `mixbench_review.pdf` as attached, but only the draft, the house rules, and the submission format are present in the prompt I can see — so I can describe the method but cannot produce the actual CSV, note, and JSON until those three source documents are supplied.",
+   "model": "glm-5.2",
+   "family": "glm",
+   "backend": "glm",
+   "author_family": "claude",
+   "revision_key": "d162cb1623369a56763ac5e616712608d5d635787e15ff00cae260f4ac66bde4",
+   "stamped_at": "2026-09-22T14:01:34+05:30"
+  },
+  {
+   "goal": {
+    "deliverables": [
+     {
+      "file": "feature_matrix_audit.csv",
+      "figures": [
+       {
+        "name": "feature_id",
+        "meaning": "The identifier of a feature row as written in Theo's draft."
+       },
+       {
+        "name": "racklane_verdict",
+        "meaning": "The verdict on whether Theo's Racklane chain cell survives the deciding document."
+       },
+       {
+        "name": "racklane_decided_by",
+        "meaning": "The short name of the one document that decides the Racklane chain cell, or none."
+       },
+       {
+        "name": "micaform_verdict",
+        "meaning": "The verdict on whether Theo's Micaform cell survives the deciding document."
+       },
+       {
+        "name": "micaform_decided_by",
+        "meaning": "The short name of the one document that decides the Micaform cell, or none."
+       }
+      ]
+     },
+     {
+      "file": "micaform_switch_note.md",
+      "figures": [
+       {
+        "name": "in common count",
+        "meaning": "The number of feature rows both products are decided to have, counted by the house rules."
+       },
+       {
+        "name": "Micaform only count",
+        "meaning": "The number of feature rows only Micaform is decided to have, counted by the house rules."
+       },
+       {
+        "name": "tape stage feature id",
+        "meaning": "The feature id of the tape stage row as written in Theo's draft."
+       },
+       {
+        "name": "Racklane release number",
+        "meaning": "The release number in the Racklane release history that settles whether the rack chain still has a tape stage."
+       }
+      ]
+     },
+     {
+      "file": "results.json",
+      "figures": [
+       {
+        "name": "overturned_cell_count",
+        "meaning": "The number of audited cells whose verdict is OVERTURNED."
+       },
+       {
+        "name": "unverifiable_cell_count",
+        "meaning": "The number of audited cells whose verdict is UNVERIFIABLE."
+       },
+       {
+        "name": "in_common_feature_count",
+        "meaning": "The number of feature rows both products are decided to have."
+       },
+       {
+        "name": "micaform_only_feature_count",
+        "meaning": "The number of feature rows only Micaform is decided to have."
+       }
+      ]
+     }
+    ]
+   },
+   "method": "I'd work through this as a 22-cell audit (11 feature rows × 2 products), then derive the four counts from the verdicts. Since I don't have the contents of `racklane_manual.html`, `micaform_page.html` or `mixbench_review.pdf` in front of me, what follows is the method I'd apply once I read them, plus the interpretation calls I'd have to make myself.\n\n**Auditing each cell.** For every row I'd take Theo's Yes/No for the rack chain and for Micaform separately. For a rack cell I'd open `racklane_manual` and look for the feature named on that row; under Rule 3 the release-history entries outrank the undated module sections, and a later release outranks an earlier one, so I'd read the history forward to Racklane 4.3 and use the last word on that feature. If the manual is silent I'd fall back to the review (Rule 4), treating what the review says about an earlier Racklane as still true at 4.3 unless the manual's history records the feature's removal. For a Micaform cell I'd go to `micaform_page` first, then the review. A vendor document only speaks for its own product; the review may speak for either. If nothing names the feature and says the product has or lacks it, the cell is UNVERIFIABLE with deciding document `none`.\n\n**Verdict per cell.** I'd compare the deciding document's answer (has / lacks) against Theo's entry. Agreement → STANDS; contradiction → OVERTURNED; no document speaks → UNVERIFIABLE. The deciding document is the highest-ranked one that speaks, and I'd name it even where a lower-ranked source agrees.\n\n**The two cell counts.** `overturned_cell_count` is simply the number of the 22 cells marked OVERTURNED; `unverifiable_cell_count` is the number marked UNVERIFIABLE.\n\n**The two feature counts.** I'd read \"decided to have it\" and \"decided to lack it\" as what the deciding document says, not what Theo wrote — so an OVERTURNED cell where the draft says No but the document says Yes still counts as the product *having* the feature. A row is `in common` when both products' deciding documents say \"has\"; it is `Micaform only` when Micaform's deciding document says \"has\" and the rack's says \"lacks.\" Any row with an UNVERIFIABLE cell on either side counts toward neither total, per Rule 7.\n\n**Calls I'd have to make for myself.** (1) Whether a passing mention rather than a feature-list entry still \"names the feature and says the product has or lacks it\" — I'd require an explicit attribution, not mere adjacency. (2) Whether a review statement about \"Racklane\" with no version is \"the earlier Racklane software\" for Rule 4's carry-forward — I'd treat unversioned review claims as applying to the older software the review tested, and carry them forward only if the manual's history doesn't remove the feature. (3) For the note's required release number beside FT-6, I'd pick the release-history entry that actually settles the tape stage's fate — the release that removed it if it was removed, otherwise the entry that confirms it survives at 4.3. (4) Whether a feature the draft invents that no source mentions should be UNVERIFIABLE rather than assumed absent — Rule 5 makes it UNVERIFIABLE, and I'd follow that even where it seems obvious the product lacks it.\n\n**The note to Maren.** I'd write at least three full sentences (≥6 words each), embed the `in common` count immediately beside its label and the `Micaform only` count beside its, and in the same paragraph place FT-6 alongside the settling release number, keeping negatives out of any clause that carries a required figure.",
+   "model": "glm-5.2",
+   "family": "glm",
+   "backend": "glm",
+   "author_family": "claude",
+   "revision_key": "d162cb1623369a56763ac5e616712608d5d635787e15ff00cae260f4ac66bde4",
+   "stamped_at": "2026-09-22T14:01:34+05:30"
+  },
+  {
+   "goal": {
+    "deliverables": [
+     {
+      "file": "feature_matrix_audit.csv",
+      "figures": [
+       {
+        "name": "feature_id",
+        "meaning": "It is the identifier of the feature row from Theo's draft comparison, written exactly as the draft writes it."
+       },
+       {
+        "name": "racklane_verdict",
+        "meaning": "It is the verdict on whether Theo's Racklane chain entry for that feature survives checking against the deciding documents."
+       },
+       {
+        "name": "racklane_decided_by",
+        "meaning": "It is the short name of the document that decides the Racklane chain cell for that feature under the house rules."
+       },
+       {
+        "name": "micaform_verdict",
+        "meaning": "It is the verdict on whether Theo's Micaform entry for that feature survives checking against the deciding documents."
+       },
+       {
+        "name": "micaform_decided_by",
+        "meaning": "It is the short name of the document that decides the Micaform cell for that feature under the house rules."
+       }
+      ]
+     },
+     {
+      "file": "micaform_switch_note.md",
+      "figures": [
+       {
+        "name": "in common count",
+        "meaning": "It is the number of features both products are decided to share, stated in the note beside the label 'in common' or 'share'."
+       },
+       {
+        "name": "Micaform only count",
+        "meaning": "It is the number of features only Micaform is decided to have, stated in the note beside the label 'Micaform only' or 'only in Micaform'."
+       },
+       {
+        "name": "tape stage feature id",
+        "meaning": "It is the feature id of the tape stage row from Theo's draft, stated in the note exactly as the draft writes it."
+       },
+       {
+        "name": "Racklane release number",
+        "meaning": "It is the number of the Racklane release that settles whether the rack chain still has a tape stage, stated in the note in figures as the release history writes it."
+       }
+      ]
+     },
+     {
+      "file": "results.json",
+      "figures": [
+       {
+        "name": "overturned_cell_count",
+        "meaning": "It is the total number of cells in the audit, counting both products' cells on every row, whose verdict is OVERTURNED."
+       },
+       {
+        "name": "unverifiable_cell_count",
+        "meaning": "It is the total number of cells in the audit, counting both products' cells on every row, whose verdict is UNVERIFIABLE."
+       },
+       {
+        "name": "in_common_feature_count",
+        "meaning": "It is the number of feature rows where both products are decided to have the feature."
+       },
+       {
+        "name": "micaform_only_feature_count",
+        "meaning": "It is the number of feature rows where Micaform is decided to have the feature and the rack chain is decided to lack it."
+       }
+      ]
+     }
+    ]
+   },
+   "method": "I'd work through it as follows, in plain terms.\n\n**Per-cell verdicts.** For each of the 22 cells (11 rows × 2 products) I'd first note what Theo's draft asserts (Yes or No), then find which of the three source documents actually *speak* to that feature for that product. \"Speaking\" means the document names the feature and says the product has it or lacks it; a silent list does not count. I'd then rank the speakers: for the rack chain, `racklane_manual` outranks `review`; for Micaform, `micaform_page` outranks `review`; the review can speak for either but always loses to the relevant vendor page. Inside the Racklane manual, a dated release-history entry beats the undated 4.0 module descriptions, and a later release beats an earlier one — so for anything the 4.3 chain actually does, I'd trace the release history forward. The deciding document is the top-ranked one that speaks, even if a lower one agrees. I'd compare the draft's Yes/No to what that deciding document says the product has at its current release (Racklane 4.3 / Micaform 1.1): agreement → `STANDS`, contradiction → `OVERTURNED`. If no document speaks, the cell is `UNVERIFIABLE` with deciding document `none`.\n\n**Tape stage (FT-6) for the rack.** Rule 4 has a special carve-out: what the review says the earlier Racklane software had counts as the rack chain still having it at 4.3, *unless* the Racklane release history records the feature's removal. So I'd search the manual's release history for an entry that explicitly removes the tape stage; if one exists, that release (and its number) settles the rack cell, and that same release number is what I'd cite in the note to Maren beside `FT-6`. If no removal is recorded, the review's statement about earlier software decides.\n\n**The four counts.** `overturned_cell_count` and `unverifiable_cell_count` are simple cell counts across all 22 cells. `in_common_feature_count` is the number of rows where the deciding documents say *both* products have the feature (not where the draft merely agrees — the *decided answer*, which can make a draft \"No\" into a \"has it\" via OVERTURNED). `micaform_only_feature_count` is rows where Micaform is decided to have the feature and the rack chain is decided to lack it. Any row carrying an `UNVERIFIABLE` cell counts toward neither of those two, per Rule 7.\n\n**Rules I'd have to settle myself.** First, what counts as \"naming\" a feature — I'd accept the draft's term or an unambiguous synonym the source uses, not mere adjacent mentions. Second, whether a Racklane feature belongs to \"the chain\" only if it lives in the Capsule or Valve Stage modules at 4.3, or whether any Racklane host feature counts; I'd read Rule 1's \"Capsule and Valve Stage modules at Racklane 4.3\" as the chain's scope and exclude features of other modules. Third, for FT-7 (\"dual capsule blend *in one instance*\"), I'd treat the \"one instance\" qualifier literally, so two-instance workarounds wouldn't satisfy it. Fourth, the note's release-number citation: I'd pick the single release-history entry that actually disposes of the tape-stage question (the one that removes it, or the latest one that keeps it) rather than any passing mention. And I'd treat conditional or mode-gated features as \"has it\" only if the document presents the feature as available in the product, not as a roadmap or pending item.",
+   "model": "glm-5.2",
+   "family": "glm",
+   "backend": "glm",
+   "author_family": "claude",
+   "revision_key": "d162cb1623369a56763ac5e616712608d5d635787e15ff00cae260f4ac66bde4",
+   "stamped_at": "2026-09-22T14:01:34+05:30"
+  }
+ ],
+ "agreement": {
+  "deliverable_set": {
+   "consensus": [
+    "feature_matrix_audit.csv",
+    "micaform_switch_note.md",
+    "results.json"
+   ],
+   "agree": 4,
+   "of": 4
+  },
+  "figures": [
+   {
+    "surface": "feature_matrix_audit.csv",
+    "figure": "feature_id",
+    "listed_by": 4,
+    "meanings": [
+     "The identifier of a feature row from Theo's draft comparison.",
+     "The identifier of the feature row from Theo's draft comparison.",
+     "The identifier of a feature row as written in Theo's draft.",
+     "It is the identifier of the feature row from Theo's draft comparison, written exactly as the draft writes it."
+    ]
+   },
+   {
+    "surface": "feature_matrix_audit.csv",
+    "figure": "micaform_decided_by",
+    "listed_by": 4,
+    "meanings": [
+     "The document that settles the Micaform cell for that feature row.",
+     "The single document that settles the Micaform cell.",
+     "The short name of the one document that decides the Micaform cell, or none.",
+     "It is the short name of the document that decides the Micaform cell for that feature under the house rules."
+    ]
+   },
+   {
+    "surface": "feature_matrix_audit.csv",
+    "figure": "micaform_verdict",
+    "listed_by": 4,
+    "meanings": [
+     "The verdict on Theo's Micaform entry for that feature row.",
+     "Whether the draft's entry for Micaform on that row survives the deciding documents.",
+     "The verdict on whether Theo's Micaform cell survives the deciding document.",
+     "It is the verdict on whether Theo's Micaform entry for that feature survives checking against the deciding documents."
+    ]
+   },
+   {
+    "surface": "feature_matrix_audit.csv",
+    "figure": "racklane_decided_by",
+    "listed_by": 4,
+    "meanings": [
+     "The document that settles the Racklane chain cell for that feature row.",
+     "The single document that settles the Racklane chain cell.",
+     "The short name of the one document that decides the Racklane chain cell, or none.",
+     "It is the short name of the document that decides the Racklane chain cell for that feature under the house rules."
+    ]
+   },
+   {
+    "surface": "feature_matrix_audit.csv",
+    "figure": "racklane_verdict",
+    "listed_by": 4,
+    "meanings": [
+     "The verdict on Theo's Racklane chain entry for that feature row.",
+     "Whether the draft's entry for the Racklane chain on that row survives the deciding documents.",
+     "The verdict on whether Theo's Racklane chain cell survives the deciding document.",
+     "It is the verdict on whether Theo's Racklane chain entry for that feature survives checking against the deciding documents."
+    ]
+   },
+   {
+    "surface": "micaform_switch_note.md",
+    "figure": "in common",
+    "listed_by": 1,
+    "meanings": [
+     "The number of features both setups are decided to have."
+    ]
+   },
+   {
+    "surface": "micaform_switch_note.md",
+    "figure": "in common count",
+    "listed_by": 3,
+    "meanings": [
+     "The number of feature rows shared by both the Racklane chain and Micaform.",
+     "The number of feature rows both products are decided to have, counted by the house rules.",
+     "It is the number of features both products are decided to share, stated in the note beside the label 'in common' or 'share'."
+    ]
+   },
+   {
+    "surface": "micaform_switch_note.md",
+    "figure": "micaform only",
+    "listed_by": 1,
+    "meanings": [
+     "The number of features decided to be in Micaform alone."
+    ]
+   },
+   {
+    "surface": "micaform_switch_note.md",
+    "figure": "micaform only count",
+    "listed_by": 3,
+    "meanings": [
+     "The number of feature rows exclusive to Micaform.",
+     "The number of feature rows only Micaform is decided to have, counted by the house rules.",
+     "It is the number of features only Micaform is decided to have, stated in the note beside the label 'Micaform only' or 'only in Micaform'."
+    ]
+   },
+   {
+    "surface": "micaform_switch_note.md",
+    "figure": "racklane release number",
+    "listed_by": 4,
+    "meanings": [
+     "The release number from the Racklane history that settles the tape stage question.",
+     "The number of the Racklane release that settles whether the rack chain still has a tape stage.",
+     "The release number in the Racklane release history that settles whether the rack chain still has a tape stage.",
+     "It is the number of the Racklane release that settles whether the rack chain still has a tape stage, stated in the note in figures as the release history writes it."
+    ]
+   },
+   {
+    "surface": "micaform_switch_note.md",
+    "figure": "tape stage feature id",
+    "listed_by": 4,
+    "meanings": [
+     "The feature identifier of the tape stage row as written in the draft.",
+     "The feature id of the tape stage row in the draft.",
+     "The feature id of the tape stage row as written in Theo's draft.",
+     "It is the feature id of the tape stage row from Theo's draft, stated in the note exactly as the draft writes it."
+    ]
+   },
+   {
+    "surface": "results.json",
+    "figure": "in_common_feature_count",
+    "listed_by": 4,
+    "meanings": [
+     "The number of feature rows where both products are decided to have the feature.",
+     "The count of feature rows both products are decided to have.",
+     "The number of feature rows both products are decided to have.",
+     "It is the number of feature rows where both products are decided to have the feature."
+    ]
+   },
+   {
+    "surface": "results.json",
+    "figure": "micaform_only_feature_count",
+    "listed_by": 4,
+    "meanings": [
+     "The number of feature rows where only Micaform is decided to have the feature.",
+     "The count of feature rows decided to be Micaform only.",
+     "The number of feature rows only Micaform is decided to have.",
+     "It is the number of feature rows where Micaform is decided to have the feature and the rack chain is decided to lack it."
+    ]
+   },
+   {
+    "surface": "results.json",
+    "figure": "overturned_cell_count",
+    "listed_by": 4,
+    "meanings": [
+     "The total number of audit cells across both products with an OVERTURNED verdict.",
+     "The count of overturned verdicts across both products' cells.",
+     "The number of audited cells whose verdict is OVERTURNED.",
+     "It is the total number of cells in the audit, counting both products' cells on every row, whose verdict is OVERTURNED."
+    ]
+   },
+   {
+    "surface": "results.json",
+    "figure": "unverifiable_cell_count",
+    "listed_by": 4,
+    "meanings": [
+     "The total number of audit cells across both products with an UNVERIFIABLE verdict.",
+     "The count of unverifiable verdicts across both products' cells.",
+     "The number of audited cells whose verdict is UNVERIFIABLE.",
+     "It is the total number of cells in the audit, counting both products' cells on every row, whose verdict is UNVERIFIABLE."
+    ]
+   }
+  ]
+ },
+ "verdict": "pass",
+ "surface_key": "f549a9dcb5040c66cce7801aee4aef4100312402a313d2c456e6524ff5e974cd",
+ "note": "METHOD divergence is difficulty, never a finding. Fix ladder for ambiguity, cheapest first: accept both readings; move the data so both agree; add motivation; state the rule (last — costs difficulty).",
+ "schema": 2,
+ "model": "glm-5.2",
+ "pool": [
+  {
+   "model": "glm-5.2",
+   "family": "glm",
+   "backend": "glm",
+   "slots": 4
+  }
+ ],
+ "pool_families": [
+  "glm"
+ ],
+ "pool_mode": "single-family",
+ "author_family": "claude",
+ "revision_key": "95664743217b0ed158109c734b999643fa01ac3b7723910259b68c2e22e895f1",
+ "stamped_at": "2026-09-22T14:01:34+05:30",
+ "measured_on_revision": "d162cb1623369a56763ac5e616712608d5d635787e15ff00cae260f4ac66bde4",
+ "carried_at": "2026-09-22T14:41:03+05:30"
+}

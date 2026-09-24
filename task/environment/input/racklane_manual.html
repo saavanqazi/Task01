@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="utf-8"><title>Racklane 4 module reference (archived)</title></head>
+<body>
+<h1>Racklane 4 — module reference</h1>
+<p>Archived reference page, Tarnwell Audio. The module sections below were written for
+Racklane 4.0. Changes made since then are listed under Release history at the foot of this
+page.</p>
+
+<h2>The Racklane host</h2>
+<p>Racklane hosts Tarnwell modules on up to eight parallel lanes. For the TM-9 microphone
+the usual chain is a Capsule module followed by a Valve Stage module on the same lane.</p>
+
+<h2>Capsule module</h2>
+<ul>
+<li><b>Model</b> — the capsule model selector: one of twelve modelled capsules.</li>
+<li><b>Low cut</b> — off, 80 Hz or 120 Hz, ahead of the capsule model.</li>
+<li><b>Tape</b> — a tape stage after the capsule model.</li>
+</ul>
+<p>The Capsule module has no dual capsule blend: it loads one capsule model per instance. To
+hear two models together, load two Capsule modules on parallel lanes.</p>
+
+<h2>Valve Stage module</h2>
+<ul>
+<li><b>Drive</b> — the valve drive stage.</li>
+<li><b>Bias</b> — valve bias control, from cold to hot.</li>
+<li><b>Sidechain key input</b> — an external key signal can duck the drive.</li>
+</ul>
+
+<h2>Release history</h2>
+<table>
+<tr><th>Release</th><th>Date</th><th>Changes</th></tr>
+<tr><td>4.1</td><td>2024-11-05</td><td>The Tape stage gains a Wow control. Presets load faster.</td></tr>
+<tr><td>4.2</td><td>2025-06-17</td><td>The Tape stage is retired from the Capsule module. Sessions that used it open with the stage removed.</td></tr>
+<tr><td>4.3</td><td>2026-01-20</td><td>Tracking mode: the Valve Stage lookahead can be switched off for zero added latency while recording.</td></tr>
+</table>
+</body>
+</html>
