@@ -15,5 +15,6 @@ Theo Brandt, for Rafa, 2 June 2026. Built from the Racklane module reference we 
 | FT-9 | Oversampling | No | Yes |  |
 | FT-10 | Sidechain key input | Yes | Yes |  |
 | FT-11 | Valve bias control | Yes | No |  |
+| FT-12 | Tape wow control | Yes | No |  |
 
 Yes means the product has the feature; No means it does not.

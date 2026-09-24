@@ -57,7 +57,7 @@
       "name": "matrix_table_trap_ft2",
       "metadata": {
         "how_justification": "Parses feature_matrix_audit.csv with csv.read_rows and applies table_equals to every graded cell of the FT-2 row (matched by 'feature_id'); a failure names the exact cell.",
-        "why_justification": "Every cell's verdict and deciding document is graded, so a review refused on a silent reference, a review allowed over the vendor, a release history skipped and an omission read as absence each show on the rows they move. Entailed by: \"One row per feature row in `draft_comparison.md` and no other rows, in any order, with `feature_id` exactly as the draft writes it. Each row carries two cells for each product. `racklane_verdict` and `micaform_verdict` each take exactly one of `STANDS`, `OVERTURNED` or `UNVERIFIABLE`: whether Theo's entry for that product on that row survives the documents. `racklane_decided_by` and `micaform_decided_by` name the one document that decides that cell, by its short name in the house rules — `racklane_manual`, `micaform_page` or `review` — or `none` where the verdict is `UNVERIFIABLE`. Which document decides a cell is not a judgement call: the house rules rank the documents, say what counts as a document speaking to a feature, and name the deciding document even where another one agrees with it, so every cell has one answer.\"",
+        "why_justification": "Every cell's verdict and deciding document is graded, so a review refused on a silent reference, a review allowed over the vendor, a release history skipped and an omission read as absence each show on the rows they move. Entailed by: \"One row per feature row in `draft_comparison.md` and no other rows, in any order, with `feature_id` exactly as the draft writes it. Each row carries two cells for each product. `racklane_verdict` and `micaform_verdict` each take exactly one of `STANDS`, `OVERTURNED` or `UNVERIFIABLE`: whether Theo's entry for that product on that row survives the documents. `racklane_decided_by` and `micaform_decided_by` name the one document that decides that cell, by its short name in the house rules \u2014 `racklane_manual`, `micaform_page` or `review` \u2014 or `none` where the verdict is `UNVERIFIABLE`. Which document decides a cell is not a judgement call: the house rules rank the documents, say what counts as a document speaking to a feature, and name the deciding document even where another one agrees with it, so every cell has one answer.\"",
         "tag": "core"
       },
       "source": {
@@ -99,7 +99,7 @@
       "name": "matrix_table_trap_ft3",
       "metadata": {
         "how_justification": "Parses feature_matrix_audit.csv with csv.read_rows and applies table_equals to every graded cell of the FT-3 row (matched by 'feature_id'); a failure names the exact cell.",
-        "why_justification": "Every cell's verdict and deciding document is graded, so a review refused on a silent reference, a review allowed over the vendor, a release history skipped and an omission read as absence each show on the rows they move. Entailed by: \"One row per feature row in `draft_comparison.md` and no other rows, in any order, with `feature_id` exactly as the draft writes it. Each row carries two cells for each product. `racklane_verdict` and `micaform_verdict` each take exactly one of `STANDS`, `OVERTURNED` or `UNVERIFIABLE`: whether Theo's entry for that product on that row survives the documents. `racklane_decided_by` and `micaform_decided_by` name the one document that decides that cell, by its short name in the house rules — `racklane_manual`, `micaform_page` or `review` — or `none` where the verdict is `UNVERIFIABLE`. Which document decides a cell is not a judgement call: the house rules rank the documents, say what counts as a document speaking to a feature, and name the deciding document even where another one agrees with it, so every cell has one answer.\"",
+        "why_justification": "Every cell's verdict and deciding document is graded, so a review refused on a silent reference, a review allowed over the vendor, a release history skipped and an omission read as absence each show on the rows they move. Entailed by: \"One row per feature row in `draft_comparison.md` and no other rows, in any order, with `feature_id` exactly as the draft writes it. Each row carries two cells for each product. `racklane_verdict` and `micaform_verdict` each take exactly one of `STANDS`, `OVERTURNED` or `UNVERIFIABLE`: whether Theo's entry for that product on that row survives the documents. `racklane_decided_by` and `micaform_decided_by` name the one document that decides that cell, by its short name in the house rules \u2014 `racklane_manual`, `micaform_page` or `review` \u2014 or `none` where the verdict is `UNVERIFIABLE`. Which document decides a cell is not a judgement call: the house rules rank the documents, say what counts as a document speaking to a feature, and name the deciding document even where another one agrees with it, so every cell has one answer.\"",
         "tag": "core"
       },
       "source": {
@@ -138,10 +138,94 @@
       }
     },
     {
+      "name": "matrix_table_trap_ft10",
+      "metadata": {
+        "how_justification": "Parses feature_matrix_audit.csv with csv.read_rows and applies table_equals to every graded cell of the FT-3 row (matched by 'feature_id'); a failure names the exact cell.",
+        "why_justification": "The sidechain row moves on both sides when a release outside the one under audit is read as current: the rack cell flips if the Racklane 4.4 entry (beyond the studio's 4.3, rule 3) is applied, and the Micaform cell flips if the page's \"Coming in 1.2\" preview is read as Micaform 1.1 (rule 4). Entailed by the house rules' release scoping and the cell contract.",
+        "tag": "core"
+      },
+      "source": {
+        "type": "file",
+        "file": {
+          "type": "csv",
+          "command": "read_rows",
+          "arguments": {
+            "path": "feature_matrix_audit.csv"
+          }
+        }
+      },
+      "assertion": {
+        "type": "deterministic",
+        "expected": {
+          "id_column": "feature_id",
+          "rows": {
+            "FT-10": {
+              "racklane_verdict": "STANDS",
+              "racklane_decided_by": "racklane_manual",
+              "micaform_verdict": "OVERTURNED",
+              "micaform_decided_by": "micaform_page"
+            }
+          },
+          "cell_types": {
+            "racklane_verdict": "text",
+            "racklane_decided_by": "text",
+            "micaform_verdict": "text",
+            "micaform_decided_by": "text"
+          }
+        },
+        "deterministic": {
+          "path": "$",
+          "comparison": "table_equals"
+        }
+      }
+    },
+    {
+      "name": "matrix_table_trap_ft12",
+      "metadata": {
+        "how_justification": "Parses feature_matrix_audit.csv with csv.read_rows and applies table_equals to every graded cell of the FT-3 row (matched by 'feature_id'); a failure names the exact cell.",
+        "why_justification": "The tape wow control is added by the 4.1 entry and removed with the Tape stage by the 4.2 entry (rule 3: a control lives on the stage that carries it), so the rack cell is OVERTURNED on the manual even though the review also mentions the control; the Micaform page is silent and the review says the tape stage has no wow control, so the review decides that cell (rule 4). Entailed by the cell contract.",
+        "tag": "core"
+      },
+      "source": {
+        "type": "file",
+        "file": {
+          "type": "csv",
+          "command": "read_rows",
+          "arguments": {
+            "path": "feature_matrix_audit.csv"
+          }
+        }
+      },
+      "assertion": {
+        "type": "deterministic",
+        "expected": {
+          "id_column": "feature_id",
+          "rows": {
+            "FT-12": {
+              "racklane_verdict": "OVERTURNED",
+              "racklane_decided_by": "racklane_manual",
+              "micaform_verdict": "STANDS",
+              "micaform_decided_by": "review"
+            }
+          },
+          "cell_types": {
+            "racklane_verdict": "text",
+            "racklane_decided_by": "text",
+            "micaform_verdict": "text",
+            "micaform_decided_by": "text"
+          }
+        },
+        "deterministic": {
+          "path": "$",
+          "comparison": "table_equals"
+        }
+      }
+    },
+    {
       "name": "matrix_table",
       "metadata": {
         "how_justification": "Parses feature_matrix_audit.csv with csv.read_rows and applies table_equals: every graded cell of 9 rows plus the full 11-row population as a row_set lock (duplicate-row and cross-product dumps fail the lock; a duplicated graded id is rejected outright), and the delivered column set closed to the stated header, with declared cell types {'racklane_verdict': 'text', 'racklane_decided_by': 'text', 'micaform_verdict': 'text', 'micaform_decided_by': 'text'} normalised on both sides. A failure names the exact row and column.",
-        "why_justification": "Every cell's verdict and deciding document is graded, so a review refused on a silent reference, a review allowed over the vendor, a release history skipped and an omission read as absence each show on the rows they move. Entailed by: \"One row per feature row in `draft_comparison.md` and no other rows, in any order, with `feature_id` exactly as the draft writes it. Each row carries two cells for each product. `racklane_verdict` and `micaform_verdict` each take exactly one of `STANDS`, `OVERTURNED` or `UNVERIFIABLE`: whether Theo's entry for that product on that row survives the documents. `racklane_decided_by` and `micaform_decided_by` name the one document that decides that cell, by its short name in the house rules — `racklane_manual`, `micaform_page` or `review` — or `none` where the verdict is `UNVERIFIABLE`. Which document decides a cell is not a judgement call: the house rules rank the documents, say what counts as a document speaking to a feature, and name the deciding document even where another one agrees with it, so every cell has one answer.\"",
+        "why_justification": "Every cell's verdict and deciding document is graded, so a review refused on a silent reference, a review allowed over the vendor, a release history skipped and an omission read as absence each show on the rows they move. FT-6 also moves when the 4.4 entry beyond the studio's release is read as current, and FT-5 when the Micaform 1.2 preview is read as the release on sale. Entailed by: \"One row per feature row in `draft_comparison.md` and no other rows, in any order, with `feature_id` exactly as the draft writes it.\"",
         "tag": "core"
       },
       "source": {
@@ -201,12 +285,6 @@
               "micaform_verdict": "STANDS",
               "micaform_decided_by": "micaform_page"
             },
-            "FT-10": {
-              "racklane_verdict": "STANDS",
-              "racklane_decided_by": "racklane_manual",
-              "micaform_verdict": "OVERTURNED",
-              "micaform_decided_by": "micaform_page"
-            },
             "FT-11": {
               "racklane_verdict": "STANDS",
               "racklane_decided_by": "racklane_manual",
@@ -225,7 +303,8 @@
             "FT-8",
             "FT-9",
             "FT-10",
-            "FT-11"
+            "FT-11",
+            "FT-12"
           ],
           "columns": [
             "feature_id",
@@ -303,7 +382,7 @@
       "name": "note_tape_release",
       "metadata": {
         "how_justification": "Opens micaform_switch_note.md with md.extract_text and applies regex_match.",
-        "why_justification": "Names the tape stage row, FT-6, and the Racklane release that settles whether the rack chain still has a tape stage, in one paragraph within about nine hundred characters of each other. That release is what the house rules' ranking of a later release entry over an earlier one and over the 4.0 control list produces, so the 4.0 list, the earlier 4.1 entry and the current 4.3 release are each a different figure and none satisfies it, and neither does the release written as a denial (a `no` or `not` in front of it, or between it and the id, inside one clause). The release number is graded here and nowhere else — what the matrix pins is the verdict and deciding document of the FT-6 rack cell it settles. Both names stand in the same paragraph: this is CO-NAMING, not attribution. Which record carries which value is pinned cell by cell in the register and in results.json, both core.",
+        "why_justification": "Names the tape stage row, FT-6, and the Racklane release that settles whether the rack chain still has a tape stage, in one paragraph within about nine hundred characters of each other. That release is what the house rules' ranking of a later release entry over an earlier one and over the 4.0 control list produces, so the 4.0 list, the earlier 4.1 entry and the current 4.3 release are each a different figure and none satisfies it, and neither does the release written as a denial (a `no` or `not` in front of it, or between it and the id, inside one clause). The release number is graded here and nowhere else \u2014 what the matrix pins is the verdict and deciding document of the FT-6 rack cell it settles. Both names stand in the same paragraph: this is CO-NAMING, not attribution. Which record carries which value is pinned cell by cell in the register and in results.json, both core.",
         "tag": "core"
       },
       "source": {
@@ -318,7 +397,7 @@
       },
       "assertion": {
         "type": "deterministic",
-        "expected": "(?is)(?:\\bFT-6\\w*\\b(?:(?:(?!(?:\\n[ \\t]*\\n|\\[Slide \\d)).){0,900}?(?:[.!?,;:–—]|\\bbut\\b|\\band\\b|\\byet\\b|\\bso\\b))?(?:(?!(?:[.!?,;:–—]|\\bbut\\b|\\band\\b|\\byet\\b|\\bso\\b))(?!\\bno\\b|\\bnot\\b)(?!(?:\\n[ \\t]*\\n|\\[Slide \\d)).){0,200}?\\b(?<!\\bno )(?<!\\bnot )(?<![\\d.])(?:4\\.2|4\\.20)(?!\\d)(?!\\.\\d)|(?:^|(?<=[.!?,;:–—\\n])|\\bbut\\b|\\band\\b|\\byet\\b|\\bso\\b)(?:(?!(?:[.!?,;:–—]|\\bbut\\b|\\band\\b|\\byet\\b|\\bso\\b))(?!\\bno\\b|\\bnot\\b)(?!\\n[ \\t]*\\n).){0,200}?\\b(?<!\\bno )(?<!\\bnot )(?<![\\d.])(?:4\\.2|4\\.20)(?!\\d)(?!\\.\\d)\\w*\\b(?:(?:(?!(?:\\n[ \\t]*\\n|\\[Slide \\d)).){0,900}?(?:[.!?,;:–—]|\\bbut\\b|\\band\\b|\\byet\\b|\\bso\\b))?(?:(?!(?:[.!?,;:–—]|\\bbut\\b|\\band\\b|\\byet\\b|\\bso\\b))(?!\\bno\\b|\\bnot\\b)(?!(?:\\n[ \\t]*\\n|\\[Slide \\d)).){0,200}?\\bFT-6)",
+        "expected": "(?is)(?:\\bFT-6\\w*\\b(?:(?:(?!(?:\\n[ \\t]*\\n|\\[Slide \\d)).){0,900}?(?:[.!?,;:\u2013\u2014]|\\bbut\\b|\\band\\b|\\byet\\b|\\bso\\b))?(?:(?!(?:[.!?,;:\u2013\u2014]|\\bbut\\b|\\band\\b|\\byet\\b|\\bso\\b))(?!\\bno\\b|\\bnot\\b)(?!(?:\\n[ \\t]*\\n|\\[Slide \\d)).){0,200}?\\b(?<!\\bno )(?<!\\bnot )(?<![\\d.])(?:4\\.2|4\\.20)(?!\\d)(?!\\.\\d)|(?:^|(?<=[.!?,;:\u2013\u2014\\n])|\\bbut\\b|\\band\\b|\\byet\\b|\\bso\\b)(?:(?!(?:[.!?,;:\u2013\u2014]|\\bbut\\b|\\band\\b|\\byet\\b|\\bso\\b))(?!\\bno\\b|\\bnot\\b)(?!\\n[ \\t]*\\n).){0,200}?\\b(?<!\\bno )(?<!\\bnot )(?<![\\d.])(?:4\\.2|4\\.20)(?!\\d)(?!\\.\\d)\\w*\\b(?:(?:(?!(?:\\n[ \\t]*\\n|\\[Slide \\d)).){0,900}?(?:[.!?,;:\u2013\u2014]|\\bbut\\b|\\band\\b|\\byet\\b|\\bso\\b))?(?:(?!(?:[.!?,;:\u2013\u2014]|\\bbut\\b|\\band\\b|\\byet\\b|\\bso\\b))(?!\\bno\\b|\\bnot\\b)(?!(?:\\n[ \\t]*\\n|\\[Slide \\d)).){0,200}?\\bFT-6)",
         "deterministic": {
           "path": "$.text",
           "comparison": "regex_match"
@@ -329,7 +408,7 @@
       "name": "note_in_common",
       "metadata": {
         "how_justification": "Opens micaform_switch_note.md with md.extract_text and applies regex_match.",
-        "why_justification": "The note states the in common count once: the features both products are decided to have, counted as the house rules count them. It moves with the trap — refusing the review on the two rack cells the reference is silent on drops it. The same count is core in results.json; here it is graded as the figure beside its own label. The digit inside a feature id such as FT-5 does not satisfy it.",
+        "why_justification": "The note states the in common count once: the features both products are decided to have, counted as the house rules count them. It moves with the trap \u2014 refusing the review on the two rack cells the reference is silent on drops it. The same count is core in results.json; here it is graded as the figure beside its own label. The digit inside a feature id such as FT-5 does not satisfy it.",
         "tag": "core"
       },
       "source": {
@@ -344,7 +423,7 @@
       },
       "assertion": {
         "type": "deterministic",
-        "expected": "(?is)(?:(?:^|(?<=[.!?,;:–—\\n])|\\bbut\\b|\\band\\b|\\byet\\b|\\bso\\b)(?:(?!(?:[.!?,;:–—]|\\bbut\\b|\\band\\b|\\byet\\b|\\bso\\b))(?!\\bno\\b|\\bnot\\b)(?!\\n[ \\t]*\\n).){0,200}?(?<!\\bno )(?<!\\bnot )(?<!\\bno )(?<!\\bnot )(?<![-\\d.])(?:5|5\\.0|5\\.00|\\bfive\\b)(?!\\d)(?!\\.\\d)[^\\w\\n,;.|/]{0,2}(?:(?![.!?](?:\\s|$))(?!(?:\\bM[-_ ]?i[-_ ]?c[-_ ]?a[-_ ]?f[-_ ]?o[-_ ]?r[-_ ]?m[-_\\s]*o[-_ ]?n[-_ ]?l[-_ ]?y\\w*\\b|\\bo[-_ ]?n[-_ ]?l[-_ ]?y[-_\\s]*i[-_ ]?n[-_\\s]*M[-_ ]?i[-_ ]?c[-_ ]?a[-_ ]?f[-_ ]?o[-_ ]?r[-_ ]?m\\w*\\b))(?!(?:\\d|\\b(?:zero|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen|twenty)\\b)).){0,48}(?<!\\bno )(?<!\\bnot )(?:\\bi[-_ ]?n[-_\\s]*c[-_ ]?o[-_ ]?m[-_ ]?m[-_ ]?o[-_ ]?n\\w*\\b|\\bs[-_ ]?h[-_ ]?a[-_ ]?r[-_ ]?e\\w*\\b)|(?<!\\d )(?<!\\d  )(?!(?:\\d|\\b(?:zero|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen|twenty)\\b))(?<!\\bno )(?<!\\bnot )(?:\\bi[-_ ]?n[-_\\s]*c[-_ ]?o[-_ ]?m[-_ ]?m[-_ ]?o[-_ ]?n\\w*\\b|\\bs[-_ ]?h[-_ ]?a[-_ ]?r[-_ ]?e\\w*\\b)(?:(?![.!?](?:\\s|$))(?!(?:\\bM[-_ ]?i[-_ ]?c[-_ ]?a[-_ ]?f[-_ ]?o[-_ ]?r[-_ ]?m[-_\\s]*o[-_ ]?n[-_ ]?l[-_ ]?y\\w*\\b|\\bo[-_ ]?n[-_ ]?l[-_ ]?y[-_\\s]*i[-_ ]?n[-_\\s]*M[-_ ]?i[-_ ]?c[-_ ]?a[-_ ]?f[-_ ]?o[-_ ]?r[-_ ]?m\\w*\\b)).){0,48}(?<!\\bno )(?<!\\bnot )(?<![-\\d.])(?:5|5\\.0|5\\.00|\\bfive\\b)(?!\\d)(?!\\.\\d)(?![^\\w\\n,;.|/]{0,2}(?:(?:\\bM[-_ ]?i[-_ ]?c[-_ ]?a[-_ ]?f[-_ ]?o[-_ ]?r[-_ ]?m[-_\\s]*o[-_ ]?n[-_ ]?l[-_ ]?y\\w*\\b|\\bo[-_ ]?n[-_ ]?l[-_ ]?y[-_\\s]*i[-_ ]?n[-_\\s]*M[-_ ]?i[-_ ]?c[-_ ]?a[-_ ]?f[-_ ]?o[-_ ]?r[-_ ]?m\\w*\\b))))",
+        "expected": "(?is)(?:(?:^|(?<=[.!?,;:\u2013\u2014\\n])|\\bbut\\b|\\band\\b|\\byet\\b|\\bso\\b)(?:(?!(?:[.!?,;:\u2013\u2014]|\\bbut\\b|\\band\\b|\\byet\\b|\\bso\\b))(?!\\bno\\b|\\bnot\\b)(?!\\n[ \\t]*\\n).){0,200}?(?<!\\bno )(?<!\\bnot )(?<!\\bno )(?<!\\bnot )(?<![-\\d.])(?:5|5\\.0|5\\.00|\\bfive\\b)(?!\\d)(?!\\.\\d)[^\\w\\n,;.|/]{0,2}(?:(?![.!?](?:\\s|$))(?!(?:\\bM[-_ ]?i[-_ ]?c[-_ ]?a[-_ ]?f[-_ ]?o[-_ ]?r[-_ ]?m[-_\\s]*o[-_ ]?n[-_ ]?l[-_ ]?y\\w*\\b|\\bo[-_ ]?n[-_ ]?l[-_ ]?y[-_\\s]*i[-_ ]?n[-_\\s]*M[-_ ]?i[-_ ]?c[-_ ]?a[-_ ]?f[-_ ]?o[-_ ]?r[-_ ]?m\\w*\\b))(?!(?:\\d|\\b(?:zero|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen|twenty)\\b)).){0,48}(?<!\\bno )(?<!\\bnot )(?:\\bi[-_ ]?n[-_\\s]*c[-_ ]?o[-_ ]?m[-_ ]?m[-_ ]?o[-_ ]?n\\w*\\b|\\bs[-_ ]?h[-_ ]?a[-_ ]?r[-_ ]?e\\w*\\b)|(?<!\\d )(?<!\\d  )(?!(?:\\d|\\b(?:zero|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen|twenty)\\b))(?<!\\bno )(?<!\\bnot )(?:\\bi[-_ ]?n[-_\\s]*c[-_ ]?o[-_ ]?m[-_ ]?m[-_ ]?o[-_ ]?n\\w*\\b|\\bs[-_ ]?h[-_ ]?a[-_ ]?r[-_ ]?e\\w*\\b)(?:(?![.!?](?:\\s|$))(?!(?:\\bM[-_ ]?i[-_ ]?c[-_ ]?a[-_ ]?f[-_ ]?o[-_ ]?r[-_ ]?m[-_\\s]*o[-_ ]?n[-_ ]?l[-_ ]?y\\w*\\b|\\bo[-_ ]?n[-_ ]?l[-_ ]?y[-_\\s]*i[-_ ]?n[-_\\s]*M[-_ ]?i[-_ ]?c[-_ ]?a[-_ ]?f[-_ ]?o[-_ ]?r[-_ ]?m\\w*\\b)).){0,48}(?<!\\bno )(?<!\\bnot )(?<![-\\d.])(?:5|5\\.0|5\\.00|\\bfive\\b)(?!\\d)(?!\\.\\d)(?![^\\w\\n,;.|/]{0,2}(?:(?:\\bM[-_ ]?i[-_ ]?c[-_ ]?a[-_ ]?f[-_ ]?o[-_ ]?r[-_ ]?m[-_\\s]*o[-_ ]?n[-_ ]?l[-_ ]?y\\w*\\b|\\bo[-_ ]?n[-_ ]?l[-_ ]?y[-_\\s]*i[-_ ]?n[-_\\s]*M[-_ ]?i[-_ ]?c[-_ ]?a[-_ ]?f[-_ ]?o[-_ ]?r[-_ ]?m\\w*\\b))))",
         "deterministic": {
           "path": "$.text",
           "comparison": "regex_match"
@@ -355,7 +434,7 @@
       "name": "note_in_common_exactly_one",
       "metadata": {
         "how_justification": "Opens micaform_switch_note.md with md.extract_text and applies not_regex_match.",
-        "why_justification": "A hedge is not an answer: the in common figure may not be offered as one of several candidates in its own sentence. The note states the in common count once: the features both products are decided to have, counted as the house rules count them. It moves with the trap — refusing the review on the two rack cells the reference is silent on drops it. The same count is core in results.json; here it is graded as the figure beside its own label. The digit inside a feature id such as FT-5 does not satisfy it.",
+        "why_justification": "A hedge is not an answer: the in common figure may not be offered as one of several candidates in its own sentence. The note states the in common count once: the features both products are decided to have, counted as the house rules count them. It moves with the trap \u2014 refusing the review on the two rack cells the reference is silent on drops it. The same count is core in results.json; here it is graded as the figure beside its own label. The digit inside a feature id such as FT-5 does not satisfy it.",
         "tag": "incidental"
       },
       "source": {
@@ -396,7 +475,7 @@
       },
       "assertion": {
         "type": "deterministic",
-        "expected": "(?is)(?:(?:^|(?<=[.!?,;:–—\\n])|\\bbut\\b|\\band\\b|\\byet\\b|\\bso\\b)(?:(?!(?:[.!?,;:–—]|\\bbut\\b|\\band\\b|\\byet\\b|\\bso\\b))(?!\\bno\\b|\\bnot\\b)(?!\\n[ \\t]*\\n).){0,200}?(?<!\\bno )(?<!\\bnot )(?<!\\bno )(?<!\\bnot )(?<![-\\d.])(?:2|2\\.0|2\\.00|\\btwo\\b)(?!\\d)(?!\\.\\d)[^\\w\\n,;.|/]{0,2}(?:(?![.!?](?:\\s|$))(?!(?:\\bi[-_ ]?n[-_\\s]*c[-_ ]?o[-_ ]?m[-_ ]?m[-_ ]?o[-_ ]?n\\w*\\b|\\bs[-_ ]?h[-_ ]?a[-_ ]?r[-_ ]?e\\w*\\b))(?!(?:\\d|\\b(?:zero|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen|twenty)\\b)).){0,48}(?<!\\bno )(?<!\\bnot )(?:\\bM[-_ ]?i[-_ ]?c[-_ ]?a[-_ ]?f[-_ ]?o[-_ ]?r[-_ ]?m[-_\\s]*o[-_ ]?n[-_ ]?l[-_ ]?y\\w*\\b|\\bo[-_ ]?n[-_ ]?l[-_ ]?y[-_\\s]*i[-_ ]?n[-_\\s]*M[-_ ]?i[-_ ]?c[-_ ]?a[-_ ]?f[-_ ]?o[-_ ]?r[-_ ]?m\\w*\\b)|(?<!\\d )(?<!\\d  )(?!(?:\\d|\\b(?:zero|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen|twenty)\\b))(?<!\\bno )(?<!\\bnot )(?:\\bM[-_ ]?i[-_ ]?c[-_ ]?a[-_ ]?f[-_ ]?o[-_ ]?r[-_ ]?m[-_\\s]*o[-_ ]?n[-_ ]?l[-_ ]?y\\w*\\b|\\bo[-_ ]?n[-_ ]?l[-_ ]?y[-_\\s]*i[-_ ]?n[-_\\s]*M[-_ ]?i[-_ ]?c[-_ ]?a[-_ ]?f[-_ ]?o[-_ ]?r[-_ ]?m\\w*\\b)(?:(?![.!?](?:\\s|$))(?!(?:\\bi[-_ ]?n[-_\\s]*c[-_ ]?o[-_ ]?m[-_ ]?m[-_ ]?o[-_ ]?n\\w*\\b|\\bs[-_ ]?h[-_ ]?a[-_ ]?r[-_ ]?e\\w*\\b)).){0,48}(?<!\\bno )(?<!\\bnot )(?<![-\\d.])(?:2|2\\.0|2\\.00|\\btwo\\b)(?!\\d)(?!\\.\\d)(?![^\\w\\n,;.|/]{0,2}(?:(?:\\bi[-_ ]?n[-_\\s]*c[-_ ]?o[-_ ]?m[-_ ]?m[-_ ]?o[-_ ]?n\\w*\\b|\\bs[-_ ]?h[-_ ]?a[-_ ]?r[-_ ]?e\\w*\\b))))",
+        "expected": "(?is)(?:(?:^|(?<=[.!?,;:\u2013\u2014\\n])|\\bbut\\b|\\band\\b|\\byet\\b|\\bso\\b)(?:(?!(?:[.!?,;:\u2013\u2014]|\\bbut\\b|\\band\\b|\\byet\\b|\\bso\\b))(?!\\bno\\b|\\bnot\\b)(?!\\n[ \\t]*\\n).){0,200}?(?<!\\bno )(?<!\\bnot )(?<!\\bno )(?<!\\bnot )(?<![-\\d.])(?:2|2\\.0|2\\.00|\\btwo\\b)(?!\\d)(?!\\.\\d)[^\\w\\n,;.|/]{0,2}(?:(?![.!?](?:\\s|$))(?!(?:\\bi[-_ ]?n[-_\\s]*c[-_ ]?o[-_ ]?m[-_ ]?m[-_ ]?o[-_ ]?n\\w*\\b|\\bs[-_ ]?h[-_ ]?a[-_ ]?r[-_ ]?e\\w*\\b))(?!(?:\\d|\\b(?:zero|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen|twenty)\\b)).){0,48}(?<!\\bno )(?<!\\bnot )(?:\\bM[-_ ]?i[-_ ]?c[-_ ]?a[-_ ]?f[-_ ]?o[-_ ]?r[-_ ]?m[-_\\s]*o[-_ ]?n[-_ ]?l[-_ ]?y\\w*\\b|\\bo[-_ ]?n[-_ ]?l[-_ ]?y[-_\\s]*i[-_ ]?n[-_\\s]*M[-_ ]?i[-_ ]?c[-_ ]?a[-_ ]?f[-_ ]?o[-_ ]?r[-_ ]?m\\w*\\b)|(?<!\\d )(?<!\\d  )(?!(?:\\d|\\b(?:zero|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen|twenty)\\b))(?<!\\bno )(?<!\\bnot )(?:\\bM[-_ ]?i[-_ ]?c[-_ ]?a[-_ ]?f[-_ ]?o[-_ ]?r[-_ ]?m[-_\\s]*o[-_ ]?n[-_ ]?l[-_ ]?y\\w*\\b|\\bo[-_ ]?n[-_ ]?l[-_ ]?y[-_\\s]*i[-_ ]?n[-_\\s]*M[-_ ]?i[-_ ]?c[-_ ]?a[-_ ]?f[-_ ]?o[-_ ]?r[-_ ]?m\\w*\\b)(?:(?![.!?](?:\\s|$))(?!(?:\\bi[-_ ]?n[-_\\s]*c[-_ ]?o[-_ ]?m[-_ ]?m[-_ ]?o[-_ ]?n\\w*\\b|\\bs[-_ ]?h[-_ ]?a[-_ ]?r[-_ ]?e\\w*\\b)).){0,48}(?<!\\bno )(?<!\\bnot )(?<![-\\d.])(?:2|2\\.0|2\\.00|\\btwo\\b)(?!\\d)(?!\\.\\d)(?![^\\w\\n,;.|/]{0,2}(?:(?:\\bi[-_ ]?n[-_\\s]*c[-_ ]?o[-_ ]?m[-_ ]?m[-_ ]?o[-_ ]?n\\w*\\b|\\bs[-_ ]?h[-_ ]?a[-_ ]?r[-_ ]?e\\w*\\b))))",
         "deterministic": {
           "path": "$.text",
           "comparison": "regex_match"
@@ -477,7 +556,7 @@
         "expected": {
           "keys": {
             "overturned_cell_count": {
-              "value": 7,
+              "value": 8,
               "tolerance": null
             },
             "unverifiable_cell_count": {
