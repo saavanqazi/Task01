@@ -353,10 +353,10 @@
       }
     },
     {
-      "name": "note_prose_floor",
+      "name": "note_gain_features",
       "metadata": {
-        "how_justification": "Opens micaform_switch_note.md with md.extract_text and applies regex_match.",
-        "why_justification": "The note is the message Maren is owed about the purchase; a count and a release number are not a message to a business partner.",
+        "how_justification": "Opens micaform_switch_note.md with md.extract_text and applies a regex requiring the distinctive word of every Micaform-only feature row (tape, blend), in any case and wording.",
+        "why_justification": "The note names what the move buys: every feature that is Micaform only under house rule 7, by the distinctive word of its draft row. The set moves with the audit \u2014 reading the 4.4 entry as current drops the tape stage from it, and a 4.0-only reading of the manual drops the blend's rack cell. Entailed by: \"it names every feature that is `Micaform only` and every feature that is `rack only`\".",
         "tag": "core"
       },
       "source": {
@@ -371,7 +371,7 @@
       },
       "assertion": {
         "type": "deterministic",
-        "expected": "(?s)(?:[A-Za-z]+[^A-Za-z]+){60,}",
+        "expected": "(?is)(?=.*\\btape\\w*\\b)(?=.*\\bblend\\w*\\b)",
         "deterministic": {
           "path": "$.text",
           "comparison": "regex_match"
@@ -509,10 +509,10 @@
       }
     },
     {
-      "name": "note_sentence_floor",
+      "name": "note_loss_features",
       "metadata": {
-        "how_justification": "Opens micaform_switch_note.md with md.extract_text and applies regex_match.",
-        "why_justification": "A note to a business partner is prose. The other checks on `micaform_switch_note.md` grade a count beside its label, a second count beside its label, and a row id in the same paragraph as a release number, and the shared 60-word floor counts runs of letters, so a file of one-letter padding carrying those tokens would satisfy all of them. This grades what the contract asks in the same terms: at least 3 whole sentences, each of 6 or more words of two letters or more, each closed with a full stop, a question mark or an exclamation mark. It pins no word and no layout, so what it refuses is a file that is not written prose at all.",
+        "how_justification": "Opens micaform_switch_note.md with md.extract_text and applies a regex requiring the distinctive word of every rack-only feature row (sidechain), in any case, hyphenated or not.",
+        "why_justification": "The note names what the move costs: every feature that is rack only under house rule 7, by the distinctive word of its draft row. The set moves with the audit \u2014 the 4.4 entry retires the sidechain, so reading it as current empties the set; reading the 1.2 preview as current empties it too. Entailed by: \"it names every feature that is `Micaform only` and every feature that is `rack only`\".",
         "tag": "core"
       },
       "source": {
@@ -527,7 +527,7 @@
       },
       "assertion": {
         "type": "deterministic",
-        "expected": "(?s)(?:\\b[A-Za-z]{2,}\\b(?:[^A-Za-z.!?]|\\b[A-Za-z]\\b){0,40}){6}[^.!?]{0,400}[.!?](?:.*?(?:\\b[A-Za-z]{2,}\\b(?:[^A-Za-z.!?]|\\b[A-Za-z]\\b){0,40}){6}[^.!?]{0,400}[.!?])(?:.*?(?:\\b[A-Za-z]{2,}\\b(?:[^A-Za-z.!?]|\\b[A-Za-z]\\b){0,40}){6}[^.!?]{0,400}[.!?])",
+        "expected": "(?is)\\bside[-_ ]?chain\\w*\\b",
         "deterministic": {
           "path": "$.text",
           "comparison": "regex_match"

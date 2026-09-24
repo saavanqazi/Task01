@@ -62,7 +62,8 @@ cell's deciding document is `none`.
 ## Rule 7 — counting what a move gains and what it loses
 
 Once every cell has its verdict, a feature is *in common* — the two share it — when both
-products are decided to have it, and *Micaform only* — only in Micaform — when Micaform is
-decided to have it and the rack chain is decided to lack it. An `UNVERIFIABLE` cell counts
-as neither having nor lacking the feature, so a row carrying one counts towards neither
-figure.
+products are decided to have it; *Micaform only* — only in Micaform, what a move gains — when
+Micaform is decided to have it and the rack chain is decided to lack it; and *rack only* —
+what a move loses — when the rack chain is decided to have it and Micaform is decided to lack
+it. An `UNVERIFIABLE` cell counts as neither having nor lacking the feature, so a row carrying
+one counts towards none of these.

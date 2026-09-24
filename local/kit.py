@@ -17,7 +17,14 @@ PROBES = ROOT / "local" / "probes"
 
 
 def trials(jobdir):
-    return sorted(p for p in Path(jobdir).iterdir() if (p / "verifier" / "reward.txt").is_file())
+    """Trial folders of a job, ordered by start time (falls back to name)."""
+    def started(p):
+        try:
+            return json.loads((p / "result.json").read_text(encoding="utf-8")).get("started_at") or ""
+        except Exception:
+            return ""
+    ts = [p for p in Path(jobdir).iterdir() if (p / "verifier" / "reward.txt").is_file()]
+    return sorted(ts, key=lambda p: (started(p), p.name))
 
 
 def cmd_clean():
@@ -179,18 +186,27 @@ def cmd_package(jobdir):
     for d in ("difficulty", "solvability"):
         shutil.rmtree(ev / d, ignore_errors=True); (ev / d).mkdir(parents=True)
     passing = None
-    for i, t in enumerate(trials(jobdir)[:4], start=1):
+    all_trials = trials(jobdir)
+    for i, t in enumerate(all_trials[:4], start=1):
         dst = ev / "difficulty" / f"r{i}"
         shutil.copytree(t, dst)
         for junk in ("lock.json", "job.log"):
             (dst / junk).unlink(missing_ok=True)
         normalize(dst)
         r = (dst / "verifier" / "reward.txt").read_text().strip()
-        print(f"difficulty/r{i}  reward={r}")
+        print(f"difficulty/r{i}  reward={r}  ({t.name})")
         if r == "1.0" and passing is None: passing = f"r{i}"
-    if passing:
+    # solvability: prefer an extra trial (5th onwards) at 1.0 so it is not a copy of a difficulty run
+    extra = [t for t in all_trials[4:] if (t / "verifier" / "reward.txt").read_text().strip() == "1.0"]
+    if extra:
+        shutil.copytree(extra[0], ev / "solvability" / "r1")
+        for junk in ("lock.json", "job.log"):
+            (ev / "solvability" / "r1" / junk).unlink(missing_ok=True)
+        normalize(ev / "solvability" / "r1")
+        print(f"solvability/r1 <- independent trial {extra[0].name} (reward 1.0)")
+    elif passing:
         shutil.copytree(ev / "difficulty" / passing, ev / "solvability" / "r1")
-        print(f"solvability/r1 <- difficulty/{passing}")
+        print(f"solvability/r1 <- copy of difficulty/{passing} (PreQC QC1-1 advisory will note the copy)")
     else:
         print("WARNING: no 1.0 run in this battery; solvability needs a passing non-oracle run from elsewhere")
     print("evaluations/ now:", [p.name for p in ev.iterdir()])

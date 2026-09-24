@@ -55,7 +55,8 @@ core miss zeroes the run.
 | Round | Oracle | GLM-5.2 (terminus-2) rewards | Verdict |
 |---|---|---|---|
 | Baseline | 1.0, 1.0 | 1.0, 1.0, 1.0, 1.0 (job `glm-mic-audit-r0-t2`) | 4/4, too easy |
-| Round 1 | 1.0, 1.0 (jobs `oracle-r1`, `oracle-r1b`); 1.0 again after the manifest rename (`oracle-r1-manifest`) | 1.0, 0.0, 1.0, 1.0 (job `glm-mic-audit-r1-t2`, trials CwyDXsG, iRPbaaP, Kp4Xjwu, sdgoqtb) | 3/4, in band |
+| Round 1 | 1.0, 1.0 (jobs `oracle-r1`, `oracle-r1b`); 1.0 again after the manifest rename (`oracle-r1-manifest`) and the digest pin (`oracle-final2`, `oracle-final3`) | 1.0, 0.0, 1.0, 1.0 (job `glm-mic-audit-r1-t2`, trials CwyDXsG, iRPbaaP, Kp4Xjwu, sdgoqtb) | 3/4, in band; superseded by the PreQC fix |
+| Round 1 + PreQC fix | _pending_ | _pending_ (job `glm-mic-audit-r2-t2`) | |
 
 Failing run (trial iRPbaaP, `evaluations/difficulty/r2`): every one of the 24 matrix cells correct. The agent
 first wrote 5 in common, then on a self-check revised it to 4, listing FT-1, FT-2, FT-3 and FT-8 as the
@@ -64,6 +65,22 @@ overturns that on the Micaform page, so Micaform has it and the row is in common
 in translating a verdict back into has/lacks before counting — the coupled step the task is built
 around — and rule 7 admits no other reading. Classified MODEL; `note_in_common` and `results_figures`
 failed together, exactly the checks that carry that figure.
+
+## PreQC round 1 (first platform upload, 2026-09-24)
+
+Upload validation wants `tests/manifest.json` as a JSON object with an optional
+`verifier_configs[]` and the assertions in `tests/verifier.json`; the bundle now ships exactly that.
+PreQC then raised two blocking findings, QC1-2 and QC1-3: the note's 60-word floor
+(`note_prose_floor`) and three-sentence floor (`note_sentence_floor`) graded prose by length alone.
+Both were replaced by key-fact checks that stay deterministic and value-based:
+`note_gain_features` requires the note to name every Micaform-only feature (tape, blend) and
+`note_loss_features` every rack-only feature (sidechain), by the distinctive word of the draft row,
+in any case and wording. `submission_format.md` states the requirement and lists the keyword of
+every row (so it leaks nothing about which rows are gained or lost), house rule 7 defines *rack only*,
+and the instruction asks for "what it buys us and what it costs". The sets move with the audit:
+reading the 4.4 entry as current or the 1.2 preview as on sale changes both. The advisory QC1-1
+(solvability a copy of a difficulty run) is addressed by shipping a fifth, independent GLM-5.2 run
+as solvability. The contract change invalidated the round 1 rollouts, so the battery was re-run.
 
 ## Rollouts shipped
 

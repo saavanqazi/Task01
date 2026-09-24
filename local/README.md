@@ -36,7 +36,7 @@ docker ps --format "{{.Names}}"
 harbor run -c local\glm-harbor-config.json -n 2 -k 4 --env-file glm.env -y
 python local\kit.py rewards jobs\glm-mic-audit-r0
 ```
-`-k 4` is the total attempts, `-n 2` how many run at once. Edit `job_name` in the config for each round
+`-k 5` runs five attempts: the first four by start time are the difficulty rollouts, the fifth (if 1.0) is the independent solvability run PreQC asks for. `-n` is how many run at once. Edit `job_name` in the config for each round
 (`glm-mic-audit-r1`, ...).
 
 The `agents[0].kwargs.opencode_config` block is required with the team proxy. Without it opencode
