@@ -1,0 +1,213 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.14, pytest-8.4.1, pluggy-1.6.0
+rootdir: /tests
+plugins: json-ctrf-0.3.5
+collected 25 items
+
+../tests/test_outputs.py ..........F....F.........                       [100%]
+
+=================================== FAILURES ===================================
+_______________________ test_deliverable[note_in_common] _______________________
+
+definition = VerifierDefinition(name='note_in_common', metadata=VerifierMetadata(how_justification='Opens micaform_switch_note.md w...\\w*\\b))))', deterministic=DeterministicConfig(path='$.text', comparison='regex_match', tolerance=None), rubric=None))
+
+    @pytest.mark.parametrize(
+        "definition",
+        SPEC.verifiers,
+        ids=[definition.name for definition in SPEC.verifiers],
+    )
+    def test_deliverable(definition):
+        outcome = verify_definition(
+            definition,
+            REGISTRY,
+            WEIGHTS[definition.name],
+            config=SPEC.config,
+            completion_fn=None,
+        )["result"]
+        detail = outcome.get("error") or outcome.get("reason") or "assertion failed"
+>       assert outcome["success"], f"{definition.name}: {detail}"
+E       AssertionError: note_in_common: assertion failed
+E       assert False
+
+/tests/test_outputs.py:144: AssertionError
+______________________ test_deliverable[results_figures] _______________________
+
+definition = VerifierDefinition(name='results_figures', metadata=VerifierMetadata(how_justification='Reads results.json with json.r...'closed': True}, deterministic=DeterministicConfig(path='$', comparison='object_equals', tolerance=None), rubric=None))
+
+    @pytest.mark.parametrize(
+        "definition",
+        SPEC.verifiers,
+        ids=[definition.name for definition in SPEC.verifiers],
+    )
+    def test_deliverable(definition):
+        outcome = verify_definition(
+            definition,
+            REGISTRY,
+            WEIGHTS[definition.name],
+            config=SPEC.config,
+            completion_fn=None,
+        )["result"]
+        detail = outcome.get("error") or outcome.get("reason") or "assertion failed"
+>       assert outcome["success"], f"{definition.name}: {detail}"
+E       AssertionError: results_figures: key in_common_feature_count: expected 5, got 4
+E       assert False
+
+/tests/test_outputs.py:144: AssertionError
+==================================== PASSES ====================================
+=========================== short test summary info ============================
+PASSED ../tests/test_outputs.py::test_deliverable[matrix_exists]
+PASSED ../tests/test_outputs.py::test_deliverable[matrix_header]
+PASSED ../tests/test_outputs.py::test_deliverable[matrix_table_trap_ft2]
+PASSED ../tests/test_outputs.py::test_deliverable[matrix_table_trap_ft3]
+PASSED ../tests/test_outputs.py::test_deliverable[matrix_table_trap_ft10]
+PASSED ../tests/test_outputs.py::test_deliverable[matrix_table_trap_ft12]
+PASSED ../tests/test_outputs.py::test_deliverable[matrix_table]
+PASSED ../tests/test_outputs.py::test_deliverable[note_exists]
+PASSED ../tests/test_outputs.py::test_deliverable[note_prose_floor]
+PASSED ../tests/test_outputs.py::test_deliverable[note_tape_release]
+PASSED ../tests/test_outputs.py::test_deliverable[note_in_common_exactly_one]
+PASSED ../tests/test_outputs.py::test_deliverable[note_micaform_only]
+PASSED ../tests/test_outputs.py::test_deliverable[note_micaform_only_exactly_one]
+PASSED ../tests/test_outputs.py::test_deliverable[note_sentence_floor]
+PASSED ../tests/test_outputs.py::test_deliverable[results_exists]
+PASSED ../tests/test_outputs.py::test_incomplete_output[feature_matrix_audit.csv]
+PASSED ../tests/test_outputs.py::test_incomplete_output[micaform_switch_note.md]
+PASSED ../tests/test_outputs.py::test_incomplete_output[results.json]
+PASSED ../tests/test_outputs.py::test_negative_corrupted_value[in_common_feature_count]
+PASSED ../tests/test_outputs.py::test_negative_corrupted_value[micaform_only_feature_count]
+PASSED ../tests/test_outputs.py::test_negative_corrupted_value[overturned_cell_count]
+PASSED ../tests/test_outputs.py::test_negative_corrupted_value[unverifiable_cell_count]
+PASSED ../tests/test_outputs.py::test_adversarial_extra_key
+FAILED ../tests/test_outputs.py::test_deliverable[note_in_common] - Assertion...
+FAILED ../tests/test_outputs.py::test_deliverable[results_figures] - Assertio...
+========================= 2 failed, 23 passed in 0.75s =========================
+{
+  "reward": 0.0,
+  "core_failures": [
+    "note_in_common",
+    "results_figures"
+  ],
+  "passed": 15,
+  "total": 17,
+  "checks": [
+    {
+      "name": "matrix_exists",
+      "tag": "core",
+      "passed": true,
+      "weight": 0.0588235294,
+      "detail": ""
+    },
+    {
+      "name": "matrix_header",
+      "tag": "core",
+      "passed": true,
+      "weight": 0.0588235294,
+      "detail": ""
+    },
+    {
+      "name": "matrix_table_trap_ft2",
+      "tag": "core",
+      "passed": true,
+      "weight": 0.0588235294,
+      "detail": ""
+    },
+    {
+      "name": "matrix_table_trap_ft3",
+      "tag": "core",
+      "passed": true,
+      "weight": 0.0588235294,
+      "detail": ""
+    },
+    {
+      "name": "matrix_table_trap_ft10",
+      "tag": "core",
+      "passed": true,
+      "weight": 0.0588235294,
+      "detail": ""
+    },
+    {
+      "name": "matrix_table_trap_ft12",
+      "tag": "core",
+      "passed": true,
+      "weight": 0.0588235294,
+      "detail": ""
+    },
+    {
+      "name": "matrix_table",
+      "tag": "core",
+      "passed": true,
+      "weight": 0.0588235294,
+      "detail": ""
+    },
+    {
+      "name": "note_exists",
+      "tag": "core",
+      "passed": true,
+      "weight": 0.0588235294,
+      "detail": ""
+    },
+    {
+      "name": "note_prose_floor",
+      "tag": "core",
+      "passed": true,
+      "weight": 0.0588235294,
+      "detail": ""
+    },
+    {
+      "name": "note_tape_release",
+      "tag": "core",
+      "passed": true,
+      "weight": 0.0588235294,
+      "detail": ""
+    },
+    {
+      "name": "note_in_common",
+      "tag": "core",
+      "passed": false,
+      "weight": 0.0588235294,
+      "detail": "assertion failed"
+    },
+    {
+      "name": "note_in_common_exactly_one",
+      "tag": "incidental",
+      "passed": true,
+      "weight": 0.0588235294,
+      "detail": ""
+    },
+    {
+      "name": "note_micaform_only",
+      "tag": "core",
+      "passed": true,
+      "weight": 0.0588235294,
+      "detail": ""
+    },
+    {
+      "name": "note_micaform_only_exactly_one",
+      "tag": "incidental",
+      "passed": true,
+      "weight": 0.0588235294,
+      "detail": ""
+    },
+    {
+      "name": "note_sentence_floor",
+      "tag": "core",
+      "passed": true,
+      "weight": 0.0588235294,
+      "detail": ""
+    },
+    {
+      "name": "results_figures",
+      "tag": "core",
+      "passed": false,
+      "weight": 0.0588235294,
+      "detail": "key in_common_feature_count: expected 5, got 4"
+    },
+    {
+      "name": "results_exists",
+      "tag": "core",
+      "passed": true,
+      "weight": 0.0588235296,
+      "detail": ""
+    }
+  ]
+}

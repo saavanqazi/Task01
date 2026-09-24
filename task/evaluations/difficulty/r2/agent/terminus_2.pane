@@ -1,0 +1,380 @@
+[?2004hroot@b8f38efd600e:/app# asciinema rec --stdin /logs/agent/recording.cast
+[?2004l[0;32masciinema: recording asciicast to /logs/agent/recording.cast[0m
+[0;32masciinema: press <ctrl-d> or type "exit" when you're done[0m
+[?2004hroot@b8f38efd600e:/app# clear
+[?2004l[H[J[3J[?2004hroot@b8f38efd600e:/app# ls -la
+[?2004ltotal 12
+drwxr-xr-x 1 root root 4096 Sep 24 20:26 .
+drwxr-xr-x 1 root root 4096 Sep 24 20:27 ..
+dr-xr-xr-x 1 root root 4096 Sep 24 20:26 input
+[?2004hroot@b8f38efd600e:/app# ls -la input
+[?2004ltotal 36
+dr-xr-xr-x 1 root root 4096 Sep 24 20:26 .
+drwxr-xr-x 1 root root 4096 Sep 24 20:26 ..
+-r-xr-xr-x 1 root root 3738 Sep 24 20:25 comparison_house_rules.md
+-r-xr-xr-x 1 root root 1075 Sep 24 20:25 draft_comparison.md
+-r-xr-xr-x 1 root root 1195 Sep 24 20:25 micaform_page.html
+-r-xr-xr-x 1 root root 2531 Sep 24 20:25 mixbench_review.pdf
+-r-xr-xr-x 1 root root 2023 Sep 24 20:25 racklane_manual.html
+-r-xr-xr-x 1 root root 5273 Sep 24 20:25 submission_format.md
+[?2004hroot@b8f38efd600e:/app# cat input/submission_format.md
+[?2004l# Submission format
+
+Deliver exactly these files, in your working directory:
+
+- `feature_matrix_audit.csv` — One row per feature row of Theo's draft: a verdict and a deciding document for each product's cell.
+- `micaform_switch_note.md` — The short note to Maren on where the move to Micaform stands.
+- `results.json` — a JSON object; see below.
+
+## `feature_matrix_audit.csv`
+
+Header, exactly: `feature_id,racklane_verdict,racklane_decided_by,micaform_verdict,micaform_decided_by`
+One row per record, keyed by `feature_id`.
+One row per feature row in `draft_comparison.md` and no other rows, in any order, with `feature_id` exactly as the draft writes it. Each row carries two cells for each product. `racklane_verdict` and `micaform_verdict` each take exactly one of `STANDS`, `OVERTURNED` or `UNVERIFIABLE`: whether Theo's entry for that product on that row survives the documents. `racklane_decided_by` and `micaform_decided_by` name the one document that decides that cell, by its short name in the house rules — `racklane_manual`, `micaform_page` or `review` — or `none` where the verdict is `UNVERIFIABLE`. Which document decides a cell is not a judgement call: the house rules rank the documents, say what counts as a document speaking to a feature, and name the deciding document even where another one agrees with it, so every cell has one answer.
+
+Example (placeholder values):
+
+```
+feature_id,racklane_verdict,racklane_decided_by,micaform_verdict,micaform_decided_by
+FT-0,STANDS,racklane_manual,UNVERIFIABLE,none
+```
+
+## `micaform_switch_note.md`
+
+A note to Maren of at least 60 words. It has to read as a written note rather than as a list of findings: at least three whole sentences, each of six or more words of two letters or more and each closed with a full stop, a question mark or an exclamation mark. Lay them out however you like — wrapped, one sentence to a line, or bulleted — and no word of them is graded. The note states how many features the two setups have `in common` and how many are `Micaform only`, each once, as a figure beside its label, in figures or spelled out in words, counted the way the house rules count them; `share` reads as the same label as `in common`, and `only in Micaform` as the same label as `Micaform only`. Beside means in the same sentence and close: the check allows about 48 characters between a count and its label, with no other number between them when the count comes first. Both counts are required on the note: a note that leaves either out, swaps them or states either wrongly fails. The note also names the tape stage row by its feature id — that id is required, exactly as the draft writes it — together with the number of the Racklane release that settles whether the rack chain still has a tape stage, in figures as the release history writes it; the two sit in the same paragraph, within about nine hundred characters of each other, and the check reads them as named together rather than as one attributed to the other. Every one of those figures is STATED, and a figure written as a denial does not count: a `no` or `not` directly in front of a figure refuses it; so does a `no` or `not` earlier in the figure's own clause whenever the figure comes before its label or id; and so does a `no` or `not` standing between the release number and the id inside one clause. A clause ends at a full stop, a question or exclamation mark, a comma, semicolon, colon or dash, or at the word `and`, `but`, `yet` or `so`. Denying a WRONG figure in a clause of its own is free. Nothing else about the note is graded — not its tone, its recommendation, what it says about the sidechain, or the order it takes. At least 60 words of prose. Each of the two counts stands beside its label once, stated as the finding — not offered as one of two candidates. That last rule is checked beside `in common` and `Micaform only` only, so a hedge beside `share` or `only in Micaform` costs nothing. The release number is not guarded that way: it is graded as the figure it stands beside, and a note that hedges it loses nothing.
+The reference note runs well past that floor, because a note that tells a business partner where a purchase stands is longer than sixty words. How long yours runs above the floor is presentation and earns nothing; the three sentences above are a separate requirement and are graded — they ask that it be written prose, not that it be long.
+
+## `results.json`
+
+A JSON object with exactly these keys and nothing else:
+
+- `overturned_cell_count` — number
+- `unverifiable_cell_count` — number
+- `in_common_feature_count` — number
+- `micaform_only_feature_count` — number
+
+Shape example (placeholder values):
+
+```json
+{
+  "overturned_cell_count": 0,
+  "unverifiable_cell_count": 0,
+  "in_common_feature_count": 0,
+  "micaform_only_feature_count": 0
+}
+```
+
+`overturned_cell_count` is the number of cells in the audit whose verdict is `OVERTURNED`, counting both products' cells on every row; `unverifiable_cell_count` is the number of cells whose verdict is `UNVERIFIABLE`, counted the same way; `in_common_feature_count` is the number of feature rows that are in common and `micaform_only_feature_count` the number that are Micaform only, both as the house rules count them.
+[?2004hroot@b8f38efd600e:/app# cat input/draft_comparison.md
+[?2004l# Racklane chain vs Micaform — feature comparison (draft)
+
+Theo Brandt, for Rafa, 2 June 2026. Built from the Racklane module reference we keep in the studio folder and from the Micaform launch material. As far as I can tell the headline additions are the Proximity and Intensity controls, which the rack never had.
+
+| feature_id | feature | Racklane chain | Micaform | note |
+|---|---|---|---|---|
+| FT-1 | Capsule model selector | Yes | Yes |  |
+| FT-2 | Proximity control | No | Yes | new in Micaform |
+| FT-3 | Intensity control | No | Yes | new in Micaform |
+| FT-4 | Valve drive stage | Yes | No | we would still need the rack for the valve |
+| FT-5 | Low cut filter | Yes | Yes |  |
+| FT-6 | Tape stage | Yes | No |  |
+| FT-7 | Dual capsule blend in one instance | No | Yes |  |
+| FT-8 | Zero latency tracking mode | No | Yes |  |
+| FT-9 | Oversampling | No | Yes |  |
+| FT-10 | Sidechain key input | Yes | Yes |  |
+| FT-11 | Valve bias control | Yes | No |  |
+| FT-12 | Tape wow control | Yes | No |  |
+
+Yes means the product has the feature; No means it does not.
+[?2004hroot@b8f38efd600e:/app# printf '\n--- HOUSE RULES ---\n'; cat input/comparison_house_rules.md
+[?2004l
+--- HOUSE RULES ---
+# Kilnworth Mix Rooms — house rules for checking a gear comparison
+
+These rules settle every cell of a feature comparison before the studio buys or retires
+anything. The comparison under check is Theo's `draft_comparison.md`. Where two documents
+disagree, these rules say which one wins, so each cell has one answer.
+
+## Rule 1 — what a cell asks
+
+A cell asks one thing: does that product, at its current release, have the feature named on
+that row? The rack chain means the Racklane host with its Capsule and Valve Stage modules at
+Racklane 4.3, the release the studio runs. Micaform means Micaform 1.1, the release on sale.
+
+## Rule 2 — which documents decide, and in what order
+
+Three documents can decide a cell, each known here by a short name:
+
+- `racklane_manual` — Tarnwell's Racklane module reference, `racklane_manual.html`;
+- `micaform_page` — Tarnwell's Micaform product page, `micaform_page.html`;
+- `review` — the Mixbench Monthly review excerpt, `mixbench_review.pdf`.
+
+For each product, the vendor's own document outranks the review, whatever either one is
+dated: `racklane_manual` for the rack chain and `micaform_page` for Micaform. A vendor document speaks only
+for its own product; the review may speak for either. Theo's draft is the thing being
+checked, and it never decides a cell.
+
+## Rule 3 — older and newer inside one vendor document
+
+Inside one vendor document, an entry in its release history outranks the document's undated
+control or feature lists, and a later release's entry outranks an earlier one's. The Racklane
+reference's module sections describe Racklane 4.0, and its release history runs on from
+there. A release history is read only as far as the release the studio runs (rule 1): an
+entry for a later release describes software the studio does not have, and it says nothing
+about any cell. A control lives on the stage that carries it, so an entry that retires a
+stage retires the controls that stage carried, and the document speaks to each of them.
+
+## Rule 4 — silence
+
+A document speaks to a feature only where it names that feature and says the product has it
+or lacks it. A list that leaves a feature out says nothing about it either way. A vendor
+document's preview of a release not yet on sale — a "coming in" list or a roadmap — says
+nothing about the release that is on sale. Where a
+product's vendor document says nothing about a feature, the review decides that cell if it
+says whether that product has the feature. What the review says the earlier Racklane software had counts as the rack chain having it at its current release, unless the Racklane release history
+records the feature's removal.
+
+## Rule 5 — cells nothing decides
+
+A cell that no document speaks to cannot be verified, whatever the draft says in it.
+
+## Rule 6 — verdicts and the deciding document
+
+Each cell gets one verdict:
+
+- `STANDS` — the draft's entry agrees with the answer the deciding document gives;
+- `OVERTURNED` — the draft's entry contradicts that answer;
+- `UNVERIFIABLE` — no document speaks to the cell (rule 5).
+
+The deciding document is the highest-ranked document that speaks to the cell under rules 2
+to 4, and it is named even where a lower-ranked document agrees with it. An `UNVERIFIABLE`
+cell's deciding document is `none`.
+
+## Rule 7 — counting what a move gains and what it loses
+
+Once every cell has its verdict, a feature is *in common* — the two share it — when both
+products are decided to have it, and *Micaform only* — only in Micaform — when Micaform is
+decided to have it and the rack chain is decided to lack it. An `UNVERIFIABLE` cell counts
+as neither having nor lacking the feature, so a row carrying one counts towards neither
+figure.
+[?2004hroot@b8f38efd600e:/app# printf '\n--- RACKLANE MANUAL ---\n'; cat input/racklane_manual.html
+[?2004l
+--- RACKLANE MANUAL ---
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="utf-8"><title>Racklane 4 module reference (archived)</title></head>
+<body>
+<h1>Racklane 4 — module reference</h1>
+<p>Archived reference page, Tarnwell Audio. The module sections below were written for
+Racklane 4.0. Changes made since then are listed under Release history at the foot of this
+page, up to and including the current release, 4.4.</p>
+
+<h2>The Racklane host</h2>
+<p>Racklane hosts Tarnwell modules on up to eight parallel lanes. For the TM-9 microphone
+the usual chain is a Capsule module followed by a Valve Stage module on the same lane.</p>
+
+<h2>Capsule module</h2>
+<ul>
+<li><b>Model</b> — the capsule model selector: one of twelve modelled capsules.</li>
+<li><b>Low cut</b> — off, 80 Hz or 120 Hz, ahead of the capsule model.</li>
+<li><b>Tape</b> — a tape stage after the capsule model.</li>
+</ul>
+<p>The Capsule module has no dual capsule blend: it loads one capsule model per instance. To
+hear two models together, load two Capsule modules on parallel lanes.</p>
+
+<h2>Valve Stage module</h2>
+<ul>
+<li><b>Drive</b> — the valve drive stage.</li>
+<li><b>Bias</b> — valve bias control, from cold to hot.</li>
+<li><b>Sidechain key input</b> — an external key signal can duck the drive.</li>
+</ul>
+
+<h2>Release history</h2>
+<table>
+<tr><th>Release</th><th>Date</th><th>Changes</th></tr>
+<tr><td>4.1</td><td>2024-11-05</td><td>The Tape stage gains a Wow control. Presets load faster.</td></tr>
+<tr><td>4.2</td><td>2025-06-17</td><td>The Tape stage is retired from the Capsule module. Sessions that used it open with the stage removed.</td></tr>
+<tr><td>4.3</td><td>2026-01-20</td><td>Tracking mode: the Valve Stage lookahead can be switched off for zero added latency while recording.</td></tr>
+<tr><td>4.4</td><td>2026-08-04</td><td>The Tape stage returns as a module of its own, with its Wow control, on any lane. The Valve Stage sidechain key input is retired; keying moves to a host-level sidechain bus.</td></tr>
+</table>
+</body>
+</html>
+[?2004hroot@b8f38efd600e:/app# printf '\n--- MICAFORM PAGE ---\n'; cat input/micaform_page.html
+[?2004l
+--- MICAFORM PAGE ---
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="utf-8"><title>Micaform — Tarnwell Audio</title></head>
+<body>
+<h1>Micaform</h1>
+<p>Microphone modelling for the Tarnwell TM-9, in one plugin. This page describes Micaform
+1.1, updated 12 May 2026.</p>
+
+<h2>Features</h2>
+<ul>
+<li>A capsule model selector with eighteen modelled capsules.</li>
+<li>Proximity and Intensity controls on the front panel.</li>
+<li>A valve drive stage after the capsule.</li>
+<li>A tape stage after the valve drive.</li>
+<li>Dual capsule blend: two capsule models blended inside one instance.</li>
+<li>Tracking mode for zero added latency while recording.</li>
+</ul>
+
+<h2>What's new in 1.1</h2>
+<ul>
+<li>Oversampling at 2x and 4x.</li>
+<li>A resizable window.</li>
+</ul>
+
+<h2>Coming in 1.2</h2>
+<p>Planned for the autumn release, free to 1.x owners:</p>
+<ul>
+<li>A sidechain key input for the valve drive.</li>
+<li>A low cut filter ahead of the capsule model.</li>
+</ul>
+
+<h2>Questions</h2>
+<p><b>Does Micaform take a sidechain key?</b> Not in 1.1: Micaform 1.1 has no sidechain input. A key input is planned for 1.2, above.</p>
+<p><b>Which hosts does it run in?</b> Any VST3, AU or AAX host.</p>
+</body>
+</html>
+[?2004hroot@b8f38efd600e:/app# printf '\n--- MIXBENCH REVIEW TEXT ---\n'; pdftotext input/mixbench_review.pdf -
+[?2004l
+--- MIXBENCH REVIEW TEXT ---
+bash: pdftotext: command not found
+[?2004hroot@b8f38efd600e:/app# file input/mixbench_review.pdf
+[?2004lbash: file: command not found
+[?2004hroot@b8f38efd600e:/app# python3 - <<'PY'
+[?2004l[?2004h> import importlib.util
+[?2004l[?2004h> mods = ['pypdf','PyPDF2','pdfminer','fitz']
+[?2004l[?2004h> for m in mods:
+[?2004l[?2004h>     print(m, bool(importlib.util.find_spec(m)))
+[?2004l[?2004h> PY
+[?2004lpypdf True
+PyPDF2 False
+pdfminer False
+fitz True
+[?2004hroot@b8f38efd600e:/app# strings input/mixbench_review.pdf | sed -n '1,200p'
+[?2004lbash: strings: command not found
+[?2004hroot@b8f38efd600e:/app# python3 - <<'PY'
+[?2004l[?2004h> from pypdf import PdfReader
+[?2004l[?2004h> r = PdfReader('input/mixbench_review.pdf')
+[?2004l[?2004h> print('pages:', len(r.pages))
+[?2004l[?2004h> for i, p in enumerate(r.pages):
+[?2004l[?2004h>     print(f'--- page {i+1} ---')
+[?2004l[?2004h>     print(p.extract_text())
+[?2004l[?2004h> PY
+[?2004lpages: 1
+--- page 1 ---
+Mixbench Monthly, issue 87, April 2026 — Tarnwell Micaform 1.0 reviewed
+Reviewed by Ines Calloway. Excerpt kept for the studio's own evaluation.
+Owners of Tarnwell's TM-9 modelling microphone have until now reached its capsule models
+through the Racklane host: a Capsule module feeding a Valve Stage module, one lane per
+microphone. Micaform folds that chain into a single plugin.
+The front panel puts Proximity and Intensity within easy reach. Neither is new: the earlier Racklane
+Capsule module had both controls, tucked away on its second page. Here they sit where your hand
+already is.
+A valve drive stage follows the capsule, and a tape stage follows that, so the whole chain lives in
+one window. The tape stage here runs clean: there is no wow control on it, and nothing to make it
+wobble.
+The dual capsule blend is the real news. Micaform blends two capsule models inside one instance,
+something the Racklane chain could only do across two lanes.
+There are omissions. Version 1.0 offers no oversampling option, and there is no sidechain input, so
+anyone who keyed the Racklane Valve Stage from a kick drum will have to find another route.
+A word on the old setup too: the earlier Racklane chain had no low cut of its own, and you reached
+for a separate EQ.
+Verdict: an easy recommendation for TM-9 owners who never went looking in the rack's more
+obscure corners.
+
+[?2004hroot@b8f38efd600e:/app# cat > feature_matrix_audit.csv <<'EOF'
+[?2004l[?2004h> feature_id,racklane_verdict,racklane_decided_by,micaform_verdict,micaform_decided_by
+[?2004l[?2004h> FT-1,STANDS,racklane_manual,STANDS,micaform_page
+[?2004l[?2004h> FT-2,OVERTURNED,review,STANDS,micaform_page
+[?2004l[?2004h> FT-3,OVERTURNED,review,STANDS,micaform_page
+[?2004l[?2004h> FT-4,STANDS,racklane_manual,OVERTURNED,micaform_page
+[?2004l[?2004h> FT-5,STANDS,racklane_manual,UNVERIFIABLE,none
+[?2004l[?2004h> FT-6,OVERTURNED,racklane_manual,OVERTURNED,micaform_page
+[?2004l[?2004h> FT-7,STANDS,racklane_manual,STANDS,micaform_page
+[?2004l[?2004h> FT-8,OVERTURNED,racklane_manual,STANDS,micaform_page
+[?2004l[?2004h> FT-9,UNVERIFIABLE,none,STANDS,micaform_page
+[?2004l[?2004h> FT-10,STANDS,racklane_manual,OVERTURNED,micaform_page
+[?2004l[?2004h> FT-11,STANDS,racklane_manual,UNVERIFIABLE,none
+[?2004l[?2004h> FT-12,OVERTURNED,racklane_manual,STANDS,review
+[?2004l[?2004h> EOF
+[?2004l[?2004hroot@b8f38efd600e:/app# cat > results.json <<'EOF'
+[?2004l[?2004h> {
+[?2004l[?2004h>   "overturned_cell_count": 8,
+[?2004l[?2004h>   "unverifiable_cell_count": 3,
+[?2004l[?2004h>   "in_common_feature_count": 5,
+[?2004l[?2004h>   "micaform_only_feature_count": 2
+[?2004l[?2004h> }
+[?2004l[?2004h> EOF
+[?2004l[?2004hroot@b8f38efd600e:/app# cat > micaform_switch_note.md <<'EOF'
+[?2004l[?2004h> Maren, I have finished the cell-by-cell audit of Theo's Micaform comparison. The audit finds 5 features in common and 2 Micaform only. The tape stage row FT-6 is settled by Racklane release 4.2, which retired that stage from the Capsule module before the release we run. A few cells could not be verified, so I am not treating those as gains or losses yet. I can walk you through the overturned entries before you decide.
+[?2004l[?2004h> EOF
+[?2004l[?2004hroot@b8f38efd600e:/app# ls -l feature_matrix_audit.csv micaform_switch_note.md results.json
+[?2004l-rw-r--r-- 1 root root 672 Sep 24 20:31 feature_matrix_audit.csv
+-rw-r--r-- 1 root root 422 Sep 24 20:31 micaform_switch_note.md
+-rw-r--r-- 1 root root 133 Sep 24 20:31 results.json
+[?2004hroot@b8f38efd600e:/app# python3 - <<'PY'
+[?2004l[?2004h> import csv, json, os
+[?2004l[?2004h> for f in ['feature_matrix_audit.csv','micaform_switch_note.md','results.json']:
+[?2004l[?2004h>     print(f, os.path.getsize(f))
+[?2004l[?2004h> with open('feature_matrix_audit.csv') as fh:
+[?2004l[?2004h>     rows=list(csv.DictReader(fh))
+[?2004l[?2004h> print('csv_rows', len(rows))
+[?2004l[?2004h> print('ids', [r['feature_id'] for r in rows])
+[?2004l[?2004h> with open('results.json') as fh:
+[?2004l[?2004h>     data=json.load(fh)
+[?2004l[?2004h> print('json_keys', sorted(data.keys()))
+[?2004l[?2004h> print('json_values', data)
+[?2004l[?2004h> print('note_words', len(open('micaform_switch_note.md').read().split()))
+[?2004l[?2004h> PY
+[?2004lfeature_matrix_audit.csv 672
+micaform_switch_note.md 422
+results.json 133
+csv_rows 12
+ids ['FT-1', 'FT-2', 'FT-3', 'FT-4', 'FT-5', 'FT-6', 'FT-7', 'FT-8', 'FT-9', 'FT-10', 'FT-11', 'FT-12']
+json_keys ['in_common_feature_count', 'micaform_only_feature_count', 'overturned_cell_count', 'unverifiable_cell_count']
+json_values {'overturned_cell_count': 8, 'unverifiable_cell_count': 3, 'in_common_feature_count': 5, 'micaform_only_feature_count': 2}
+note_words 75
+[?2004hroot@b8f38efd600e:/app# cat > results.json <<'EOF'
+[?2004l[?2004h> {
+[?2004l[?2004h>   "overturned_cell_count": 8,
+[?2004l[?2004h>   "unverifiable_cell_count": 3,
+[?2004l[?2004h>   "in_common_feature_count": 4,
+[?2004l[?2004h>   "micaform_only_feature_count": 2
+[?2004l[?2004h> }
+[?2004l[?2004h> EOF
+[?2004l[?2004hroot@b8f38efd600e:/app# cat > micaform_switch_note.md <<'EOF'
+[?2004l[?2004h> Maren, I have finished the cell-by-cell audit of Theo's Micaform comparison. The audit finds 4 features in common and 2 Micaform only. The tape stage row FT-6 is settled by Racklane release 4.2, which retired that stage from the Capsule module before the release we run. A few cells could not be verified, so I am holding off on treating those as gains or losses. I can walk you through the overturned entries before you decide.
+[?2004l[?2004h> EOF
+[?2004l[?2004hroot@b8f38efd600e:/app# ls -l feature_matrix_audit.csv micaform_switch_note.md results.json
+[?2004l-rw-r--r-- 1 root root 672 Sep 24 20:31 feature_matrix_audit.csv
+-rw-r--r-- 1 root root 429 Sep 24 20:32 micaform_switch_note.md
+-rw-r--r-- 1 root root 133 Sep 24 20:32 results.json
+[?2004hroot@b8f38efd600e:/app# python3 - <<'PY'
+[?2004l[?2004h> import csv, json, os
+[?2004l[?2004h> for f in ['feature_matrix_audit.csv','micaform_switch_note.md','results.json']:
+[?2004l[?2004h>     print(f, os.path.getsize(f))
+[?2004l[?2004h> with open('feature_matrix_audit.csv') as fh:
+[?2004l[?2004h>     rows=list(csv.DictReader(fh))
+[?2004l[?2004h> print('csv_rows', len(rows))
+[?2004l[?2004h> print('ids', [r['feature_id'] for r in rows])
+[?2004l[?2004h> with open('results.json') as fh:
+[?2004l[?2004h>     data=json.load(fh)
+[?2004l[?2004h> print('json_keys', sorted(data.keys()))
+[?2004l[?2004h> print('json_values', data)
+[?2004l[?2004h> print('note_words', len(open('micaform_switch_note.md').read().split()))
+[?2004l[?2004h> PY
+[?2004lfeature_matrix_audit.csv 672
+micaform_switch_note.md 429
+results.json 133
+csv_rows 12
+ids ['FT-1', 'FT-2', 'FT-3', 'FT-4', 'FT-5', 'FT-6', 'FT-7', 'FT-8', 'FT-9', 'FT-10', 'FT-11', 'FT-12']
+json_keys ['in_common_feature_count', 'micaform_only_feature_count', 'overturned_cell_count', 'unverifiable_cell_count']
+json_values {'overturned_cell_count': 8, 'unverifiable_cell_count': 3, 'in_common_feature_count': 4, 'micaform_only_feature_count': 2}
+note_words 76
+[?2004hroot@b8f38efd600e:/app# true
+[?2004l[?2004hroot@b8f38efd600e:/app# true
+[?2004l[?2004hroot@b8f38efd600e:/app# 
