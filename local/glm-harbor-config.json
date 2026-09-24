@@ -4,18 +4,27 @@
   "n_attempts": 4,
   "n_concurrent_trials": 2,
   "tasks": [
-    {
-      "path": "task"
-    }
+    { "path": "task" }
   ],
   "agents": [
     {
       "name": "opencode",
-      "model_name": "openai/glm-5.2"
+      "model_name": "openai/glm-5.2",
+      "kwargs": {
+        "opencode_config": {
+          "small_model": "openai/glm-5.2",
+          "provider": {
+            "openai": {
+              "npm": "@ai-sdk/openai-compatible",
+              "options": {
+                "baseURL": "http://34.41.10.8:4000/v1",
+                "apiKey": "{env:OPENAI_API_KEY}"
+              }
+            }
+          }
+        }
+      }
     }
   ],
-  "environment": {
-    "type": "docker",
-    "delete": true
-  }
+  "environment": { "type": "docker", "delete": true }
 }

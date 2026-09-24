@@ -37,10 +37,18 @@ harbor run -c local\glm-harbor-config.json -n 2 -k 4 --env-file glm.env -y
 python local\kit.py rewards jobs\glm-mic-audit-r0
 ```
 `-k 4` is the total attempts, `-n 2` how many run at once. Edit `job_name` in the config for each round
-(`glm-mic-audit-r1`, ...). If your harbor prefers flags over a config file, the equivalent is:
+(`glm-mic-audit-r1`, ...).
+
+The `agents[0].kwargs.opencode_config` block is required with the team proxy. Without it opencode
+(a) asks the proxy for `gpt-5.4-nano` to title the session, which the GLM-only key refuses, and
+(b) streams GLM through the OpenAI Responses API, which the proxy emulates badly and opencode aborts
+with `text part ... not found`. The block pins the small model to GLM and routes the `openai`
+provider through `@ai-sdk/openai-compatible` (plain chat completions).
+
+If opencode still crashes, fall back to the terminus-2 harness, which QC accepts:
 
 ```bat
-harbor run -p task -a opencode -m openai/glm-5.2 -k 4 -n 2 --env-file glm.env -o jobs --job-name glm-mic-audit-r0 -y
+harbor run -p task -a terminus-2 -m openai/glm-5.2 -k 4 -n 2 --env-file glm.env -o jobs --job-name glm-mic-audit-r0-t2 -y
 ```
 
 Read whole `checks[]` entries in `jobs\<job>\<trial>\verifier\score.json`; do not grep for "passed".
