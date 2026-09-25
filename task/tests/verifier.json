@@ -57,7 +57,7 @@
       "name": "matrix_table",
       "metadata": {
         "how_justification": "Parses feature_matrix_audit.csv with csv.read_rows and applies table_equals: every graded cell of 9 rows plus the full 11-row population as a row_set lock (duplicate-row and cross-product dumps fail the lock; a duplicated graded id is rejected outright), and the delivered column set closed to the stated header, with declared cell types {'racklane_verdict': 'text', 'racklane_decided_by': 'text', 'micaform_verdict': 'text', 'micaform_decided_by': 'text'} normalised on both sides. A failure names the exact row and column.",
-        "why_justification": "Every cell's verdict and deciding document is graded, and the row set is locked to the twelve feature ids: Theo's draft prints the FT-7 line twice, and the sheet is one row per feature row keyed by feature_id, so a transcription that carries the duplicate fails the population lock. Entailed by: \"One row per feature row in `draft_comparison.md` and no other rows, in any order, with `feature_id` exactly as the draft writes it\" and \"One row per record, keyed by `feature_id`\".",
+        "why_justification": "Every cell's verdict and deciding document is graded, and the row set is locked to the twelve features: Theo's draft prints the FT-7 line twice, and the sheet is one row per feature keyed by feature_id, so a transcription that carries the pasted line twice fails the population lock. Entailed by: \"One row per feature Theo compares in `draft_comparison.md` and no other rows\" and \"One row per record, keyed by `feature_id`: a `feature_id` identifies one feature, and the sheet carries one row for it\".",
         "tag": "core"
       },
       "source": {

@@ -58,7 +58,8 @@ core miss zeroes the run.
 | Round 1 | 1.0, 1.0 (jobs `oracle-r1`, `oracle-r1b`); 1.0 again after the manifest rename (`oracle-r1-manifest`) and the digest pin (`oracle-final2`, `oracle-final3`) | 1.0, 0.0, 1.0, 1.0 (job `glm-mic-audit-r1-t2`, trials CwyDXsG, iRPbaaP, Kp4Xjwu, sdgoqtb) | 3/4, in band; superseded by the PreQC fix |
 | Round 1 + PreQC fix | 1.0 (`oracle-r2`) | 1.0 ×5 (job `glm-mic-audit-r2-t2`) | 5/5, too easy |
 | Round 2 | 1.0 (`oracle-r3`) | 1.0 ×5 (job `glm-mic-audit-r3-t2`) | 5/5, too easy |
-| Round 3 | _pending_ (`oracle-r4`) | _pending_ (job `glm-mic-audit-r4-t2`) | |
+| Round 3 | 1.0 (`oracle-r4`) | 0.0 ×5 (job `glm-mic-audit-r4-t2`) | 0/5, every failure `matrix_table` duplicate id FT-7 only; all five derived 4.2 from the inventory. Classified AMBIGUITY: the contract said "one row per feature row", and the pasted line is a feature row textually. |
+| Round 3, contract reworded | _pending_ (`oracle-r5`) | _pending_ (job `glm-mic-audit-r5-t2`) | |
 
 Failing run (trial iRPbaaP, `evaluations/difficulty/r2`): every one of the 24 matrix cells correct. The agent
 first wrote 5 in common, then on a self-check revised it to 4, listing FT-1, FT-2, FT-3 and FT-8 as the
@@ -95,7 +96,7 @@ checklist. Round 3 moves the difficulty from rules to data, the shape that a che
 | Change | File(s) | What it forces |
 |---|---|---|
 | **The chain's release is derived, not stated.** Rule 1 no longer says "4.3". A new `studio_inventory.csv` lists the studio's machines: the live-room rig that carries the TM-9 chain is held at Racklane **4.2**; the edit suite runs 4.3; a laptop runs a 4.4 beta and an expired Micaform 1.0 trial; the edit suite has a Micaform 1.1 evaluation licence. | `environment/input/studio_inventory.csv`, rule 1, `instruction.md` names the inventory | The release cap in rule 3 now has to be read off the inventory row for the TM-9 chain. Taking 4.3 (the version the manual's text and the edit suite make obvious) reproduces the round 2 gold exactly and fails FT-3, FT-5 and FT-8 plus every count. The 4.3 and 4.4 entries are now the bait. |
-| **A pasted line in Theo's draft.** The FT-7 row appears twice, identically. | `environment/input/draft_comparison.md` | The sheet is one row per feature row keyed by `feature_id` (already in the contract), so the audit carries FT-7 once. A transcription that carries the duplicate fails the population lock. No rule names this; the contract's key implies it. |
+| **A pasted line in Theo's draft.** The FT-7 row appears twice, identically. | `environment/input/draft_comparison.md`; contract and instruction reworded from "one row per feature row" to "one row per feature Theo compares, keyed by `feature_id`" | The sheet is one row per feature, so the audit carries FT-7 once. A transcription that carries the pasted line twice fails the population lock. No rule names the duplicate; the contract's key implies it. The first wording ("per feature row") was ambiguous, every run carried the line twice, and it was fixed before the shipped battery. |
 
 Gold after round 3 (chain at 4.2): overturned 7, unverifiable 4 (FT-5 M, FT-8 R, FT-9 R, FT-11 M),
 in common 4, Micaform only 2 (tape stage, blend), rack only 1 (sidechain). 20 verifiers (18 core,
