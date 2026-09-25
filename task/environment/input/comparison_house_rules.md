@@ -20,7 +20,8 @@ Three documents can decide a cell, each known here by a short name:
 
 For each product, the vendor's own document outranks the review, whatever either one is
 dated: `racklane_manual` for the rack chain and `micaform_page` for Micaform. A vendor document speaks only
-for its own product; the review may speak for either. Theo's draft is the thing being
+for its own product: whatever it says about the other one, in a comparison, a sidebar or an
+aside, says nothing about that product's cells. The review may speak for either. Theo's draft is the thing being
 checked, and it never decides a cell.
 
 ## Rule 3 — older and newer inside one vendor document
@@ -31,7 +32,9 @@ reference's module sections describe Racklane 4.0, and its release history runs 
 there. A release history is read only as far as the release the studio runs (rule 1): an
 entry for a later release describes software the studio does not have, and it says nothing
 about any cell. A control lives on the stage that carries it, so an entry that retires a
-stage retires the controls that stage carried, and the document speaks to each of them.
+stage retires the controls that stage carried, and the document speaks to each of them. A
+feature carried by a module outside the chain (rule 1) is not the chain's, so an entry that
+moves a feature to such a module records its removal from the chain.
 
 ## Rule 4 — silence
 

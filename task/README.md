@@ -56,7 +56,8 @@ core miss zeroes the run.
 |---|---|---|---|
 | Baseline | 1.0, 1.0 | 1.0, 1.0, 1.0, 1.0 (job `glm-mic-audit-r0-t2`) | 4/4, too easy |
 | Round 1 | 1.0, 1.0 (jobs `oracle-r1`, `oracle-r1b`); 1.0 again after the manifest rename (`oracle-r1-manifest`) and the digest pin (`oracle-final2`, `oracle-final3`) | 1.0, 0.0, 1.0, 1.0 (job `glm-mic-audit-r1-t2`, trials CwyDXsG, iRPbaaP, Kp4Xjwu, sdgoqtb) | 3/4, in band; superseded by the PreQC fix |
-| Round 1 + PreQC fix | _pending_ | _pending_ (job `glm-mic-audit-r2-t2`) | |
+| Round 1 + PreQC fix | 1.0 (`oracle-r2`) | 1.0 ×5 (job `glm-mic-audit-r2-t2`) | 5/5, too easy |
+| Round 2 | _pending_ (`oracle-r3`) | _pending_ (job `glm-mic-audit-r3-t2`) | |
 
 Failing run (trial iRPbaaP, `evaluations/difficulty/r2`): every one of the 24 matrix cells correct. The agent
 first wrote 5 in common, then on a self-check revised it to 4, listing FT-1, FT-2, FT-3 and FT-8 as the
@@ -65,6 +66,24 @@ overturns that on the Micaform page, so Micaform has it and the row is in common
 in translating a verdict back into has/lacks before counting — the coupled step the task is built
 around — and rule 7 admits no other reading. Classified MODEL; `note_in_common` and `results_figures`
 failed together, exactly the checks that carry that figure.
+
+## Hardening round 2 (2026-09-25)
+
+The battery on the PreQC-corrected package passed 5/5 (job `glm-mic-audit-r2-t2`): across nine
+GLM-5.2 runs the matrix had been solved correctly nine times, so the round 1 traps were all
+within reach and the single round 1 miss was a counting slip. Round 2 adds traps that need the
+rules composed, each pinned by an explicit clause:
+
+| Change | File(s) | What it forces |
+|---|---|---|
+| **Cross-product statements inside vendor documents.** The Racklane page gains a "Moving to Micaform?" sidebar (Micaform "carries the Low cut and the Bias control"); the Micaform page says the rack chain "never offered" oversampling. | `racklane_manual.html`, `micaform_page.html`; rule 2 now says what a vendor document says about the other product, in a sidebar or aside, says nothing about that product's cells | Keyword matching flips FT-5 Micaform and FT-11 Micaform (both stay UNVERIFIABLE) and FT-9 rack (stays UNVERIFIABLE). |
+| **A feature moved out of the chain.** The 4.3 entry moves the Low cut to a new Room module on its own lane. | `racklane_manual.html`; rule 3 gains "a feature carried by a module outside the chain (rule 1) is not the chain's" | FT-5 rack: the 4.0 Capsule list has it, 4.3 removes it from the chain → OVERTURNED on `racklane_manual`. Three hops: chain definition + history entry + module clause. |
+| **The review-on-silence pair splits.** The 4.3 entry retires the Intensity control. | `racklane_manual.html` | The review says the old Capsule had both Proximity and Intensity; rule 4's removal exception fires for Intensity only. FT-2 stays OVERTURNED on `review`, FT-3 STANDS on `racklane_manual`. Intensity becomes Micaform only. |
+
+Gold after round 2: overturned 8, unverifiable 3, in common 4, Micaform only 3 (Intensity, tape stage,
+blend); rack only 1 (sidechain). 19 verifiers (17 core, 2 incidental): per-row traps on FT-2, FT-3,
+FT-5, FT-9, FT-10 and FT-12; `note_gain_features` requires Intensity, tape and blend. Gold replay 1.0,
+19/19; the nine note probes re-run.
 
 ## PreQC round 1 (first platform upload, 2026-09-24)
 
