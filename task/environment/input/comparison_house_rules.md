@@ -35,8 +35,9 @@ there. A release history is read only as far as the release the chain runs (rule
 entry for a later release describes software the studio does not have, and it says nothing
 about any cell. A control lives on the stage that carries it, so an entry that retires a
 stage retires the controls that stage carried, and the document speaks to each of them. A
-feature carried by a module outside the chain (rule 1) is not the chain's, so an entry that
-moves a feature to such a module records its removal from the chain.
+feature carried by a module outside the chain (rule 1) is not the chain's: a document that
+places a feature only on such a module says the chain lacks it, and an entry that moves a
+feature to such a module records its removal from the chain.
 
 ## Rule 4 — silence
 

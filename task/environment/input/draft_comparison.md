@@ -17,5 +17,9 @@ Theo Brandt, for Rafa, 2 June 2026. Built from the Racklane module reference we 
 | FT-10 | Sidechain key input | Yes | Yes |  |
 | FT-11 | Valve bias control | Yes | No |  |
 | FT-12 | Tape wow control | Yes | No |  |
+| FT-13 | Polarity flip | No | Yes | on the launch panel |
+| FT-14 | Preset browser | Yes | Yes |  |
+| FT-15 | Resizable window | No | Yes |  |
+| FT-16 | Room reverb | No | No |  |
 
 Yes means the product has the feature; No means it does not.

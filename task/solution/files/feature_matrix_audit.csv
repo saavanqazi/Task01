@@ -1,7 +1,7 @@
 feature_id,racklane_verdict,racklane_decided_by,micaform_verdict,micaform_decided_by
 FT-1,STANDS,racklane_manual,STANDS,micaform_page
 FT-2,OVERTURNED,review,STANDS,micaform_page
-FT-3,OVERTURNED,review,STANDS,micaform_page
+FT-3,STANDS,racklane_manual,STANDS,micaform_page
 FT-4,STANDS,racklane_manual,OVERTURNED,micaform_page
 FT-5,STANDS,racklane_manual,UNVERIFIABLE,none
 FT-6,OVERTURNED,racklane_manual,OVERTURNED,micaform_page
@@ -11,3 +11,7 @@ FT-9,UNVERIFIABLE,none,STANDS,micaform_page
 FT-10,STANDS,racklane_manual,OVERTURNED,micaform_page
 FT-11,STANDS,racklane_manual,UNVERIFIABLE,none
 FT-12,OVERTURNED,racklane_manual,STANDS,review
+FT-13,OVERTURNED,racklane_manual,OVERTURNED,micaform_page
+FT-14,OVERTURNED,review,STANDS,review
+FT-15,UNVERIFIABLE,none,STANDS,micaform_page
+FT-16,STANDS,racklane_manual,UNVERIFIABLE,none

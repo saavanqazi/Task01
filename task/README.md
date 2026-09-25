@@ -59,7 +59,8 @@ core miss zeroes the run.
 | Round 1 + PreQC fix | 1.0 (`oracle-r2`) | 1.0 ×5 (job `glm-mic-audit-r2-t2`) | 5/5, too easy |
 | Round 2 | 1.0 (`oracle-r3`) | 1.0 ×5 (job `glm-mic-audit-r3-t2`) | 5/5, too easy |
 | Round 3 | 1.0 (`oracle-r4`) | 0.0 ×5 (job `glm-mic-audit-r4-t2`) | 0/5, every failure `matrix_table` duplicate id FT-7 only; all five derived 4.2 from the inventory. Classified AMBIGUITY: the contract said "one row per feature row", and the pasted line is a feature row textually. |
-| Round 3, contract reworded | _pending_ (`oracle-r5`) | _pending_ (job `glm-mic-audit-r5-t2`) | |
+| Round 3, contract reworded | 1.0 (`oracle-r5`) | 1.0 ×5 (job `glm-mic-audit-r5-t2`; one run hit the agent timeout after writing its files) | 5/5, too easy |
+| Round 4 | _pending_ (`oracle-r6`) | _pending_ (job `glm-mic-audit-r6-t2`) | |
 
 Failing run (trial iRPbaaP, `evaluations/difficulty/r2`): every one of the 24 matrix cells correct. The agent
 first wrote 5 in common, then on a self-check revised it to 4, listing FT-1, FT-2, FT-3 and FT-8 as the
@@ -103,6 +104,26 @@ in common 4, Micaform only 2 (tape stage, blend), rack only 1 (sidechain). 20 ve
 2 incidental): per-row traps FT-2, FT-3, FT-5, FT-8, FT-9, FT-10, FT-12. Gold replay 1.0, 20/20; the
 naive 4.3 answer scores 0.0 on trap_ft3/ft5/ft8 + results_figures; the right answer with the
 duplicate row scores 0.0 on matrix_table (population lock); the nine note probes re-run.
+
+## Hardening round 4 (2026-09-25) — state across a long history, generated gold
+
+After the contract reword the round 3 battery passed 5/5 (job `glm-mic-audit-r5-t2`): the pasted
+line, the inventory and every rule trap are all solved by a careful reader once the wording is
+unambiguous (25 correct matrices in 25 runs on unambiguous packages). Round 4 keeps every earlier
+element and moves the difficulty into state tracking across a longer release history, with the gold
+derived by `solution/compute_gold.py` from an evidence model of the documents so sixteen rows and
+eight history entries cannot drift out of step:
+
+| Change | File(s) | What it forces |
+|---|---|---|
+| **Point releases.** The history now runs 4.1, 4.2, 4.2.3, 4.2.7, 4.2.10, 4.2.11, 4.3, 4.4, and the TM-9 rig is held at **4.2.10**. The Low cut leaves for the Room module at 4.2.3 and returns at 4.2.10; Intensity is retired at 4.2.7; a Polarity flip is added at 4.2.10; Proximity is retired at 4.2.11 (beyond the cap). | `racklane_manual.html`, `studio_inventory.csv` | The cap sits inside a run of point releases. Comparing versions as strings puts 4.2.7 and 4.2.3 after 4.2.10 and skips them (FT-3, FT-16 flip); assuming 4.3 flips FT-2 and FT-8; the low cut's out-and-back requires the last entry at or below the cap, not the first. |
+| **Four new rows.** FT-13 Polarity flip (rack gains it at 4.2.10; Micaform's "Changes in 1.1" removes it, over the 1.0 review), FT-14 Preset browser (neither vendor names it; the review decides both cells), FT-15 Resizable window (rack unverifiable), FT-16 Room reverb (lives only on a module outside the chain: the manual says the chain lacks it). | `draft_comparison.md`, `micaform_page.html`, `mixbench_review.pdf`, rule 3's module clause now also covers a feature that only ever lived outside the chain | Two rows are decided by the review on both sides or against a vendor list; one is rack only, so the note's loss set has two members. |
+
+Gold after round 4: overturned 9, unverifiable 6, in common 3 (FT-1, FT-2, FT-4), Micaform only 4
+(Intensity, tape stage, blend, preset browser), rack only 2 (sidechain, polarity). 23 verifiers
+(21 core, 2 incidental): per-row traps FT-2, FT-3, FT-5, FT-8, FT-9, FT-10, FT-12, FT-13, FT-14, FT-16.
+Gold replay 1.0, 23/23; wrong paths replayed: assume-4.3 → 0.0 (trap_ft2, trap_ft8, results),
+string-compared versions → 0.0 (trap_ft3, trap_ft16, results), pasted line kept → 0.0 (matrix_table).
 
 ## PreQC round 1 (first platform upload, 2026-09-24)
 
