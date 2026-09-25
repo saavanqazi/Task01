@@ -11,6 +11,7 @@ Theo Brandt, for Rafa, 2 June 2026. Built from the Racklane module reference we 
 | FT-5 | Low cut filter | Yes | Yes |  |
 | FT-6 | Tape stage | Yes | No |  |
 | FT-7 | Dual capsule blend in one instance | No | Yes |  |
+| FT-7 | Dual capsule blend in one instance | No | Yes |  |
 | FT-8 | Zero latency tracking mode | No | Yes |  |
 | FT-9 | Oversampling | No | Yes |  |
 | FT-10 | Sidechain key input | Yes | Yes |  |

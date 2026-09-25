@@ -1,0 +1,7 @@
+asset_id,location,role,software,version,status,note
+KW-01,Live room,TM-9 tracking chain (Capsule to Valve Stage on one lane),Racklane,4.2,in service,held at 4.2 until the album sessions close; do not update
+KW-02,Edit suite,editing and recall,Racklane,4.3,in service,
+KW-03,Laptop,test bench,Racklane,4.4,beta,not used on sessions
+KW-04,Laptop,test bench,Micaform,1.0,trial expired,
+KW-05,Live room,TM-9 microphone,Tarnwell TM-9,,in service,serial 0912
+KW-06,Edit suite,editing and recall,Micaform,1.1,evaluation licence,30-day evaluation

@@ -8,7 +8,9 @@ disagree, these rules say which one wins, so each cell has one answer.
 
 A cell asks one thing: does that product, at its current release, have the feature named on
 that row? The rack chain means the Racklane host with its Capsule and Valve Stage modules at
-Racklane 4.3, the release the studio runs. Micaform means Micaform 1.1, the release on sale.
+the release installed on the machine that carries the TM-9 chain, which the studio inventory
+(`studio_inventory.csv`) records; installs on other machines do not count. Micaform means
+Micaform 1.1, the release on sale, whatever licences the inventory lists.
 
 ## Rule 2 — which documents decide, and in what order
 
@@ -29,7 +31,7 @@ checked, and it never decides a cell.
 Inside one vendor document, an entry in its release history outranks the document's undated
 control or feature lists, and a later release's entry outranks an earlier one's. The Racklane
 reference's module sections describe Racklane 4.0, and its release history runs on from
-there. A release history is read only as far as the release the studio runs (rule 1): an
+there. A release history is read only as far as the release the chain runs (rule 1): an
 entry for a later release describes software the studio does not have, and it says nothing
 about any cell. A control lives on the stage that carries it, so an entry that retires a
 stage retires the controls that stage carried, and the document speaks to each of them. A

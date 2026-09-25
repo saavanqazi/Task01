@@ -54,262 +54,10 @@
       }
     },
     {
-      "name": "matrix_table_trap_ft2",
-      "metadata": {
-        "how_justification": "Parses feature_matrix_audit.csv with csv.read_rows and applies table_equals to every graded cell of the FT-2 row (matched by 'feature_id'); a failure names the exact cell.",
-        "why_justification": "Every cell's verdict and deciding document is graded, so a review refused on a silent reference, a review allowed over the vendor, a release history skipped and an omission read as absence each show on the rows they move. Entailed by: \"One row per feature row in `draft_comparison.md` and no other rows, in any order, with `feature_id` exactly as the draft writes it. Each row carries two cells for each product. `racklane_verdict` and `micaform_verdict` each take exactly one of `STANDS`, `OVERTURNED` or `UNVERIFIABLE`: whether Theo's entry for that product on that row survives the documents. `racklane_decided_by` and `micaform_decided_by` name the one document that decides that cell, by its short name in the house rules \u2014 `racklane_manual`, `micaform_page` or `review` \u2014 or `none` where the verdict is `UNVERIFIABLE`. Which document decides a cell is not a judgement call: the house rules rank the documents, say what counts as a document speaking to a feature, and name the deciding document even where another one agrees with it, so every cell has one answer.\"",
-        "tag": "core"
-      },
-      "source": {
-        "type": "file",
-        "file": {
-          "type": "csv",
-          "command": "read_rows",
-          "arguments": {
-            "path": "feature_matrix_audit.csv"
-          }
-        }
-      },
-      "assertion": {
-        "type": "deterministic",
-        "expected": {
-          "id_column": "feature_id",
-          "rows": {
-            "FT-2": {
-              "racklane_verdict": "OVERTURNED",
-              "racklane_decided_by": "review",
-              "micaform_verdict": "STANDS",
-              "micaform_decided_by": "micaform_page"
-            }
-          },
-          "cell_types": {
-            "racklane_verdict": "text",
-            "racklane_decided_by": "text",
-            "micaform_verdict": "text",
-            "micaform_decided_by": "text"
-          }
-        },
-        "deterministic": {
-          "path": "$",
-          "comparison": "table_equals"
-        }
-      }
-    },
-    {
-      "name": "matrix_table_trap_ft3",
-      "metadata": {
-        "how_justification": "Parses feature_matrix_audit.csv with csv.read_rows and applies table_equals to every graded cell of the FT-3 row (matched by 'feature_id'); a failure names the exact cell.",
-        "why_justification": "Intensity: the review says the earlier Capsule module had it, but the 4.3 entry retires it, so rule 4's removal exception fires and the manual decides the rack cell as lacking \u2014 Theo's No STANDS on racklane_manual, unlike FT-2 where nothing was removed. A model that treats the Proximity/Intensity pair as one case gets this row wrong.",
-        "tag": "core"
-      },
-      "source": {
-        "type": "file",
-        "file": {
-          "type": "csv",
-          "command": "read_rows",
-          "arguments": {
-            "path": "feature_matrix_audit.csv"
-          }
-        }
-      },
-      "assertion": {
-        "type": "deterministic",
-        "expected": {
-          "id_column": "feature_id",
-          "rows": {
-            "FT-3": {
-              "racklane_verdict": "STANDS",
-              "racklane_decided_by": "racklane_manual",
-              "micaform_verdict": "STANDS",
-              "micaform_decided_by": "micaform_page"
-            }
-          },
-          "cell_types": {
-            "racklane_verdict": "text",
-            "racklane_decided_by": "text",
-            "micaform_verdict": "text",
-            "micaform_decided_by": "text"
-          }
-        },
-        "deterministic": {
-          "path": "$",
-          "comparison": "table_equals"
-        }
-      }
-    },
-    {
-      "name": "matrix_table_trap_ft5",
-      "metadata": {
-        "how_justification": "Parses feature_matrix_audit.csv with csv.read_rows and applies table_equals to every graded cell of the FT-3 row (matched by 'feature_id'); a failure names the exact cell.",
-        "why_justification": "Low cut: the 4.0 Capsule list has it, but the 4.3 entry moves it to the Room module, which is outside the chain rule 1 defines, so the manual records its removal from the chain and Theo's Yes is OVERTURNED. The Micaform cell stays UNVERIFIABLE: the Racklane page's 'Moving to Micaform?' sidebar cannot speak for Micaform (rule 2) and the 1.2 preview cannot speak for 1.1 (rule 4). Entailed by the cell contract.",
-        "tag": "core"
-      },
-      "source": {
-        "type": "file",
-        "file": {
-          "type": "csv",
-          "command": "read_rows",
-          "arguments": {
-            "path": "feature_matrix_audit.csv"
-          }
-        }
-      },
-      "assertion": {
-        "type": "deterministic",
-        "expected": {
-          "id_column": "feature_id",
-          "rows": {
-            "FT-5": {
-              "racklane_verdict": "OVERTURNED",
-              "racklane_decided_by": "racklane_manual",
-              "micaform_verdict": "UNVERIFIABLE",
-              "micaform_decided_by": "none"
-            }
-          },
-          "cell_types": {
-            "racklane_verdict": "text",
-            "racklane_decided_by": "text",
-            "micaform_verdict": "text",
-            "micaform_decided_by": "text"
-          }
-        },
-        "deterministic": {
-          "path": "$",
-          "comparison": "table_equals"
-        }
-      }
-    },
-    {
-      "name": "matrix_table_trap_ft9",
-      "metadata": {
-        "how_justification": "Parses feature_matrix_audit.csv with csv.read_rows and applies table_equals to every graded cell of the FT-3 row (matched by 'feature_id'); a failure names the exact cell.",
-        "why_justification": "Oversampling: the Micaform page's remark that the rack chain 'never offered' it cannot speak for the rack chain (rule 2), the manual is silent and the review says nothing about the rack, so the rack cell is UNVERIFIABLE; the Micaform cell STANDS on the 1.1 page, whatever the 1.0 review says. Entailed by the cell contract.",
-        "tag": "core"
-      },
-      "source": {
-        "type": "file",
-        "file": {
-          "type": "csv",
-          "command": "read_rows",
-          "arguments": {
-            "path": "feature_matrix_audit.csv"
-          }
-        }
-      },
-      "assertion": {
-        "type": "deterministic",
-        "expected": {
-          "id_column": "feature_id",
-          "rows": {
-            "FT-9": {
-              "racklane_verdict": "UNVERIFIABLE",
-              "racklane_decided_by": "none",
-              "micaform_verdict": "STANDS",
-              "micaform_decided_by": "micaform_page"
-            }
-          },
-          "cell_types": {
-            "racklane_verdict": "text",
-            "racklane_decided_by": "text",
-            "micaform_verdict": "text",
-            "micaform_decided_by": "text"
-          }
-        },
-        "deterministic": {
-          "path": "$",
-          "comparison": "table_equals"
-        }
-      }
-    },
-    {
-      "name": "matrix_table_trap_ft10",
-      "metadata": {
-        "how_justification": "Parses feature_matrix_audit.csv with csv.read_rows and applies table_equals to every graded cell of the FT-3 row (matched by 'feature_id'); a failure names the exact cell.",
-        "why_justification": "The sidechain row moves on both sides when a release outside the one under audit is read as current: the rack cell flips if the Racklane 4.4 entry (beyond the studio's 4.3, rule 3) is applied, and the Micaform cell flips if the page's \"Coming in 1.2\" preview is read as Micaform 1.1 (rule 4). Entailed by the house rules' release scoping and the cell contract.",
-        "tag": "core"
-      },
-      "source": {
-        "type": "file",
-        "file": {
-          "type": "csv",
-          "command": "read_rows",
-          "arguments": {
-            "path": "feature_matrix_audit.csv"
-          }
-        }
-      },
-      "assertion": {
-        "type": "deterministic",
-        "expected": {
-          "id_column": "feature_id",
-          "rows": {
-            "FT-10": {
-              "racklane_verdict": "STANDS",
-              "racklane_decided_by": "racklane_manual",
-              "micaform_verdict": "OVERTURNED",
-              "micaform_decided_by": "micaform_page"
-            }
-          },
-          "cell_types": {
-            "racklane_verdict": "text",
-            "racklane_decided_by": "text",
-            "micaform_verdict": "text",
-            "micaform_decided_by": "text"
-          }
-        },
-        "deterministic": {
-          "path": "$",
-          "comparison": "table_equals"
-        }
-      }
-    },
-    {
-      "name": "matrix_table_trap_ft12",
-      "metadata": {
-        "how_justification": "Parses feature_matrix_audit.csv with csv.read_rows and applies table_equals to every graded cell of the FT-3 row (matched by 'feature_id'); a failure names the exact cell.",
-        "why_justification": "The tape wow control is added by the 4.1 entry and removed with the Tape stage by the 4.2 entry (rule 3: a control lives on the stage that carries it), so the rack cell is OVERTURNED on the manual even though the review also mentions the control; the Micaform page is silent and the review says the tape stage has no wow control, so the review decides that cell (rule 4). Entailed by the cell contract.",
-        "tag": "core"
-      },
-      "source": {
-        "type": "file",
-        "file": {
-          "type": "csv",
-          "command": "read_rows",
-          "arguments": {
-            "path": "feature_matrix_audit.csv"
-          }
-        }
-      },
-      "assertion": {
-        "type": "deterministic",
-        "expected": {
-          "id_column": "feature_id",
-          "rows": {
-            "FT-12": {
-              "racklane_verdict": "OVERTURNED",
-              "racklane_decided_by": "racklane_manual",
-              "micaform_verdict": "STANDS",
-              "micaform_decided_by": "review"
-            }
-          },
-          "cell_types": {
-            "racklane_verdict": "text",
-            "racklane_decided_by": "text",
-            "micaform_verdict": "text",
-            "micaform_decided_by": "text"
-          }
-        },
-        "deterministic": {
-          "path": "$",
-          "comparison": "table_equals"
-        }
-      }
-    },
-    {
       "name": "matrix_table",
       "metadata": {
         "how_justification": "Parses feature_matrix_audit.csv with csv.read_rows and applies table_equals: every graded cell of 9 rows plus the full 11-row population as a row_set lock (duplicate-row and cross-product dumps fail the lock; a duplicated graded id is rejected outright), and the delivered column set closed to the stated header, with declared cell types {'racklane_verdict': 'text', 'racklane_decided_by': 'text', 'micaform_verdict': 'text', 'micaform_decided_by': 'text'} normalised on both sides. A failure names the exact row and column.",
-        "why_justification": "Every cell's verdict and deciding document is graded, so a review refused on a silent reference, a review allowed over the vendor, a release history skipped and an omission read as absence each show on the rows they move. FT-6 also moves when the 4.4 entry beyond the studio's release is read as current, and FT-5 when the Micaform 1.2 preview is read as the release on sale. Entailed by: \"One row per feature row in `draft_comparison.md` and no other rows, in any order, with `feature_id` exactly as the draft writes it.\"",
+        "why_justification": "Every cell's verdict and deciding document is graded, and the row set is locked to the twelve feature ids: Theo's draft prints the FT-7 line twice, and the sheet is one row per feature row keyed by feature_id, so a transcription that carries the duplicate fails the population lock. Entailed by: \"One row per feature row in `draft_comparison.md` and no other rows, in any order, with `feature_id` exactly as the draft writes it\" and \"One row per record, keyed by `feature_id`\".",
         "tag": "core"
       },
       "source": {
@@ -347,12 +95,6 @@
             },
             "FT-7": {
               "racklane_verdict": "STANDS",
-              "racklane_decided_by": "racklane_manual",
-              "micaform_verdict": "STANDS",
-              "micaform_decided_by": "micaform_page"
-            },
-            "FT-8": {
-              "racklane_verdict": "OVERTURNED",
               "racklane_decided_by": "racklane_manual",
               "micaform_verdict": "STANDS",
               "micaform_decided_by": "micaform_page"
@@ -399,6 +141,300 @@
       }
     },
     {
+      "name": "matrix_table_trap_ft2",
+      "metadata": {
+        "how_justification": "Parses feature_matrix_audit.csv with csv.read_rows and applies table_equals to every graded cell of the FT-2 row (matched by 'feature_id'); a failure names the exact cell.",
+        "why_justification": "Proximity: the manual is silent, the review says the earlier Capsule module had it and nothing up to the chain's release (4.2, from the inventory) removed it, so the review decides the rack cell as having it and Theo's No is OVERTURNED on review. Entailed by the cell contract.",
+        "tag": "core"
+      },
+      "source": {
+        "type": "file",
+        "file": {
+          "type": "csv",
+          "command": "read_rows",
+          "arguments": {
+            "path": "feature_matrix_audit.csv"
+          }
+        }
+      },
+      "assertion": {
+        "type": "deterministic",
+        "expected": {
+          "id_column": "feature_id",
+          "rows": {
+            "FT-2": {
+              "racklane_verdict": "OVERTURNED",
+              "racklane_decided_by": "review",
+              "micaform_verdict": "STANDS",
+              "micaform_decided_by": "micaform_page"
+            }
+          },
+          "cell_types": {
+            "racklane_verdict": "text",
+            "racklane_decided_by": "text",
+            "micaform_verdict": "text",
+            "micaform_decided_by": "text"
+          }
+        },
+        "deterministic": {
+          "path": "$",
+          "comparison": "table_equals"
+        }
+      }
+    },
+    {
+      "name": "matrix_table_trap_ft3",
+      "metadata": {
+        "how_justification": "Parses feature_matrix_audit.csv with csv.read_rows and applies table_equals to every graded cell of the FT-2 row (matched by 'feature_id'); a failure names the exact cell.",
+        "why_justification": "Intensity: same path as FT-2 at the chain's release 4.2. The 4.3 entry that retires the control lies beyond the release the TM-9 rig runs (rule 1 via studio_inventory.csv, rule 3 cap), so it says nothing; a model that takes 4.3 from the manual's text or the edit suite's install turns this cell into STANDS on racklane_manual. Entailed by the cell contract.",
+        "tag": "core"
+      },
+      "source": {
+        "type": "file",
+        "file": {
+          "type": "csv",
+          "command": "read_rows",
+          "arguments": {
+            "path": "feature_matrix_audit.csv"
+          }
+        }
+      },
+      "assertion": {
+        "type": "deterministic",
+        "expected": {
+          "id_column": "feature_id",
+          "rows": {
+            "FT-3": {
+              "racklane_verdict": "OVERTURNED",
+              "racklane_decided_by": "review",
+              "micaform_verdict": "STANDS",
+              "micaform_decided_by": "micaform_page"
+            }
+          },
+          "cell_types": {
+            "racklane_verdict": "text",
+            "racklane_decided_by": "text",
+            "micaform_verdict": "text",
+            "micaform_decided_by": "text"
+          }
+        },
+        "deterministic": {
+          "path": "$",
+          "comparison": "table_equals"
+        }
+      }
+    },
+    {
+      "name": "matrix_table_trap_ft5",
+      "metadata": {
+        "how_justification": "Parses feature_matrix_audit.csv with csv.read_rows and applies table_equals to every graded cell of the FT-2 row (matched by 'feature_id'); a failure names the exact cell.",
+        "why_justification": "Low cut: the 4.0 Capsule list has it and the 4.3 entry that moves it to the Room module is beyond the chain's release, so the rack cell STANDS on racklane_manual; the review's 'no low cut' is outranked. The Micaform cell stays UNVERIFIABLE: the Racklane page's 'Moving to Micaform?' sidebar cannot speak for Micaform (rule 2) and the 1.2 preview cannot speak for 1.1 (rule 4). Entailed by the cell contract.",
+        "tag": "core"
+      },
+      "source": {
+        "type": "file",
+        "file": {
+          "type": "csv",
+          "command": "read_rows",
+          "arguments": {
+            "path": "feature_matrix_audit.csv"
+          }
+        }
+      },
+      "assertion": {
+        "type": "deterministic",
+        "expected": {
+          "id_column": "feature_id",
+          "rows": {
+            "FT-5": {
+              "racklane_verdict": "STANDS",
+              "racklane_decided_by": "racklane_manual",
+              "micaform_verdict": "UNVERIFIABLE",
+              "micaform_decided_by": "none"
+            }
+          },
+          "cell_types": {
+            "racklane_verdict": "text",
+            "racklane_decided_by": "text",
+            "micaform_verdict": "text",
+            "micaform_decided_by": "text"
+          }
+        },
+        "deterministic": {
+          "path": "$",
+          "comparison": "table_equals"
+        }
+      }
+    },
+    {
+      "name": "matrix_table_trap_ft8",
+      "metadata": {
+        "how_justification": "Parses feature_matrix_audit.csv with csv.read_rows and applies table_equals to every graded cell of the FT-2 row (matched by 'feature_id'); a failure names the exact cell.",
+        "why_justification": "Zero-latency tracking mode arrived in the 4.3 entry, beyond the chain's release 4.2, so the manual says nothing; the review says nothing about the rack; the rack cell is UNVERIFIABLE. Taking 4.3 as the chain's release makes it OVERTURNED. Entailed by the cell contract.",
+        "tag": "core"
+      },
+      "source": {
+        "type": "file",
+        "file": {
+          "type": "csv",
+          "command": "read_rows",
+          "arguments": {
+            "path": "feature_matrix_audit.csv"
+          }
+        }
+      },
+      "assertion": {
+        "type": "deterministic",
+        "expected": {
+          "id_column": "feature_id",
+          "rows": {
+            "FT-8": {
+              "racklane_verdict": "UNVERIFIABLE",
+              "racklane_decided_by": "none",
+              "micaform_verdict": "STANDS",
+              "micaform_decided_by": "micaform_page"
+            }
+          },
+          "cell_types": {
+            "racklane_verdict": "text",
+            "racklane_decided_by": "text",
+            "micaform_verdict": "text",
+            "micaform_decided_by": "text"
+          }
+        },
+        "deterministic": {
+          "path": "$",
+          "comparison": "table_equals"
+        }
+      }
+    },
+    {
+      "name": "matrix_table_trap_ft9",
+      "metadata": {
+        "how_justification": "Parses feature_matrix_audit.csv with csv.read_rows and applies table_equals to every graded cell of the FT-2 row (matched by 'feature_id'); a failure names the exact cell.",
+        "why_justification": "Oversampling: the Micaform page's remark that the rack chain 'never offered' it cannot speak for the rack chain (rule 2), the manual is silent and the review says nothing about the rack, so the rack cell is UNVERIFIABLE; the Micaform cell STANDS on the 1.1 page, whatever the 1.0 review says. Entailed by the cell contract.",
+        "tag": "core"
+      },
+      "source": {
+        "type": "file",
+        "file": {
+          "type": "csv",
+          "command": "read_rows",
+          "arguments": {
+            "path": "feature_matrix_audit.csv"
+          }
+        }
+      },
+      "assertion": {
+        "type": "deterministic",
+        "expected": {
+          "id_column": "feature_id",
+          "rows": {
+            "FT-9": {
+              "racklane_verdict": "UNVERIFIABLE",
+              "racklane_decided_by": "none",
+              "micaform_verdict": "STANDS",
+              "micaform_decided_by": "micaform_page"
+            }
+          },
+          "cell_types": {
+            "racklane_verdict": "text",
+            "racklane_decided_by": "text",
+            "micaform_verdict": "text",
+            "micaform_decided_by": "text"
+          }
+        },
+        "deterministic": {
+          "path": "$",
+          "comparison": "table_equals"
+        }
+      }
+    },
+    {
+      "name": "matrix_table_trap_ft10",
+      "metadata": {
+        "how_justification": "Parses feature_matrix_audit.csv with csv.read_rows and applies table_equals to every graded cell of the FT-2 row (matched by 'feature_id'); a failure names the exact cell.",
+        "why_justification": "Sidechain: the rack cell STANDS on the 4.0 Valve Stage list (the 4.4 entry retiring it is beyond the chain's release); the Micaform cell is OVERTURNED on the page's FAQ, and the 'Coming in 1.2' preview cannot make 1.1 have it (rule 4). Entailed by the cell contract.",
+        "tag": "core"
+      },
+      "source": {
+        "type": "file",
+        "file": {
+          "type": "csv",
+          "command": "read_rows",
+          "arguments": {
+            "path": "feature_matrix_audit.csv"
+          }
+        }
+      },
+      "assertion": {
+        "type": "deterministic",
+        "expected": {
+          "id_column": "feature_id",
+          "rows": {
+            "FT-10": {
+              "racklane_verdict": "STANDS",
+              "racklane_decided_by": "racklane_manual",
+              "micaform_verdict": "OVERTURNED",
+              "micaform_decided_by": "micaform_page"
+            }
+          },
+          "cell_types": {
+            "racklane_verdict": "text",
+            "racklane_decided_by": "text",
+            "micaform_verdict": "text",
+            "micaform_decided_by": "text"
+          }
+        },
+        "deterministic": {
+          "path": "$",
+          "comparison": "table_equals"
+        }
+      }
+    },
+    {
+      "name": "matrix_table_trap_ft12",
+      "metadata": {
+        "how_justification": "Parses feature_matrix_audit.csv with csv.read_rows and applies table_equals to every graded cell of the FT-2 row (matched by 'feature_id'); a failure names the exact cell.",
+        "why_justification": "Tape wow control: added by the 4.1 entry and removed with the Tape stage by the 4.2 entry (a control lives on its stage), both within the chain's release, so the rack cell is OVERTURNED on racklane_manual; the Micaform page is silent and the review says the tape stage has no wow control, so the review decides that cell. Entailed by the cell contract.",
+        "tag": "core"
+      },
+      "source": {
+        "type": "file",
+        "file": {
+          "type": "csv",
+          "command": "read_rows",
+          "arguments": {
+            "path": "feature_matrix_audit.csv"
+          }
+        }
+      },
+      "assertion": {
+        "type": "deterministic",
+        "expected": {
+          "id_column": "feature_id",
+          "rows": {
+            "FT-12": {
+              "racklane_verdict": "OVERTURNED",
+              "racklane_decided_by": "racklane_manual",
+              "micaform_verdict": "STANDS",
+              "micaform_decided_by": "review"
+            }
+          },
+          "cell_types": {
+            "racklane_verdict": "text",
+            "racklane_decided_by": "text",
+            "micaform_verdict": "text",
+            "micaform_decided_by": "text"
+          }
+        },
+        "deterministic": {
+          "path": "$",
+          "comparison": "table_equals"
+        }
+      }
+    },
+    {
       "name": "note_exists",
       "metadata": {
         "how_justification": "Checks micaform_switch_note.md is present as a file in the workspace.",
@@ -427,8 +463,8 @@
     {
       "name": "note_gain_features",
       "metadata": {
-        "how_justification": "Opens micaform_switch_note.md with md.extract_text and applies a regex requiring the distinctive word of every Micaform-only feature row (Intensity, tape, blend), in any case and wording.",
-        "why_justification": "The note names what the move buys: every feature that is Micaform only under house rule 7 (Intensity, retired from the rack at 4.3; the tape stage, retired at 4.2; the dual capsule blend), by the distinctive word of its draft row. The set moves with the audit: missing the 4.3 retirement drops Intensity, reading the 4.4 entry as current drops the tape stage. Entailed by: \"it names every feature that is `Micaform only` and every feature that is `rack only`\".",
+        "how_justification": "Opens micaform_switch_note.md with md.extract_text and applies a regex requiring the distinctive word of every Micaform-only feature row (tape, blend), in any case and wording.",
+        "why_justification": "The note names what the move buys: every feature that is Micaform only under house rule 7 (the tape stage, retired from the rack at 4.2; the dual capsule blend), by the distinctive word of its draft row. The set moves with the audit: reading the 4.4 entry as current drops the tape stage. Entailed by: \"it names every feature that is `Micaform only` and every feature that is `rack only`\".",
         "tag": "core"
       },
       "source": {
@@ -443,7 +479,7 @@
       },
       "assertion": {
         "type": "deterministic",
-        "expected": "(?is)(?=.*\\bintensity\\w*\\b)(?=.*\\btape\\w*\\b)(?=.*\\bblend\\w*\\b)",
+        "expected": "(?is)(?=.*\\btape\\w*\\b)(?=.*\\bblend\\w*\\b)",
         "deterministic": {
           "path": "$.text",
           "comparison": "regex_match"
@@ -532,7 +568,7 @@
       "name": "note_micaform_only",
       "metadata": {
         "how_justification": "Opens micaform_switch_note.md with md.extract_text and applies regex_match.",
-        "why_justification": "The note states the Micaform only count once: what the move buys that the rack chain is decided to lack, counted as the house rules count it. The same count is core in results.json; here it is graded as the figure beside its own label. The digit inside a feature id such as FT-3 does not satisfy it.",
+        "why_justification": "The note states the Micaform only count once: what the move buys that the rack chain is decided to lack, counted as the house rules count it. The same count is core in results.json; here it is graded as the figure beside its own label. The digit inside a feature id such as FT-2 does not satisfy it.",
         "tag": "core"
       },
       "source": {
@@ -547,7 +583,7 @@
       },
       "assertion": {
         "type": "deterministic",
-        "expected": "(?is)(?:(?:^|(?<=[.!?,;:\u2013\u2014\\n])|\\bbut\\b|\\band\\b|\\byet\\b|\\bso\\b)(?:(?!(?:[.!?,;:\u2013\u2014]|\\bbut\\b|\\band\\b|\\byet\\b|\\bso\\b))(?!\\bno\\b|\\bnot\\b)(?!\\n[ \\t]*\\n).){0,200}?(?<!\\bno )(?<!\\bnot )(?<!\\bno )(?<!\\bnot )(?<![-\\d.])(?:3|3\\.0|3\\.00|\\bthree\\b)(?!\\d)(?!\\.\\d)[^\\w\\n,;.|/]{0,2}(?:(?![.!?](?:\\s|$))(?!(?:\\bi[-_ ]?n[-_\\s]*c[-_ ]?o[-_ ]?m[-_ ]?m[-_ ]?o[-_ ]?n\\w*\\b|\\bs[-_ ]?h[-_ ]?a[-_ ]?r[-_ ]?e\\w*\\b))(?!(?:\\d|\\b(?:zero|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen|twenty)\\b)).){0,48}(?<!\\bno )(?<!\\bnot )(?:\\bM[-_ ]?i[-_ ]?c[-_ ]?a[-_ ]?f[-_ ]?o[-_ ]?r[-_ ]?m[-_\\s]*o[-_ ]?n[-_ ]?l[-_ ]?y\\w*\\b|\\bo[-_ ]?n[-_ ]?l[-_ ]?y[-_\\s]*i[-_ ]?n[-_\\s]*M[-_ ]?i[-_ ]?c[-_ ]?a[-_ ]?f[-_ ]?o[-_ ]?r[-_ ]?m\\w*\\b)|(?<!\\d )(?<!\\d  )(?!(?:\\d|\\b(?:zero|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen|twenty)\\b))(?<!\\bno )(?<!\\bnot )(?:\\bM[-_ ]?i[-_ ]?c[-_ ]?a[-_ ]?f[-_ ]?o[-_ ]?r[-_ ]?m[-_\\s]*o[-_ ]?n[-_ ]?l[-_ ]?y\\w*\\b|\\bo[-_ ]?n[-_ ]?l[-_ ]?y[-_\\s]*i[-_ ]?n[-_\\s]*M[-_ ]?i[-_ ]?c[-_ ]?a[-_ ]?f[-_ ]?o[-_ ]?r[-_ ]?m\\w*\\b)(?:(?![.!?](?:\\s|$))(?!(?:\\bi[-_ ]?n[-_\\s]*c[-_ ]?o[-_ ]?m[-_ ]?m[-_ ]?o[-_ ]?n\\w*\\b|\\bs[-_ ]?h[-_ ]?a[-_ ]?r[-_ ]?e\\w*\\b)).){0,48}(?<!\\bno )(?<!\\bnot )(?<![-\\d.])(?:3|3\\.0|3\\.00|\\bthree\\b)(?!\\d)(?!\\.\\d)(?![^\\w\\n,;.|/]{0,2}(?:(?:\\bi[-_ ]?n[-_\\s]*c[-_ ]?o[-_ ]?m[-_ ]?m[-_ ]?o[-_ ]?n\\w*\\b|\\bs[-_ ]?h[-_ ]?a[-_ ]?r[-_ ]?e\\w*\\b))))",
+        "expected": "(?is)(?:(?:^|(?<=[.!?,;:\u2013\u2014\\n])|\\bbut\\b|\\band\\b|\\byet\\b|\\bso\\b)(?:(?!(?:[.!?,;:\u2013\u2014]|\\bbut\\b|\\band\\b|\\byet\\b|\\bso\\b))(?!\\bno\\b|\\bnot\\b)(?!\\n[ \\t]*\\n).){0,200}?(?<!\\bno )(?<!\\bnot )(?<!\\bno )(?<!\\bnot )(?<![-\\d.])(?:2|2\\.0|2\\.00|\\btwo\\b)(?!\\d)(?!\\.\\d)[^\\w\\n,;.|/]{0,2}(?:(?![.!?](?:\\s|$))(?!(?:\\bi[-_ ]?n[-_\\s]*c[-_ ]?o[-_ ]?m[-_ ]?m[-_ ]?o[-_ ]?n\\w*\\b|\\bs[-_ ]?h[-_ ]?a[-_ ]?r[-_ ]?e\\w*\\b))(?!(?:\\d|\\b(?:zero|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen|twenty)\\b)).){0,48}(?<!\\bno )(?<!\\bnot )(?:\\bM[-_ ]?i[-_ ]?c[-_ ]?a[-_ ]?f[-_ ]?o[-_ ]?r[-_ ]?m[-_\\s]*o[-_ ]?n[-_ ]?l[-_ ]?y\\w*\\b|\\bo[-_ ]?n[-_ ]?l[-_ ]?y[-_\\s]*i[-_ ]?n[-_\\s]*M[-_ ]?i[-_ ]?c[-_ ]?a[-_ ]?f[-_ ]?o[-_ ]?r[-_ ]?m\\w*\\b)|(?<!\\d )(?<!\\d  )(?!(?:\\d|\\b(?:zero|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen|twenty)\\b))(?<!\\bno )(?<!\\bnot )(?:\\bM[-_ ]?i[-_ ]?c[-_ ]?a[-_ ]?f[-_ ]?o[-_ ]?r[-_ ]?m[-_\\s]*o[-_ ]?n[-_ ]?l[-_ ]?y\\w*\\b|\\bo[-_ ]?n[-_ ]?l[-_ ]?y[-_\\s]*i[-_ ]?n[-_\\s]*M[-_ ]?i[-_ ]?c[-_ ]?a[-_ ]?f[-_ ]?o[-_ ]?r[-_ ]?m\\w*\\b)(?:(?![.!?](?:\\s|$))(?!(?:\\bi[-_ ]?n[-_\\s]*c[-_ ]?o[-_ ]?m[-_ ]?m[-_ ]?o[-_ ]?n\\w*\\b|\\bs[-_ ]?h[-_ ]?a[-_ ]?r[-_ ]?e\\w*\\b)).){0,48}(?<!\\bno )(?<!\\bnot )(?<![-\\d.])(?:2|2\\.0|2\\.00|\\btwo\\b)(?!\\d)(?!\\.\\d)(?![^\\w\\n,;.|/]{0,2}(?:(?:\\bi[-_ ]?n[-_\\s]*c[-_ ]?o[-_ ]?m[-_ ]?m[-_ ]?o[-_ ]?n\\w*\\b|\\bs[-_ ]?h[-_ ]?a[-_ ]?r[-_ ]?e\\w*\\b))))",
         "deterministic": {
           "path": "$.text",
           "comparison": "regex_match"
@@ -558,7 +594,7 @@
       "name": "note_micaform_only_exactly_one",
       "metadata": {
         "how_justification": "Opens micaform_switch_note.md with md.extract_text and applies not_regex_match.",
-        "why_justification": "A hedge is not an answer: the Micaform only figure may not be offered as one of several candidates in its own sentence. The note states the Micaform only count once: what the move buys that the rack chain is decided to lack, counted as the house rules count it. The same count is core in results.json; here it is graded as the figure beside its own label. The digit inside a feature id such as FT-3 does not satisfy it.",
+        "why_justification": "A hedge is not an answer: the Micaform only figure may not be offered as one of several candidates in its own sentence. The note states the Micaform only count once: what the move buys that the rack chain is decided to lack, counted as the house rules count it. The same count is core in results.json; here it is graded as the figure beside its own label. The digit inside a feature id such as FT-2 does not satisfy it.",
         "tag": "incidental"
       },
       "source": {
@@ -610,7 +646,7 @@
       "name": "results_figures",
       "metadata": {
         "how_justification": "Reads results.json with json.read_file and applies object_equals over the 4 graded keys with the key set closed; numeric keys compare within an absolute tolerance and a failure names the exact key.",
-        "why_justification": "The overturned count moves with the review-on-silence rule, the vendor-over-review rule and the release history, the unverifiable count with the review-on-silence rule and the release history; the two feature counts move with how the release history is read and with reading an omission as absence, and the in-common count also with the review-on-silence rule. The contract closes the key set.",
+        "why_justification": "The four figures move with the chain's release (taken from the inventory: 4.2 gives 7/4/4/2, assuming 4.3 gives 8/3/4/3), with the review-on-silence rule, the vendor-over-review rule, the cross-product scoping and the duplicated draft row (counting it twice moves nothing here because FT-7 stands on both sides, but the row set does). The contract closes the key set.",
         "tag": "core"
       },
       "source": {
@@ -628,11 +664,11 @@
         "expected": {
           "keys": {
             "overturned_cell_count": {
-              "value": 8,
+              "value": 7,
               "tolerance": null
             },
             "unverifiable_cell_count": {
-              "value": 3,
+              "value": 4,
               "tolerance": null
             },
             "in_common_feature_count": {
@@ -640,7 +676,7 @@
               "tolerance": null
             },
             "micaform_only_feature_count": {
-              "value": 3,
+              "value": 2,
               "tolerance": null
             }
           },

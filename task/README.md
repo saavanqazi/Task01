@@ -57,7 +57,8 @@ core miss zeroes the run.
 | Baseline | 1.0, 1.0 | 1.0, 1.0, 1.0, 1.0 (job `glm-mic-audit-r0-t2`) | 4/4, too easy |
 | Round 1 | 1.0, 1.0 (jobs `oracle-r1`, `oracle-r1b`); 1.0 again after the manifest rename (`oracle-r1-manifest`) and the digest pin (`oracle-final2`, `oracle-final3`) | 1.0, 0.0, 1.0, 1.0 (job `glm-mic-audit-r1-t2`, trials CwyDXsG, iRPbaaP, Kp4Xjwu, sdgoqtb) | 3/4, in band; superseded by the PreQC fix |
 | Round 1 + PreQC fix | 1.0 (`oracle-r2`) | 1.0 ×5 (job `glm-mic-audit-r2-t2`) | 5/5, too easy |
-| Round 2 | _pending_ (`oracle-r3`) | _pending_ (job `glm-mic-audit-r3-t2`) | |
+| Round 2 | 1.0 (`oracle-r3`) | 1.0 ×5 (job `glm-mic-audit-r3-t2`) | 5/5, too easy |
+| Round 3 | _pending_ (`oracle-r4`) | _pending_ (job `glm-mic-audit-r4-t2`) | |
 
 Failing run (trial iRPbaaP, `evaluations/difficulty/r2`): every one of the 24 matrix cells correct. The agent
 first wrote 5 in common, then on a self-check revised it to 4, listing FT-1, FT-2, FT-3 and FT-8 as the
@@ -84,6 +85,23 @@ Gold after round 2: overturned 8, unverifiable 3, in common 4, Micaform only 3 (
 blend); rack only 1 (sidechain). 19 verifiers (17 core, 2 incidental): per-row traps on FT-2, FT-3,
 FT-5, FT-9, FT-10 and FT-12; `note_gain_features` requires Intensity, tape and blend. Gold replay 1.0,
 19/19; the nine note probes re-run.
+
+## Hardening round 3 (2026-09-25) — the kind of difficulty changes
+
+Round 2 also passed 5/5 (job `glm-mic-audit-r3-t2`): fourteen correct GLM-5.2 matrices in fourteen
+runs. Every trap so far came with a house-rule clause naming it, and the model applies the rules as a
+checklist. Round 3 moves the difficulty from rules to data, the shape that a checklist misses:
+
+| Change | File(s) | What it forces |
+|---|---|---|
+| **The chain's release is derived, not stated.** Rule 1 no longer says "4.3". A new `studio_inventory.csv` lists the studio's machines: the live-room rig that carries the TM-9 chain is held at Racklane **4.2**; the edit suite runs 4.3; a laptop runs a 4.4 beta and an expired Micaform 1.0 trial; the edit suite has a Micaform 1.1 evaluation licence. | `environment/input/studio_inventory.csv`, rule 1, `instruction.md` names the inventory | The release cap in rule 3 now has to be read off the inventory row for the TM-9 chain. Taking 4.3 (the version the manual's text and the edit suite make obvious) reproduces the round 2 gold exactly and fails FT-3, FT-5 and FT-8 plus every count. The 4.3 and 4.4 entries are now the bait. |
+| **A pasted line in Theo's draft.** The FT-7 row appears twice, identically. | `environment/input/draft_comparison.md` | The sheet is one row per feature row keyed by `feature_id` (already in the contract), so the audit carries FT-7 once. A transcription that carries the duplicate fails the population lock. No rule names this; the contract's key implies it. |
+
+Gold after round 3 (chain at 4.2): overturned 7, unverifiable 4 (FT-5 M, FT-8 R, FT-9 R, FT-11 M),
+in common 4, Micaform only 2 (tape stage, blend), rack only 1 (sidechain). 20 verifiers (18 core,
+2 incidental): per-row traps FT-2, FT-3, FT-5, FT-8, FT-9, FT-10, FT-12. Gold replay 1.0, 20/20; the
+naive 4.3 answer scores 0.0 on trap_ft3/ft5/ft8 + results_figures; the right answer with the
+duplicate row scores 0.0 on matrix_table (population lock); the nine note probes re-run.
 
 ## PreQC round 1 (first platform upload, 2026-09-24)
 
